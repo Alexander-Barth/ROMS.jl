@@ -1,0 +1,14 @@
+name = "ROMS"
+uuid = "da6b2582-fac1-11ea-b7c4-a321ee60f94e"
+keywords = ["interpolation", "data analysis", "spatial data analysis", "oceanography"]
+license = "MIT"
+desc = "ROMS"
+version = "0.0.1"
+
+[deps]
+Interpolations = "a98d9a8b-a2ab-59e6-89dd-64a1c18fca59"
+NCDatasets = "85f8d34a-cbdd-5861-8df4-14fed0d494ab"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+DataStructures = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
