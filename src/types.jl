@@ -1,4 +1,4 @@
-struct Grid{T}
+struct Grid{T,TAB}
     grid_fname::String
     Tcline::T
     theta_s::T
@@ -12,10 +12,10 @@ struct Grid{T}
     h_u::Array{T,2}
     h_v::Array{T,2}
     h_psi::Array{T,2}
-    mask::Array{T,2}
-    mask_u::Array{T,2}
-    mask_v::Array{T,2}
-    mask_psi::Array{T,2}
+    mask::TAB
+    mask_u::TAB
+    mask_v::TAB
+    mask_psi::TAB
     pm::Array{T,2}
     pm_u::Array{T,2}
     pm_v::Array{T,2}
@@ -162,5 +162,3 @@ function Grid(grid_fname,opt)
     )
 
 end
-
-
