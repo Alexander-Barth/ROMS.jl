@@ -4,7 +4,7 @@
 # angle: local rotation of grid
 # h: depth
 
-function interp_clim4(clim_filename,domain,dataset,tr; padding = 0.5)
+function interp_clim(clim_filename,domain,dataset,tr; padding = 0.5)
 
     x = domain.lon;
     y = domain.lat;

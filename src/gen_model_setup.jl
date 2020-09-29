@@ -31,7 +31,7 @@ sv,(sx,sy,st) = load(ds_zeta,longitude=xr,latitude=yr,time=tr)
 #elseif bc_model == "mfs"
     tr = [t0, t1]
     time = tr[1]:bc_dt:tr[end]
-    ROMS.interp_clim4(clim_filename,domain,dataset,tr)
+    ROMS.interp_clim(clim_filename,domain,dataset,tr)
 #end
 
 
