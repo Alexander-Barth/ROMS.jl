@@ -36,8 +36,7 @@ sv,(sx,sy,st) = load(ds_zeta,longitude=xr,latitude=yr,time=tr)
 
 
 ROMS.extract_ic(domain,clim_filename,ic_filename, t0);
-
-@code_warntype ROMS.extract_bc(domain,clim_filename,bc_filename)
+ROMS.extract_bc(domain,clim_filename,bc_filename)
 
 #=
 
