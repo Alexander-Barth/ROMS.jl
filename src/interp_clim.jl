@@ -85,8 +85,8 @@ function interp_clim(clim_filename,domain,dataset,tr; padding = 0.5)
 
 
         # depth-averaged current
-        U, = ROMS.uvinteg(uv,uz);
-        V, = ROMS.uvinteg(vv,vz);
+        U, = ROMS.vinteg(uv,uz);
+        V, = ROMS.vinteg(vv,vz);
 
         @show size(U)
         Ui_rc = ROMS.model_interp3(ux,uy,uz,U,x,y,z_r[:,:,end],missing = :zero);

@@ -1,10 +1,10 @@
-function uvinteg(a,z::AbstractVector)
+function vinteg(a,z::AbstractVector)
     z3 = repeat(reshape(z,(1,1,length(z))),inner=(size(a,1),size(a,2),1))
-    return uvinteg(a,z3)
+    return vinteg(a,z3)
 end
 
 
-function uvinteg(a,z)
+function vinteg(a,z)
     imax = size(a,1);
     jmax = size(a,2);
     kmax = size(a,3);
@@ -14,7 +14,7 @@ function uvinteg(a,z)
 
     # z must be negative in water and decreases with k
     if any(any(z[:,:,2] .> 0)) || any(any(z[:,:,2] .> z[:,:,1]))
-        error("uvinteg: not implemented/tested");
+        error("vinteg: not implemented/tested");
     end
 
     if false
@@ -36,7 +36,7 @@ function uvinteg(a,z)
     #rg(dz)
 
     if any(dz .< 0)
-        error("uvinteg: negative dz")
+        error("vinteg: negative dz")
     end
 
     mask = isnan.(a) .| isnan.(z);
