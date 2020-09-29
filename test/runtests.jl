@@ -3,7 +3,7 @@ using ROMS
 using Statistics
 using Dates
 using NCDatasets
-
+#=
 @testset "Bathymetry" begin
     i = ROMS.findindex([10.,20.,30.],20.1)
     @test i == 2
@@ -157,7 +157,10 @@ end
     end
 end
 
+=#
 @testset "Example setup" begin
-    include("../src/ls2_config.jl")
-    include("../src/gen_model_setup.jl")
+#    include("../src/ls2_config.jl")
+#    include("../src/gen_model_setup.jl")
 end
+include("../src/ls2_config.jl")
+include("../src/gen_model_setup.jl")

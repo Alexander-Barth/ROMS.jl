@@ -6,6 +6,7 @@ using Interpolations
 using Printf
 using DataStructures
 using DIVAnd
+using Statistics
 import Base: getindex, download
 
 include("constants.jl")
@@ -35,6 +36,10 @@ include("roms_def_ic.jl")
 include("roms_read_time.jl")
 include("def_forcing.jl")
 include("roms_metadata.jl")
+include("roms_extract_bc.jl")
+include("roms_def_bc.jl")
+include("generate_grid.jl")
+
 
 include("Atmosphere/prepare_ecmwf.jl")
 

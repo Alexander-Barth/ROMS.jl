@@ -1,4 +1,5 @@
-function roms_def_ic(icname,domain,missing_value)
+function roms_def_ic(icname,domain,missing_value;
+                     time_origin = DateTime(1858,11,17))
 
     xi_rho = size(domain.z_r,1);
     eta_rho = size(domain.z_r,2);
@@ -23,11 +24,12 @@ function roms_def_ic(icname,domain,missing_value)
     ds.dim["tracer"] = 2
     ds.dim["time"] = Inf # unlimited dimension
 
+    time_origin
     # Declare variables
 
     ncocean_time = defVar(ds,"ocean_time", Float64, ("time",), attrib = OrderedDict(
         "long_name"                 => "time since initialization",
-        "units"                     => "days since 1858-11-17 00:00:00",
+        "units"                     => "days since $(Dates.format(time_origin,"yyyy-mm-dd HH:MM:SS"))",
         "field"                     => "time, scalar, series",
         "missing_value"             => missing_value,
     ))
@@ -98,4 +100,3 @@ function roms_def_ic(icname,domain,missing_value)
 
     return ds
 end
-

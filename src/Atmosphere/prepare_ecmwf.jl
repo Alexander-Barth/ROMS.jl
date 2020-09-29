@@ -19,8 +19,13 @@ function relative_humidity(temperature_2m_C,dew_temperature_2m_C)
     100 * vapor_pressure(dew_temperature_2m_C) / vapor_pressure(temperature_2m_C)
 end
 
+"""
 
-function prepare_ecmwf(atmo_fname,filename_prefix,domain_name)
+Based on forcing/d_ecmwf2roms.m
+"""
+function prepare_ecmwf(atmo_fname,filename_prefix,domain_name;
+                       time_origin = DateTime(1858,11,17)
+)
 
     ds_ecmwf = NCDataset(atmo_fname)
     lon = ds_ecmwf["longitude"][:]
@@ -34,7 +39,6 @@ function prepare_ecmwf(atmo_fname,filename_prefix,domain_name)
 
     flag_cartesian = 0
     flag_spherical = 1
-    time_origin = DateTime(1858,11,17)
 
     F = [
         (

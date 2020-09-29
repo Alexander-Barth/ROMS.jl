@@ -35,16 +35,13 @@ ic_filename =  joinpath(basedir,"ic2016-eb.nc"); # initial conditions
 bc_filename =  joinpath(basedir,"bc2016-eb.nc"); # boundary conditions
 
 
-clim_filename =  joinpath(basedir,"clim2019-eb.nc"); # GCM interpolated on model grid
-ic_filename =  joinpath(basedir,"ic2019-eb.nc"); # initial conditions
-bc_filename =  joinpath(basedir,"bc2019-eb.nc"); # boundary conditions
+clim_filename =  joinpath(basedir,"clim2019.nc"); # GCM interpolated on model grid
+ic_filename =  joinpath(basedir,"ic2019.nc"); # initial conditions
+bc_filename =  joinpath(basedir,"bc2019.nc"); # boundary conditions
 
 
 # additional space in longitude and latitude to download from GCM
 extra = .5;
-
-# Quadratic mean radius of Earth
-R0 = 6372.795477598e3;
 
 # model specific parameters
 opt = Dict(
@@ -79,6 +76,8 @@ t1 = DateTime(2019,1,2);
 #t1 = DateTime(2019,1,10);
 #t1 = DateTime(2020,1,1);
 
+t1 = DateTime(2018,12,1);
+t0 = DateTime(2020,1,1);
 
 cmems_username = ENV["CMEMS_USERNAME"]
 cmems_password = ENV["CMEMS_PASSWORD"]
