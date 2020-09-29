@@ -40,7 +40,7 @@ function interp_clim4(clim_filename,domain,dataset,tr; padding = 0.5)
     N = length(st);
     first = true;
 
-    ds = ROMS.def_clim3(clim_filename,missing_value,size(x,1),size(x,2),size(z_r,3));
+    ds = ROMS.def_clim(clim_filename,missing_value,size(x,1),size(x,2),size(z_r,3));
 
     climtime = ds["time"]
     czeta = ds["zeta"]

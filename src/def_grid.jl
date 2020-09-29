@@ -1,4 +1,4 @@
-function defgrid(fname,xi_rho,eta_rho)
+function def_grid(fname,xi_rho,eta_rho)
     @debug "create $fname"
     ds = NCDataset(fname,"c", attrib = OrderedDict(
         "type"                      => "GRID file",

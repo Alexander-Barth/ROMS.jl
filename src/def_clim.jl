@@ -1,4 +1,4 @@
-function def_clim3(fname,missing_value,xi_rho,eta_rho,s_rho);
+function def_clim(fname,missing_value,xi_rho,eta_rho,s_rho);
 
     if isfile(fname)
         rm(fname)
