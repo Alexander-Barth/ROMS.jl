@@ -51,25 +51,25 @@ grid.z is for an elevation equal to zero.
 Example
 
 ```julia
-opt = Dict(
-    :Tcline => 50,   # m
-    :theta_s => 5,   # surface refinement
-    :theta_b => 0.4, # bottom refinement
-    :nlevels => 32,  # number of vertical levels
-    :Vtransform  => 2,
-    :Vstretching => 4,
+opt = (
+    Tcline = 50,   # m
+    theta_s = 5,   # surface refinement
+    theta_b = 0.4, # bottom refinement
+    nlevels = 32,  # number of vertical levels
+    Vtransform  = 2,
+    Vstretching = 4,
 )
 grid = ROMS.Grid(expanduser("~/Models/LS2v/LS2v.nc"),opt)
 ```
 """
 function Grid(grid_fname,opt)
     T = Float64
-    Tcline      = T(opt[:Tcline])
-    theta_s     = T(opt[:theta_s])
-    theta_b     = T(opt[:theta_b])
-    nlevels     = opt[:nlevels]
-    Vtransform  = opt[:Vtransform]
-    Vstretching = opt[:Vstretching]
+    Tcline      = T(opt.Tcline)
+    theta_s     = T(opt.theta_s)
+    theta_b     = T(opt.theta_b)
+    nlevels     = opt.nlevels
+    Vtransform  = opt.Vtransform
+    Vstretching = opt.Vstretching
 
     ds = Dataset(grid_fname,"r")
     h = nomissing(ds["h"][:,:])

@@ -5,12 +5,12 @@ mkpath(basedir);
 mkpath(modeldir);
 
 
-ROMS.generate_grid(bath_name,xr,yr,red,opt,hmin,rmax)
+ROMS.generate_grid(grid_fname,bath_name,xr,yr,red,opt,hmin,rmax)
 
 
 #=
 mkpath(basedir);
-domain = ROMS.Grid(opt[:grid_fname],opt);
+domain = ROMS.Grid(grid_fname,opt);
 
 outdir = joinpath(basedir,"OGCM")
 mkpath(outdir)

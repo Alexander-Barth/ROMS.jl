@@ -1,4 +1,4 @@
-function generate_grid(bath_name,xr,yr,red,opt,hmin,rmax; do_plot = false)
+function generate_grid(grid_fname,bath_name,xr,yr,red,opt,hmin,rmax; do_plot = false)
 
 xo,yo,bo = ROMS.gebco_load(bath_name,xr,yr);
 
@@ -69,7 +69,7 @@ end
 
 # generate bathymetry file
 
-z_r,z_w = ROMS.roms_generate_config(x,y,h,mask,pm,pn,dndx,dmde,opt);
+z_r,z_w = ROMS.roms_generate_config(grid_fname,x,y,h,mask,pm,pn,dndx,dmde,opt);
 
 
 end

@@ -38,20 +38,20 @@ bc_filename =  joinpath(basedir,"bc2016-eb.nc"); # boundary conditions
 clim_filename =  joinpath(basedir,"clim2019.nc"); # GCM interpolated on model grid
 ic_filename =  joinpath(basedir,"ic2019.nc"); # initial conditions
 bc_filename =  joinpath(basedir,"bc2019.nc"); # boundary conditions
+grid_fname = joinpath(modeldir,domain_name * ".nc")
 
 
 # additional space in longitude and latitude to download from GCM
 extra = .5;
 
 # model specific parameters
-opt = Dict(
-    :Tcline => 50,   # m
-    :theta_s => 5,   # surface refinement
-    :theta_b => 0.4, # bottom refinement
-    :nlevels => 32,  # number of vertical levels
-    :Vtransform  => 2,
-    :Vstretching => 4,
-    :grid_fname => joinpath(modeldir,domain_name * ".nc")
+opt = (
+    Tcline = 50,   # m
+    theta_s = 5,   # surface refinement
+    theta_b = 0.4, # bottom refinement
+    nlevels = 32,  # number of vertical levels
+    Vtransform  = 2,
+    Vstretching = 4,
 )
 
 atmo_model = "ecmwf";
