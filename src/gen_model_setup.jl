@@ -27,11 +27,11 @@ sv,(sx,sy,st) = load(ds_zeta,longitude=xr,latitude=yr,time=tr)
 =#
 
 #if bc_model == "hycom"
-#  roms_prep_clim_hycom(domain,clim_filename,[t0:1:t1],basedir);
+#  prep_clim_hycom(domain,clim_filename,[t0:1:t1],basedir);
 #elseif bc_model == "mfs"
     tr = [t0, t1]
     time = tr[1]:bc_dt:tr[end]
-    ROMS.roms_interp_clim4(clim_filename,domain,dataset,tr)
+    ROMS.interp_clim4(clim_filename,domain,dataset,tr)
 #end
 
 
@@ -59,7 +59,7 @@ ROMS.extract_bc(domain,clim_filename,bc_filename)
 # ncwrite(parent_data,"hc",opt.Tcline)
 
 
-roms_extract_bc(domain,clim_filename,bc_filename);
+extract_bc(domain,clim_filename,bc_filename);
 
 
 =#

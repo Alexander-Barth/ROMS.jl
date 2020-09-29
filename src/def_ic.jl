@@ -1,4 +1,4 @@
-function roms_def_ic(icname,domain,missing_value;
+function def_ic(icname,domain,missing_value;
                      time_origin = DateTime(1858,11,17))
 
     xi_rho = size(domain.z_r,1);

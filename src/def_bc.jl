@@ -1,6 +1,6 @@
 # domain.z_r and domain.mask
 
-function roms_def_bc(bc_filename,domain,missing_value;
+function def_bc(bc_filename,domain,missing_value;
                      time_origin = DateTime(1858,11,17))
 
     xi_rho = size(domain.z_r,1)

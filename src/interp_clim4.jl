@@ -4,7 +4,7 @@
 # angle: local rotation of grid
 # h: depth
 
-function roms_interp_clim4(clim_filename,domain,dataset,tr; padding = 0.5)
+function interp_clim4(clim_filename,domain,dataset,tr; padding = 0.5)
 
     x = domain.lon;
     y = domain.lat;
@@ -103,14 +103,14 @@ function roms_interp_clim4(clim_filename,domain,dataset,tr; padding = 0.5)
         ubar = Ui ./ h_u;
         vbar = Vi ./ h_v;
 
-        ubar2,vbar2 = ROMS.roms_vavg(domain,ui,vi);
+        ubar2,vbar2 = ROMS.vavg(domain,ui,vi);
 
         # make ubar and ui consistent
         ui = ui .+ (ubar-ubar2)
         vi = vi .+ (vbar-vbar2)
 
         @debug begin
-            ubar2c,vbar2c = ROMS.roms_vavg(domain,ui,vi);
+            ubar2c,vbar2c = ROMS.vavg(domain,ui,vi);
             @show maximum(abs.(ubar - ubar2c))
             @show maximum(abs.(vbar - vbar2c))
         end

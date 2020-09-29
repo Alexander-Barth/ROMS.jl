@@ -1,7 +1,7 @@
 """
     Non-rotated grids
 """
-function create_roms_grid(fname,h,f,lon_r,lat_r,mask_r,angle,pm,pn,dndx,dmde)
+function create_grid(fname,h,f,lon_r,lat_r,mask_r,angle,pm,pn,dndx,dmde)
     @assert all(angle .== 0)
 
     xi_rho,eta_rho = size(h)

@@ -1,5 +1,5 @@
 
-roms_metadata = Dict(
+metadata = Dict(
     "cloud_time" => (
         ncattrib = (
             long_name = "cloud fraction time",

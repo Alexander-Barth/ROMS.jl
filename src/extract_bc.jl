@@ -2,7 +2,7 @@ function extract_bc(domain,clim_filename,bc_filename; missing_value = 9999)
     clim = NCDataset(clim_filename,"r")
     mask = domain.mask
 
-    ds = roms_def_bc(bc_filename,domain,missing_value)
+    ds = def_bc(bc_filename,domain,missing_value)
 
     for i = 1:length(clim["time"])
         ds["time"][i] = clim["time"][i]

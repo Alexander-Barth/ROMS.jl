@@ -7,7 +7,7 @@ function extract_ic(domain,bigfile,icfile,t0)
     if isfile(icfile)
         rm(icfile)
     end
-    ic = roms_def_ic(icfile,domain,missing_value);
+    ic = def_ic(icfile,domain,missing_value);
 
     Dataset(bigfile,"r") do nc
         ic["ocean_time"][1] = t0;
@@ -17,7 +17,7 @@ function extract_ic(domain,bigfile,icfile,t0)
 
         # try to retrieve last model forecast
 
-        time = roms_read_time(nc);
+        time = read_time(nc);
 
         if length(time) == 1
             index = 1

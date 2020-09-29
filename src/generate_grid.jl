@@ -69,7 +69,7 @@ end
 
 # generate bathymetry file
 
-z_r,z_w = ROMS.roms_generate_config(grid_fname,x,y,h,mask,pm,pn,dndx,dmde,opt);
+z_r,z_w = ROMS.generate_config(grid_fname,x,y,h,mask,pm,pn,dndx,dmde,opt);
 
 
 end

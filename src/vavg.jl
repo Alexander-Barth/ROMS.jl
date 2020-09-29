@@ -1,4 +1,4 @@
-function roms_vavg(d,u,v);
+function vavg(d,u,v);
 
     dz = d.z_w[:,:,2:end] - d.z_w[:,:,1:end-1]
     dz_u = stagger_r2u(dz);

@@ -24,7 +24,7 @@ basedir_ref = datadir
 for i = 1:length(filenames)
     Vname,fname = filenames[i]
 
-    Tname = ROMS.roms_metadata[Vname].Tname
+    Tname = ROMS.metadata[Vname].Tname
     output = split(replace(fname,filename_prefix => ""),"_")[1]
 
     fname_ref = joinpath(basedir_ref,"liguriansea_$(output)_era_ref.nc")

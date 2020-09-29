@@ -1,5 +1,5 @@
 
-function roms_generate_config(grid_fname,x,y,h,mask,pm,pn,dndx,dmde,opt)
+function generate_config(grid_fname,x,y,h,mask,pm,pn,dndx,dmde,opt)
 
     hmin = minimum(h)
     hc=min(hmin,opt.Tcline)
@@ -21,8 +21,8 @@ function roms_generate_config(grid_fname,x,y,h,mask,pm,pn,dndx,dmde,opt)
     # Coriolis parameter
     f = 2*omega * cos.(pi*y/180);
 
-    @debug "create_roms_grid"
-    create_roms_grid(grid_fname,h,f,x,y,mask,angle,pm,pn,dndx,dmde);
+    @debug "create_grid"
+    create_grid(grid_fname,h,f,x,y,mask,angle,pm,pn,dndx,dmde);
 
     return z_r,z_w
 end
