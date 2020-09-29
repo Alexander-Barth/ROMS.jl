@@ -1,10 +1,9 @@
-# interpolate climatology
-# option:
-# x,y,z_r: coordinates on rho points
-# angle: local rotation of grid
-# h: depth
-
-function interp_clim(clim_filename,domain,dataset,tr; padding = 0.5)
+"""
+    interpolate climatology
+"""
+function interp_clim(domain,clim_filename,dataset,timerange;
+                     padding = 0.5,
+                     missing_value = -9999.)
 
     x = domain.lon;
     y = domain.lat;
@@ -20,7 +19,7 @@ function interp_clim(clim_filename,domain,dataset,tr; padding = 0.5)
     end
 
     query = (
-        time = tr,
+        time = timerange,
         longitude = wider(x),
         latitude = wider(y),
     )
@@ -31,10 +30,7 @@ function interp_clim(clim_filename,domain,dataset,tr; padding = 0.5)
     u,(ux,uy,uz,ut) = load(dataset[:eastward_sea_water_velocity]; query...)
     v,(vx,vy,vz,vt) = load(dataset[:northward_sea_water_velocity]; query...)
 
-
     angle = repeat(domain.angle,inner = (1, 1, size(z_r,3)))
-
-    missing_value = -9999;
 
     time = st;
     N = length(st);
@@ -57,7 +53,7 @@ function interp_clim(clim_filename,domain,dataset,tr; padding = 0.5)
 
         zz = zeros(size(zeta,1),size(zeta,2));
 
-        @info "loaded $t"
+        @info "interpolate $t"
         climtime[ni] = time[ni]
         czeta[:,:,ni] = ROMS.model_interp3(zx,zy,zz,nomissing(zeta[:,:,ni],NaN),
                                            x,y,z_r[:,:,end],missing = :ufill);
@@ -122,6 +118,5 @@ function interp_clim(clim_filename,domain,dataset,tr; padding = 0.5)
         cvbar[:,:,ni] = vbar;
 
     end
-
     close(ds)
 end
