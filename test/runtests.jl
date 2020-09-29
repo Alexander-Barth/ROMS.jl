@@ -9,7 +9,6 @@ using NCDatasets
     include("test_bathymetry.jl")
 end
 
-#=
 @testset "Vertical coordinate" begin
     theta_s =  5
     theta_b =  0.4
@@ -78,7 +77,7 @@ end
     @test size(x_u,2) == size(x_r,2)
 end
 
-
+#=
 @testset "OGCM" begin
     outdir = joinpath(basedir,"OGCM")
     mkpath(outdir)
@@ -100,55 +99,12 @@ end
     @test vi ≈ 2*zi
 
 end
+=#
 
-
-
-@testset "OGCM" begin
-    datadir = joinpath(dirname(@__FILE__),"..","data")
-    atmo_fname = joinpath(datadir,"era_operational_archive_2019.nc")
-    filename_prefix = joinpath(datadir,"liguriansea_")
-    domain_name = "Ligurian Sea Region"
-
-    filenames = @time ROMS.prepare_ecmwf(atmo_fname,filename_prefix,domain_name)
-
-    # compare
-
-    basedir_ref = datadir
-
-    for i = 1:length(filenames)
-        Vname,fname = filenames[i]
-
-        Tname = ROMS.roms_metadata[Vname].Tname
-        output = split(replace(fname,filename_prefix => ""),"_")[1]
-
-        fname_ref = joinpath(basedir_ref,"ls2_$(output)_era_2019.nc")
-
-        dsout = Dataset(fname)
-        ds_ref = Dataset(fname_ref)
-
-        #@show ds_ref[Vname][1,1,1]
-        #@show dsout[Vname][1,1,1]
-
-        tindex = 1:length(ds_ref[Tname])
-        #tindex = 1:2
-        #@show ds_ref[Tname][1:2]
-        #@show dsout[Tname][1:2]
-
-        diff = ds_ref[Tname][tindex] - dsout[Tname][tindex]
-        @test all(Dates.value.(diff) .== 0)
-
-        diff = ds_ref[Vname][:,:,tindex] - dsout[Vname][:,:,tindex]
-
-        #@show std(ds_ref[Vname][:,:,end])
-        #@show std(dsout[Vname][:,:,end])
-        @test maximum(abs.(diff)) < 1e-4
-
-        close(dsout)
-        close(ds_ref)
-    end
+@testset "Forcing" begin
+    include("test_forcing.jl")
 end
 
-=#
 @testset "Example setup" begin
 #    include("../src/ls2_config.jl")
 #    include("../src/gen_model_setup.jl")
