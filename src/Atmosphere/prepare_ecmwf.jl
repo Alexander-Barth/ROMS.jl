@@ -185,13 +185,13 @@ function prepare_ecmwf(atmo_fname,filename_prefix,domain_name;
 
         Vname = F[i].Vname
         @info "Processing: $Vname for $(time[1]) - $(time[end])"
-        Tname = ROMS.roms_metadata[Vname].Tname
+        Tname = ROMS.metadata[Vname].Tname
 
         outfname = filename_prefix * "$(F[i].output)_test.nc"
 
         ncattrib = OrderedDict(
             String(k) => v for (k,v) in
-            pairs(ROMS.roms_metadata[Vname].ncattrib))
+            pairs(ROMS.metadata[Vname].ncattrib))
 
         merge!(ncattrib,OrderedDict(
             "time" => Tname,
@@ -199,7 +199,7 @@ function prepare_ecmwf(atmo_fname,filename_prefix,domain_name;
 
         ncattrib_time = OrderedDict(
             String(k) => v for (k,v) in
-            pairs(ROMS.roms_metadata[Tname].ncattrib))
+            pairs(ROMS.metadata[Tname].ncattrib))
 
         merge!(ncattrib_time,OrderedDict(
             "units"                     => "days since $(Dates.format(time_origin,"yyyy-mm-dd HH:MM:SS"))",
