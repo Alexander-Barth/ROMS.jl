@@ -1,5 +1,6 @@
 
-function extract_ic(domain,bigfile,icfile,t0)
+function extract_ic(domain,bigfile,icfile,t0;
+                    time_origin = DateTime(1858,11,17))
 
 
     missing_value = -99999;
@@ -7,7 +8,7 @@ function extract_ic(domain,bigfile,icfile,t0)
     if isfile(icfile)
         rm(icfile)
     end
-    ic = def_ic(icfile,domain,missing_value);
+    ic = def_ic(icfile,domain,missing_value; time_origin = time_origin);
 
     Dataset(bigfile,"r") do nc
         ic["ocean_time"][1] = t0;
@@ -52,6 +53,10 @@ function extract_ic(domain,bigfile,icfile,t0)
 
     end
     close(ic)
+
+    time_origin = DateTime(1858,11,17)
+    dstart = Dates.value(t0 - time_origin) / (24*60*60*1000)
+    @info "DSTART = $dstart"
 
     return nothing
 end

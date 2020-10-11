@@ -14,8 +14,10 @@ end
 atmo_fname = joinpath(datadir,"ecmwf_sample_data.nc")
 filename_prefix = joinpath(datadir,"liguriansea_")
 domain_name = "Ligurian Sea Region"
+Vnames = ["sustr","svstr","shflux","swflux","swrad","Uwind","Vwind","
+    lwrad","lwrad_down","latent","sensible","cloud","rain","Pair","Tair","Qair"]
 
-filenames = @time ROMS.prepare_ecmwf(atmo_fname,filename_prefix,domain_name)
+filenames = @time ROMS.prepare_ecmwf(atmo_fname,Vnames,filename_prefix,domain_name)
 
 # compare
 

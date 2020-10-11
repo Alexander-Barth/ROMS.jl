@@ -20,10 +20,27 @@ function relative_humidity(temperature_2m_C,dew_temperature_2m_C)
 end
 
 """
+    prepare_ecmwf(atmo_fname,Vnames,filename_prefix,domain_name;
+                       time_origin = DateTime(1858,11,17)
+    )
 
+Generate ROMS forcing fields from the ECMWF data file `atmo_fname`.
+
+# Example
+
+```julia
+datadir = "..."
+atmo_fname = joinpath(datadir,"ecmwf_sample_data.nc")
+filename_prefix = joinpath(datadir,"liguriansea_")
+domain_name = "Ligurian Sea Region"
+Vnames = ["sustr","svstr","shflux","swflux","swrad","Uwind","Vwind","lwrad",
+    "lwrad_down","latent","sensible","cloud","rain","Pair","Tair","Qair"]
+prepare_ecmwf(atmo_fname,Vnames,filename_prefix,domain_name)
+)
+```
 Based on forcing/d_ecmwf2roms.m
 """
-function prepare_ecmwf(atmo_fname,filename_prefix,domain_name;
+function prepare_ecmwf(atmo_fname,Vnames,filename_prefix,domain_name;
                        time_origin = DateTime(1858,11,17)
 )
 
@@ -163,9 +180,10 @@ function prepare_ecmwf(atmo_fname,filename_prefix,domain_name;
     ]
 
 
-    doFields = 1:16
+    #doFields = 1:16
+    doFields = filter(i -> F[i].Vname in Vnames,1:length(F))
 
-    filenames = [(F[i].Vname,filename_prefix * "$(F[i].output)_test.nc") for i = doFields]
+    filenames = [(F[i].Vname,filename_prefix * "$(F[i].output).nc") for i = doFields]
 
     # remove existing files
     for (Vname,fname) in filenames
@@ -187,7 +205,7 @@ function prepare_ecmwf(atmo_fname,filename_prefix,domain_name;
         @info "Processing: $Vname for $(time[1]) - $(time[end])"
         Tname = ROMS.metadata[Vname].Tname
 
-        outfname = filename_prefix * "$(F[i].output)_test.nc"
+        outfname = filename_prefix * "$(F[i].output).nc"
 
         ncattrib = OrderedDict(
             String(k) => v for (k,v) in
