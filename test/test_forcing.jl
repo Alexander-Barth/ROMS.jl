@@ -11,6 +11,7 @@ if !isdir(datadir)
     datadir = joinpath(pwd(),"ROMS-test-data")
 end
 
+@show datadir
 atmo_fname = joinpath(datadir,"ecmwf_sample_data.nc")
 filename_prefix = joinpath(datadir,"liguriansea_")
 domain_name = "Ligurian Sea Region"
@@ -27,7 +28,7 @@ for i = 1:length(filenames)
     Vname,fname = filenames[i]
 
     Tname = ROMS.metadata[Vname].Tname
-    output = split(replace(fname,filename_prefix => ""),"_")[1]
+    output = replace(replace(fname,filename_prefix => ""),".nc" => "")
 
     fname_ref = joinpath(basedir_ref,"liguriansea_$(output)_era_ref.nc")
 
