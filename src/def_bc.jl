@@ -1,5 +1,18 @@
 # domain.z_r and domain.mask
 
+
+function openboundaries(mask)
+    directions = String[];
+    if any(mask[2:end-1,1]);    push!(directions,"south");  end
+    if any(mask[2:end-1,end]);  push!(directions,"north");  end
+    if any(mask[1,2:end-1]);    push!(directions,"west");   end
+    if any(mask[end,2:end-1]);  push!(directions,"east");   end
+    return directions
+end
+
+
+openboundaries(domain::Grid) = openboundaries(domain.mask)
+
 function def_bc(bc_filename,domain,missing_value;
                      time_origin = DateTime(1858,11,17))
 
@@ -8,13 +21,7 @@ function def_bc(bc_filename,domain,missing_value;
     s_rho = size(domain.z_r,3)
     mask = domain.mask
 
-    directions = String[];
-
-    if any(mask[2:end-1,1]);    push!(directions,"south");  end
-    if any(mask[2:end-1,end]);  push!(directions,"north");  end
-    if any(mask[1,2:end-1]);    push!(directions,"west");   end
-    if any(mask[end,2:end-1]);  push!(directions,"east");   end
-
+    directions = openboundaries(mask)
 
     ds = NCDataset(bc_filename,"c", attrib = OrderedDict(
         "type"                      => "BOUNDARY FORCING file",

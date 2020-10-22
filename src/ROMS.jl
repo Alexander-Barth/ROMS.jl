@@ -37,6 +37,7 @@ include("metadata.jl")
 include("extract_bc.jl")
 include("def_bc.jl")
 include("generate_grid.jl")
+include("infile.jl")
 
 
 include("Atmosphere/prepare_ecmwf.jl")
