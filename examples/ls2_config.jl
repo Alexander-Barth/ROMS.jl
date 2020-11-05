@@ -87,6 +87,7 @@ cmems_password = ENV["CMEMS_PASSWORD"]
 
 t0 = DateTime(2019,1,1);
 t1 = DateTime(2019,1,2);
+t1 = DateTime(2019,2,1);
 
 #include(joinpath(dirname(@__FILE__),"..","src","gen_model_setup.jl"))
 
@@ -147,8 +148,9 @@ directions = ["west","south","east","north"]
 
 whenopen(BC) = join(map(d -> (d in openbc ? BC : "Clo"),directions)," ")
 DT = 150.
-NHIS = 24*60*60 / DT
+NHIS = round(Int,24*60*60 / DT)
 NAVG = NHIS
+NTIMES = floor(Int,Dates.value(t1-t0) / (DT * 1000))
 
 substitutions = Dict(
     "TITLE" => "My test",
