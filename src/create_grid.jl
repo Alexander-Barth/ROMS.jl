@@ -6,7 +6,10 @@ function create_grid(fname,h,f,lon_r,lat_r,mask_r,angle,pm,pn,dndx,dmde)
 
     xi_rho,eta_rho = size(h)
 
-    rm(fname)
+    if isfile(fname)
+       rm(fname)
+    end
+
     ds = def_grid(fname,xi_rho,eta_rho)
 
     mask_u,mask_v,mask_psi = stagger_mask(mask_r)
