@@ -1,11 +1,12 @@
 using Dates
 using PyPlot
+using ROMS
 ioff()
 
 # name of the domain
 domain_name = "LS2v";
 
-bath_name = "/mnt/data1/abarth/combined_emodnet_bathymetry.nc"
+bath_name = expanduser("~/Data/Bathymetry/combined_emodnet_bathymetry.nc")
 
 # range of longitude
 xr = [7.6, 12.2];
@@ -55,8 +56,8 @@ opt = (
 )
 
 atmo_model = "ecmwf";
-ecmwf_fname = joinpath(ENV["HOME"],"tmp/LS2v/era_interim_2019.nc")
-ecmwf_fname = expanduser("~/projects/Python/ROMS/ecmwf_operational_archive_2018-12-01T00:00:00_2020-01-01T00:00:00.nc")
+
+ecmwf_fname = expanduser("~/Data/Atmosphere/ecmwf_operational_archive_2018-12-01T00:00:00_2020-01-01T00:00:00.nc")
 
 atmo_filename = joinpath(basedir,"atmo-" * atmo_model * "2019.nc");
 
