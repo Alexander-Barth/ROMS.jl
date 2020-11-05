@@ -63,7 +63,7 @@ function download(ds::CMEMS,name::Symbol;
     for time = tr[1]:tchunk:(tr[end] + teps)
         tr2 = [time, min(time+tchunk,(tr[end]+teps) )];
 
-        fname = "$(var)_$(time).nc"
+        fname = "$(var)_$(time)_$(tr2[end]).nc"
         fullname = joinpath(ds.cachedir,fname)
 
         if !isfile(fullname)
