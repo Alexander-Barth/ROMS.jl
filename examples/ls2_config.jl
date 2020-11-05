@@ -126,7 +126,7 @@ Vnames = ["sustr","svstr","shflux","swflux","swrad","Uwind","Vwind","
 forcing_filenames = ROMS.prepare_ecmwf(ecmwf_fname,Vnames,filename_prefix,domain_name)
 
 
-romsdir = "/home/abarth/src/roms"
+romsdir = expanduser("~/src/roms")
 simulationdir = joinpath(basedir,"Simulation1")
 
 intemplate = joinpath(romsdir,"ROMS","External","roms_upwelling.in")
@@ -135,7 +135,7 @@ varname_template = joinpath(romsdir,"ROMS","External","varinfo.dat")
 mkpath(simulationdir)
 infile = joinpath(simulationdir,"roms.in")
 varname = joinpath(simulationdir,"varinfo.dat")
-cp(varname_template,varname)
+cp(varname_template,varname; force=true)
 
 forc_filenames  = unique(getindex.(forcing_filenames,2))
 
@@ -146,6 +146,9 @@ directions = ["west","south","east","north"]
 
 
 whenopen(BC) = join(map(d -> (d in openbc ? BC : "Clo"),directions)," ")
+DT = 150.
+NHIS = 24*60*60 / DT
+NAVG = NHIS
 
 substitutions = Dict(
     "TITLE" => "My test",
@@ -172,6 +175,9 @@ substitutions = Dict(
     "LBC(isVvel)" => whenopen("RadNud"),
     "LBC(isMtke)" => whenopen("Rad"),
     "LBC(isTvar)" => whenopen("RadNud") * " \\\n" * whenopen("RadNud"),
+    "DT" => DT,
+    "NHIS" => NHIS,
+    "NAVG" => NAVG,
 )
 
 ROMS.infilereplace(intemplate,infile,substitutions)
