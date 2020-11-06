@@ -16,7 +16,7 @@ yr = [42, 44.5];
 # reduce bathymetry in x and y direction
 red = (2, 2); # units: resolution of bathymetry (1/120 degrees)
 red = (8, 8); # units: resolution of bathymetry (1/480 degrees)
-
+red = (16, 16)
 
 # enable (true) or disable (false) plots
 do_plot = false;
@@ -64,8 +64,6 @@ atmo_filename = joinpath(basedir,"atmo-" * atmo_model * "2019.nc");
 atmo_dt = 6/24; # 6 hours
 atmo_dt = 3/24; # 3 hours
 
-bc_model = "hycom";
-bc_model = "mfs";
 bc_dt = Dates.Day(1); # 1 day
 
 
@@ -112,7 +110,9 @@ mkpath(outdir)
 dataset = ROMS.CMEMS(cmems_username,cmems_password,outdir)
 
 tr = [t0, t1]
-time = tr[1]:bc_dt:tr[end]
+
+tr = [t0-Dates.Day(1), t1+Dates.Day(1)]
+
 ROMS.interp_clim(domain,clim_filename,dataset,tr)
 
 ROMS.extract_ic(domain,clim_filename,ic_filename, t0);
