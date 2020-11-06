@@ -83,7 +83,7 @@ t0 = DateTime(2019,1,1);
 t1 = DateTime(2019,1,2);
 t1 = DateTime(2019,2,1);
 
-t1 = DateTime(2019,1,2);
+t0 = DateTime(2019,1,2);
 t1 = DateTime(2019,1,4);
 
 # setup dir
