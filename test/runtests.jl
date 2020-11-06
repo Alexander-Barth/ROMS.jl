@@ -106,9 +106,9 @@ end
 end
 
 @testset "Example setup" begin
-#    include("../src/ls2_config.jl")
+#    include("../src/example_config.jl")
 #    include("../src/gen_model_setup.jl")
 end
 
-#include("../src/ls2_config.jl")
+#include("../src/example_config.jl")
 #include("../src/gen_model_setup.jl")
