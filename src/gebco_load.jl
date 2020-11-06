@@ -15,6 +15,6 @@ function gebco_load(bath_name,xr,yr)
         x = x[i];
         y = y[j];
 
-        return x,y,b
+        return x,y,Float64.(b)
     end
 end

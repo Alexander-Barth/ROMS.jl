@@ -33,7 +33,6 @@ dndx[:, 2:end-1] = 0.5*(1 ./ pn[:, 3:end] - 1 ./ pn[:, 1:end-2]);
 ar = [1  cos(mean(y[:]) * pi/180) 1];
 
 # mask
-
 mask = b .< 0;
 
 # avoid isolated sea points at boundary
