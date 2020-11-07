@@ -14,10 +14,12 @@ addons:
         packages:
           - libnetcdf-dev gfortran make perl netcdf-bin libnetcdff-dev libopenmpi-dev openmpi-bin subversion git python3-pip wget
 
+install:
+  - python3 -m pip install motuclient
+
 script: # the default script is equivalent to the following
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
   - julia --project -e 'using Pkg; Pkg.build(); Pkg.test(; coverage=true)';
-  - python3 -m pip install motuclient;
   - examples/compile_run_ROMS.sh | tee compile_run_ROMS.log;
   - grep DONE compile_run_ROMS.log;
 
@@ -25,13 +27,13 @@ script: # the default script is equivalent to the following
 #  - julia -e 'using Pkg; Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())';
 #  - julia -e 'using Pkg; Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())';
 
-jobs:
-  include:
-    - stage: "Documentation"
-      julia: 1.5
-      os: linux
-      script:
-        - julia --project=docs/ -e 'using Pkg; Pkg.instantiate();
-                                    Pkg.develop(PackageSpec(path=pwd()))'
-        - julia --project=docs/ docs/make.jl
-      after_success: skip
+# jobs:
+#   include:
+#     - stage: "Documentation"
+#       julia: 1.5
+#       os: linux
+#       script:
+#         - julia --project=docs/ -e 'using Pkg; Pkg.instantiate();
+#                                     Pkg.develop(PackageSpec(path=pwd()))'
+#         - julia --project=docs/ docs/make.jl
+#       after_success: skip
