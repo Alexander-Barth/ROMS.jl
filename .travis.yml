@@ -23,6 +23,7 @@ jobs:
         - python3 -m pip install --upgrade pip
         - python3 -m pip install --upgrade setuptools
         - python3 -m pip install motuclient
+        - julia -e 'using Pkg; Pkg.develop(PackageSpec(path=pwd()))'
         - examples/compile_run_ROMS.sh | tee compile_run_ROMS.log;
         - grep DONE compile_run_ROMS.log;
       after_success: skip
