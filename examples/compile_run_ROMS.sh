@@ -9,7 +9,7 @@ BUILD_DIR="$HOME/Lectures/OCEA0036-1/ROMS-implementation-test"
 
 mkdir -p ~/src/
 cd ~/src/
-svn checkout --username "$ROMS_USERNAME" --password "$ROMS_PASSWORD" https://www.myroms.org/svn/src/trunk roms
+svn checkout --no-auth-cache --non-interactive  --username "$ROMS_USERNAME" --password "$ROMS_PASSWORD" https://www.myroms.org/svn/src/trunk roms
 svn up -r1042
 
 cd "$BUILD_DIR"
