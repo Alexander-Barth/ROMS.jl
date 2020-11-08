@@ -3,8 +3,9 @@ using ROMS
 using Statistics
 using Dates
 using NCDatasets
+using PyPlot
 
-
+#=
 @testset "Bathymetry" begin
     include("test_bathymetry.jl")
 end
@@ -76,6 +77,7 @@ end
     @test size(x_u,1) == size(x_r,1)-1
     @test size(x_u,2) == size(x_r,2)
 end
+=#
 
 #=
 @testset "OGCM" begin
@@ -101,21 +103,26 @@ end
 end
 =#
 
+#=
 @testset "Forcing" begin
     include("test_forcing.jl")
 end
+=#
 
-@testset "Example setup" begin
+#@testset "Example setup" begin
 #    include("../src/example_config.jl")
 #    include("../src/gen_model_setup.jl")
-end
+#end
 
 @testset "ROMS run" begin
-    setupscript = joinpath(@__DIR__,"examples","compile_run_ROMS.sh")
+    setupscript = joinpath(@__DIR__,"..","examples","compile_run_ROMS.sh")
     run(`$setupscript`)
-    include("..","examples","example_config.jl")
+    include(joinpath("..","examples","example_config.jl"))
     romsbin = expanduser("~/Lectures/OCEA0036-1/ROMS-implementation-test/romsM")
-    run(`mpirun -np 1 $romsbin roms.in`)
+
+    cd(expanduser("~/tmp-test2/LS2v/Simulation1")) do
+        run(`mpirun -np 1 $romsbin roms.in`)
+    end
 end
 
 #include("../src/example_config.jl")

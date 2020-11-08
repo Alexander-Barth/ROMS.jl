@@ -7,6 +7,7 @@ using Printf
 using DataStructures
 using DIVAnd
 using Statistics
+using PyPlot
 import Base: getindex, download
 
 include("constants.jl")

@@ -14,19 +14,22 @@ addons:
         packages:
           - libnetcdf-dev gfortran make perl netcdf-bin libnetcdff-dev libopenmpi-dev openmpi-bin subversion git python3-pip wget python3-setuptools python3-matplotlib
 
+before_install:
+    - python3 -m pip install motuclient
+
+
 jobs:
   include:
-    - stage: "ROMS run"
-      julia: 1.5
-      os: linux
-      script:
-        - python3 -m pip install --upgrade pip
-        - python3 -m pip install --upgrade setuptools
-        - python3 -m pip install motuclient
-        - julia -e 'using Pkg; Pkg.develop(PackageSpec(path=pwd()))'
-        - examples/compile_run_ROMS.sh | tee compile_run_ROMS.log;
-        - grep DONE compile_run_ROMS.log;
-      after_success: skip
+    # - stage: "ROMS run"
+    #   julia: 1.5
+    #   os: linux
+    #   script:
+    #     - python3 -m pip install --upgrade pip
+    #     - python3 -m pip install --upgrade setuptools
+    #     - julia -e 'using Pkg; Pkg.develop(PackageSpec(path=pwd()))'
+    #     - examples/compile_run_ROMS.sh | tee compile_run_ROMS.log;
+    #     - grep DONE compile_run_ROMS.log;
+    #   after_success: skip
     - stage: "Documentation"
       julia: 1.5
       os: linux
