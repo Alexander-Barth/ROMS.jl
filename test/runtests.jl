@@ -110,5 +110,13 @@ end
 #    include("../src/gen_model_setup.jl")
 end
 
+@testset "ROMS run" begin
+    setupscript = joinpath(@__DIR__,"examples","compile_run_ROMS.sh")
+    run(`$setupscript`)
+    include("..","examples","example_config.jl")
+    romsbin = expanduser("~/Lectures/OCEA0036-1/ROMS-implementation-test/romsM")
+    run(`mpirun -np 1 $romsbin roms.in`)
+end
+
 #include("../src/example_config.jl")
 #include("../src/gen_model_setup.jl")
