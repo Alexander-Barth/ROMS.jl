@@ -115,15 +115,16 @@ end
 #end
 
 @testset "ROMS run" begin
-    setupscript = joinpath(@__DIR__,"..","examples","compile_run_ROMS.sh")
-    run(`$setupscript`)
-    include(joinpath("..","examples","example_config.jl"))
-    romsbin = expanduser("~/Lectures/OCEA0036-1/ROMS-implementation-test/romsM")
+    if Sys.islinux() && haskey(ENV,"ROMS_PASSWORD")
+        setupscript = joinpath(@__DIR__,"..","examples","compile_run_ROMS.sh")
+        run(`$setupscript`)
+        include(joinpath("..","examples","example_config.jl"))
+        romsbin = expanduser("~/Lectures/OCEA0036-1/ROMS-implementation-test/romsM")
 
-    cd(expanduser("~/tmp-test2/LS2v/Simulation1")) do
-        run(`mpirun -np 1 $romsbin roms.in`)
+        cd(expanduser("~/tmp-test2/LS2v/Simulation1")) do
+            run(`mpirun -np 1 $romsbin roms.in`)
+        end
     end
 end
-
 #include("../src/example_config.jl")
 #include("../src/gen_model_setup.jl")
