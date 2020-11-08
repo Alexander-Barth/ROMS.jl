@@ -6,30 +6,28 @@ os:
 julia:
   - 1.5
 
-notifications:
-  email: false
-
 addons:
     apt: # apt-get for linux
         packages:
           - libnetcdf-dev gfortran make perl netcdf-bin libnetcdff-dev libopenmpi-dev openmpi-bin subversion git python3-pip wget python3-setuptools python3-matplotlib
 
+notifications:
+  email: false
+
+
 before_install:
     - python3 -m pip install motuclient
+
+# using default test script
+after_success:
+  # push coverage results to Coveralls
+  - julia -e 'using Pkg; cd(Pkg.dir("DIVAnd")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
+  # push coverage results to Codecov
+  - julia -e 'using Pkg; cd(Pkg.dir("DIVAnd")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
 
 
 jobs:
   include:
-    # - stage: "ROMS run"
-    #   julia: 1.5
-    #   os: linux
-    #   script:
-    #     - python3 -m pip install --upgrade pip
-    #     - python3 -m pip install --upgrade setuptools
-    #     - julia -e 'using Pkg; Pkg.develop(PackageSpec(path=pwd()))'
-    #     - examples/compile_run_ROMS.sh | tee compile_run_ROMS.log;
-    #     - grep DONE compile_run_ROMS.log;
-    #   after_success: skip
     - stage: "Documentation"
       julia: 1.5
       os: linux
