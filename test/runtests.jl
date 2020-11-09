@@ -109,16 +109,11 @@ end
 end
 =#
 
-#@testset "Example setup" begin
-#    include("../src/example_config.jl")
-#    include("../src/gen_model_setup.jl")
-#end
-
 @testset "ROMS run" begin
     if Sys.islinux() && haskey(ENV,"ROMS_PASSWORD")
         setupscript = joinpath(@__DIR__,"compile_run_ROMS.sh")
         run(`$setupscript`)
-        include(joinpath("..","examples","example_config.jl"))
+        include("example_config.jl")
         romsbin = expanduser("~/ROMS-implementation-test/romsM")
 
         cd(expanduser("~/ROMS-implementation-test/Simulation1")) do
