@@ -63,6 +63,7 @@ jobs:
         with:
           version: '1'
       - run: |
+          sudo apt-get install python3-matplotlib
           git config --global user.name name
           git config --global user.email email
           git config --global github.user username
