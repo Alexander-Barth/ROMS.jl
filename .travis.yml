@@ -9,7 +9,20 @@ julia:
 addons:
     apt: # apt-get for linux
         packages:
-          - libnetcdf-dev gfortran make perl netcdf-bin libnetcdff-dev libopenmpi-dev openmpi-bin subversion git python3-pip wget python3-setuptools python3-matplotlib
+          - git
+          - gfortran
+          - libnetcdf-dev
+          - libnetcdff-dev
+          - libopenmpi-dev
+          - make
+          - netcdf-bin
+          - openmpi-bin
+          - perl
+          - python3-pip
+          - python3-setuptools
+          - python3-matplotlib
+          - subversion
+          - wget
 
 notifications:
   email: false
@@ -17,6 +30,9 @@ notifications:
 
 before_install:
     - python3 -m pip install motuclient
+
+script:
+    - julia --project --color=yes --check-bounds=yes -e 'using Pkg; Pkg.instantiate(); Pkg.build(); Pkg.test(; coverage=true)'
 
 # using default test script
 after_success:
