@@ -5,7 +5,7 @@ using Dates
 using NCDatasets
 using PyPlot
 
-#=
+
 @testset "Bathymetry" begin
     include("test_bathymetry.jl")
 end
@@ -77,37 +77,22 @@ end
     @test size(x_u,1) == size(x_r,1)-1
     @test size(x_u,2) == size(x_r,2)
 end
-=#
 
-#=
-@testset "OGCM" begin
-    outdir = joinpath(basedir,"OGCM")
-    mkpath(outdir)
 
-    ENV["JULIA_DEBUG"] = "ROMS"
-    tr = [t0,t1]
-    dataset = ROMS.CMEMS(cmems_username,cmems_password,outdir)
-
-    ds_zeta = dataset[:sea_surface_height_above_geoid]
-    filenames = download(ds_zeta,longitude=xr,latitude=yr,time=tr)
-
-    sv,(sx,sy,st) = load(ds_zeta,longitude=xr,latitude=yr,time=tr)
-
+@testset "Interpolation" begin
     z = reshape(-10:0,(1,1,11))
     v = 2*z
     zi = reshape(-10:0,(1,1,11))
 
     vi = ROMS.interp1z(z,v,zi; extrap_surface = false, extrap_bottom = false);
     @test vi ≈ 2*zi
-
 end
-=#
 
-#=
+
 @testset "Forcing" begin
     include("test_forcing.jl")
 end
-=#
+
 
 @testset "ROMS run" begin
     if Sys.islinux() && haskey(ENV,"ROMS_PASSWORD")
@@ -118,8 +103,7 @@ end
 
         cd(expanduser("~/ROMS-implementation-test/Simulation1")) do
             run(`mpirun -np 1 $romsbin roms.in`)
+            @test isfile("roms_his.nc")
         end
     end
 end
-#include("../src/example_config.jl")
-#include("../src/gen_model_setup.jl")
