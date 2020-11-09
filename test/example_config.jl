@@ -1,6 +1,5 @@
 using Dates
 using ROMS
-ioff()
 
 # name of the domain
 domain_name = "LS2v";
@@ -31,14 +30,22 @@ rmax = 0.4;
 # minimal depth
 hmin = 2; # m
 
-# name of folders
-modeldir = joinpath(ENV["HOME"],"ROMS-implementation-test") # grid file
+# name of folders and files
+
+# grid file
+modeldir = joinpath(ENV["HOME"],"ROMS-implementation-test")
+grid_fname = joinpath(modeldir,domain_name * ".nc")
+
 basedir = joinpath(ENV["HOME"],"ROMS-implementation-test")
 
-clim_filename =  joinpath(basedir,"clim2019.nc"); # GCM interpolated on model grid
-ic_filename =  joinpath(basedir,"ic2019.nc"); # initial conditions
-bc_filename =  joinpath(basedir,"bc2019.nc"); # boundary conditions
-grid_fname = joinpath(modeldir,domain_name * ".nc")
+# GCM interpolated on model grid
+clim_filename =  joinpath(basedir,"clim2019.nc")
+
+# initial conditions
+ic_filename =  joinpath(basedir,"ic2019.nc")
+
+# boundary conditions
+bc_filename =  joinpath(basedir,"bc2019.nc")
 
 # model specific parameters
 opt = (
@@ -52,7 +59,7 @@ opt = (
 
 #ecmwf_fname = expanduser("~/Data/Atmosphere/ecmwf_operational_archive_2018-12-01T00:00:00_2020-01-01T00:00:00.nc")
 
-# from 2019-01-01 03:00:00  to 2019-01-07 03:00:00
+# ECMWF from 2019-01-01 03:00:00  to 2019-01-07 03:00:00
 ecmwf_fname = expanduser("~/Data/Atmosphere/ecmwf_sample_data.nc")
 
 if !isfile(ecmwf_fname)
@@ -61,26 +68,14 @@ if !isfile(ecmwf_fname)
 end
 
 
-bc_dt = Dates.Day(1); # 1 day
-
-# change time range
-# t0 start time
-# t1 end time
-
-t0 = DateTime(2019,1,1);
-t1 = DateTime(2019,1,2);
-#t1 = DateTime(2019,1,10);
-#t1 = DateTime(2020,1,1);
-
-t1 = DateTime(2018,12,1);
-t0 = DateTime(2020,1,1);
+# CMEMS credentials
 
 cmems_username = ENV["CMEMS_USERNAME"]
 cmems_password = ENV["CMEMS_PASSWORD"]
 
-t0 = DateTime(2019,1,1);
-t1 = DateTime(2019,1,2);
-t1 = DateTime(2019,2,1);
+# change time range
+# t0 start time
+# t1 end time
 
 t0 = DateTime(2019,1,2);
 t1 = DateTime(2019,1,4);
@@ -90,9 +85,7 @@ t1 = DateTime(2019,1,4);
 mkpath(basedir);
 mkpath(modeldir);
 
-
 ROMS.generate_grid(grid_fname,bath_name,xr,yr,red,opt,hmin,rmax);
-
 
 mkpath(basedir);
 domain = ROMS.Grid(grid_fname,opt);
@@ -101,7 +94,6 @@ domain = ROMS.Grid(grid_fname,opt);
 
 outdir = joinpath(basedir,"OGCM")
 mkpath(outdir)
-
 
 dataset = ROMS.CMEMS(cmems_username,cmems_password,outdir)
 
