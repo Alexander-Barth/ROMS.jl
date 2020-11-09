@@ -74,8 +74,8 @@ jobs:
       - run: |
           julia --project=docs -e '
             using Documenter: doctest
-            using PkgTemplates
-            doctest(PkgTemplates)'
+            using ROMS
+            doctest(ROMS)'
       - run: julia --project=docs docs/make.jl
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
