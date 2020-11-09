@@ -32,8 +32,8 @@ rmax = 0.4;
 hmin = 2; # m
 
 # name of folders
-modeldir = joinpath(ENV["HOME"],"Models-tmp",domain_name); # grid file
-basedir = joinpath(ENV["HOME"],"tmp-test2",domain_name);
+modeldir = joinpath(ENV["HOME"],"ROMS-implementation-test") # grid file
+basedir = joinpath(ENV["HOME"],"ROMS-implementation-test")
 
 clim_filename =  joinpath(basedir,"clim2019.nc"); # GCM interpolated on model grid
 ic_filename =  joinpath(basedir,"ic2019.nc"); # initial conditions

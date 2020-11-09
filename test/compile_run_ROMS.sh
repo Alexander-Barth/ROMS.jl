@@ -5,7 +5,7 @@
 # ~/Data/Atmosphere/ecmwf_operational_archive_2018-12-01T00:00:00_2020-01-01T00:00:00.nc
 
 
-BUILD_DIR="$HOME/Lectures/OCEA0036-1/ROMS-implementation-test"
+BUILD_DIR="$HOME/ROMS-implementation-test"
 
 mkdir -p ~/src/
 cd ~/src/

@@ -66,14 +66,14 @@ function model_interp3_(x::AbstractVector,y::AbstractVector,z,v,xi,yi,zi;
                        extrap_bottom = extrap_bottom)
     end
 
-    @show extrema(vii[isfinite.(vii)])
-    
+    #@show extrema(vii[isfinite.(vii)])
+
     if missing == :ufill
         vii = DIVAnd.ufill(vii,isfinite.(vii))
     elseif missing == :zero
         vii[isnan.(vii)] .= 0
     end
 
-    @show extrema(vii)
+    #@show extrema(vii)
     return vii
 end

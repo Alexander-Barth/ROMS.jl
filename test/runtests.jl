@@ -116,12 +116,12 @@ end
 
 @testset "ROMS run" begin
     if Sys.islinux() && haskey(ENV,"ROMS_PASSWORD")
-        setupscript = joinpath(@__DIR__,"..","examples","compile_run_ROMS.sh")
+        setupscript = joinpath(@__DIR__,"compile_run_ROMS.sh")
         run(`$setupscript`)
         include(joinpath("..","examples","example_config.jl"))
-        romsbin = expanduser("~/Lectures/OCEA0036-1/ROMS-implementation-test/romsM")
+        romsbin = expanduser("~/ROMS-implementation-test/romsM")
 
-        cd(expanduser("~/tmp-test2/LS2v/Simulation1")) do
+        cd(expanduser("~/ROMS-implementation-test/Simulation1")) do
             run(`mpirun -np 1 $romsbin roms.in`)
         end
     end
