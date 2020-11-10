@@ -24,9 +24,6 @@ yr = [42, 44.5];
 # reduce bathymetry in x and y direction
 red = (4, 4)
 
-# enable (true) or disable (false) plots
-do_plot = false;
-
 # maximum normalized topographic variations
 rmax = 0.4;
 
@@ -36,10 +33,10 @@ hmin = 2; # m
 # name of folders and files
 
 # grid file
-modeldir = joinpath(ENV["HOME"],"ROMS-implementation-test")
+modeldir = expanduser("~/ROMS-implementation-test")
 grid_fname = joinpath(modeldir,domain_name * ".nc")
 
-basedir = joinpath(ENV["HOME"],"ROMS-implementation-test")
+basedir = expanduser("~/ROMS-implementation-test")
 
 # GCM interpolated on model grid
 clim_filename =  joinpath(basedir,"clim2019.nc")
@@ -60,6 +57,8 @@ opt = (
     Vstretching = 4,
 )
 
+
+# https://dox.ulg.ac.be/index.php/s/tbzNV9Z9UPtG5et/download
 #ecmwf_fname = expanduser("~/Data/Atmosphere/ecmwf_operational_archive_2018-12-01T00:00:00_2020-01-01T00:00:00.nc")
 
 # ECMWF from 2019-01-01 03:00:00  to 2019-01-07 03:00:00
@@ -126,6 +125,7 @@ varname_template = joinpath(romsdir,"ROMS","External","varinfo.dat")
 mkpath(simulationdir)
 infile = joinpath(simulationdir,"roms.in")
 varname = joinpath(simulationdir,"varinfo.dat")
+
 cp(varname_template,varname; force=true)
 
 forc_filenames  = unique(getindex.(forcing_filenames,2))
@@ -137,9 +137,12 @@ directions = ["west","south","east","north"]
 
 whenopen(BC) = join(map(d -> (d in openbc ? BC : "Clo"),directions)," ")
 
+# time step (seconds)
 DT = 300.
+# output frequency of ROMS in time steps
 NHIS = round(Int,24*60*60 / DT)
 NAVG = NHIS
+# number of time steps
 NTIMES = floor(Int,Dates.value(t1-t0) / (DT * 1000))
 
 substitutions = Dict(
