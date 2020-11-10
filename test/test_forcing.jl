@@ -1,14 +1,18 @@
 using ROMS
 using NCDatasets
 using Test
+using Dates
 
 datadir = joinpath(dirname(@__FILE__),"..","data")
 
 if !isdir(datadir)
-    # ROMS-test-data
+    # get ROMS-test-data
     testdatazip = download("https://dox.ulg.ac.be/index.php/s/hr2QIw8ND7a6dGZ/download")
-    run(`unzip -o $testdatazip`)
-    datadir = joinpath(pwd(),"ROMS-test-data")
+    temporarydir = mktempdir()
+    cd(temporarydir) do
+        run(`unzip $testdatazip`)
+    end
+    datadir = joinpath(temporarydir,"ROMS-test-data")
 end
 
 @show datadir
