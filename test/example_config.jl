@@ -5,11 +5,14 @@ using ROMS
 domain_name = "LS2v";
 
 #bath_name = expanduser("~/Data/Bathymetry/combined_emodnet_bathymetry.nc")
-bath_name = expanduser("~/Data/Bathymetry/gebco_30sec_1.nc")
+#bath_name = expanduser("~/Data/Bathymetry/gebco_30sec_1.nc")
+# longitude from 5°E to 15°E and latitude from 40°N to 45°N
+bath_name = expanduser("~/Data/Bathymetry/gebco_30sec_1_ligurian_sea.nc")
 
 if !isfile(bath_name)
     mkpath(dirname(bath_name))
-    download("http://modb.oce.ulg.ac.be/mediawiki/upload/OCEA0036/gebco_30sec_1.nc",bath_name)
+    #download("http://modb.oce.ulg.ac.be/mediawiki/upload/OCEA0036/gebco_30sec_1.nc",bath_name)
+    download("https://dox.ulg.ac.be/index.php/s/piwSaFP3nhM8jSD/download",bath_name)
 end
 
 # range of longitude

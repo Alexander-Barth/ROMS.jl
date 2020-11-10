@@ -7,7 +7,7 @@ datadir = joinpath(dirname(@__FILE__),"..","data")
 if !isdir(datadir)
     # ROMS-test-data
     testdatazip = download("https://dox.ulg.ac.be/index.php/s/hr2QIw8ND7a6dGZ/download")
-    run(`unzip $testdatazip`)
+    run(`unzip -o $testdatazip`)
     datadir = joinpath(pwd(),"ROMS-test-data")
 end
 
