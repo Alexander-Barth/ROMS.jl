@@ -45,10 +45,14 @@ end
 """
     grid = ROMS.Grid(grid_fname,opt)
 
-Note
-grid.z is for an elevation equal to zero.
+Loads the ROMS grid from a NetCDF file `grid_fname`. The `grid` structure contains the
+longitude, latitude, depth (`z`), angle and mask at rho, u, v and w points for 
+a C-grid.
 
-Example
+!!! note
+    `grid.z` corresponds to an elevation equal to zero.
+
+## Example
 
 ```julia
 opt = (

@@ -1,50 +1,46 @@
 """
     s,C = stretching(Vstretching, theta_s, theta_b, hc, N, kgrid, report)
 
-STRETCHING:  Compute ROMS vertical coordinate stretching function
-
+Compute ROMS vertical coordinate stretching function.
 
 Given vertical terrain-following vertical stretching parameters, this
 routine computes the vertical stretching function used in ROMS vertical
-coordinate transformation. Check the following link for details:
+coordinate transformation. Check the following (link)[https://www.myroms.org/wiki/index.php/Vertical_S-coordinate] for details:
 
-   https://www.myroms.org/wiki/index.php/Vertical_S-coordinate
 
-On Input:
+## On Input:
 
-   Vstretching   Vertical stretching function:
+*   `Vstretching`:   Vertical stretching function:
+```
                    Vstretching = 1,  original (Song and Haidvogel, 1994)
                    Vstretching = 2,  A. Shchepetkin (UCLA-ROMS, 2005)
                    Vstretching = 3,  R. Geyer BBL refinement
                    Vstretching = 4,  A. Shchepetkin (UCLA-ROMS, 2010)
                    Vstretching = 5,  Quadractic (Souza et al., 2015)
-   theta_s       S-coordinate surface control parameter (scalar)
-   theta_b       S-coordinate bottom control parameter (scalar)
-   hc            Width (m) of surface or bottom boundary layer in which
+```
+*   `theta_s`:       S-coordinate surface control parameter (scalar)
+*   `theta_b`:       S-coordinate bottom control parameter (scalar)
+*   `hc`:            Width (m) of surface or bottom boundary layer in which
                    higher vertical resolution is required during
                    stretching (scalar)
-   N             Number of vertical levels (scalar)
-   kgrid         Depth grid type logical switch:
+*   `N`:             Number of vertical levels (scalar)
+*   `kgrid`         Depth grid type logical switch:
                    kgrid = 0,        function at vertical RHO-points
                    kgrid = 1,        function at vertical W-points
-   report        Flag to report detailed information (OPTIONAL):
+*   `report`        Flag to report detailed information (OPTIONAL):
                    report = false,   do not report
                    report = true,    report information
 
-On Output:
+## On Output:
 
-   s             S-coordinate independent variable, [-1 <= s <= 0] at
+*   `s`:             S-coordinate independent variable, [-1 <= s <= 0] at
                    vertical RHO- or W-points (vector)
-   C             Nondimensional, monotonic, vertical stretching function,
+*    `C`:             Nondimensional, monotonic, vertical stretching function,
                    C(s), 1D array, [-1 <= C(s) <= 0]
 
-
-svn \$Id: stretching.m 996 2020-01-10 04:28:56Z arango \$
-========================================================================#
- Copyright (c) 2002-2020 The ROMS/TOMS Group                            #
-   Licensed under a MIT/X style license                                 #
-   See License_ROMS.txt                           Hernan G. Arango      #
-========================================================================#
+The code is ported from the matlab code `stretching.m` from Hernan G. Arango.
+Copyright (c) 2002-2020 The ROMS/TOMS Group, Licensed under a MIT/X style license
+See License_ROMS.txt, Hernan G. Arango
 """
 function stretching(Vstretching, theta_s, theta_b, hc, N, kgrid;
                     report = false)

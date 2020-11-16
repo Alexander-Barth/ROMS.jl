@@ -19,6 +19,33 @@ struct CMEMS <: AbstractDataset
     mapping::Dict{Symbol,NTuple{2,String}}
 end
 
+
+"""
+    ds = ROMS.CMEMS(username,password,cachedir;
+                   service_id = "MEDSEA_ANALYSIS_FORECAST_PHY_006_013-TDS",
+                   motu_server = "http://nrt.cmems-du.eu/motu-web/Motu",
+                   # Put here the path of the script motuclient
+                   motu_program = "motuclient",
+                   mapping = Dict(
+                       # var  product_id
+                       :sea_surface_height_above_geoid => ("zos","med00-cmcc-ssh-an-fc-d"),
+                       :sea_water_potential_temperature => ("thetao", "med00-cmcc-tem-an-fc-d"),
+                       :sea_water_salinity => ("so","med00-cmcc-sal-an-fc-d"),
+                       :eastward_sea_water_velocity => ("uo", "med00-cmcc-cur-an-fc-d"),
+                       :northward_sea_water_velocity => ("vo", "med00-cmcc-cur-an-fc-d"),
+               ))
+
+Returns a structure `ds` to connect to a CMEMS Motu server using the python
+tools `motuclient` (which must be available in your `PATH`).
+The `mapping` parameter contains a dictorary linking the NetCDF CF standard namer
+to the underlying NetCDF variable names and the product identifers (more
+information is available in the product user manual).
+`cachedir` is a directory where the products are downloaded for caching.
+
+!!! note
+    The default values of `service_id` and `mapping` are specific to the
+    Mediterranean  Sea and must be adapted for other domains.
+"""
 function CMEMS(username,password,cachedir;
                service_id = "MEDSEA_ANALYSIS_FORECAST_PHY_006_013-TDS",
                motu_server = "http://nrt.cmems-du.eu/motu-web/Motu",
@@ -100,7 +127,12 @@ function download(ds::CMEMS,name::Symbol;
 end
 
 
+"""
+    v,(x,y,z,t) = ROMS.load(ds::CMEMS,name::Symbol; kwargs...)
 
+Loads a variable from a CMEMS remote resource.
+`name` is the NetCDF CF standard name.
+"""
 function load(ds::CMEMS,name::Symbol; kwargs...)
     filenames,var = download(ds,name; kwargs...)
     ds = NCDataset(filenames,"r",aggdim = "time")

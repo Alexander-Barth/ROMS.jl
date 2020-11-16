@@ -1,5 +1,11 @@
 """
-    interpolate climatology
+    ROMS.interp_clim(domain,clim_filename,dataset,timerange;
+                     padding = 0.5,
+                     missing_value = -9999.)
+
+Interpolate `dataset` on the the model grid `domain` and creating the
+climatology file `clim_filename` for all dates between `timerange[1]` and
+`timerange[2]`.
 """
 function interp_clim(domain,clim_filename,dataset,timerange;
                      padding = 0.5,

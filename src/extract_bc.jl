@@ -1,3 +1,10 @@
+"""
+    ROMS.extract_bc(domain,clim_filename,bc_filename; missing_value = 9999)
+
+From the climatology `clim_filename` extract the boundary conditions
+at all open boundaries (using the `mask` in `domain`)
+and save the result into the netCDF `nc_filename`.
+"""
 function extract_bc(domain,clim_filename,bc_filename; missing_value = 9999)
     clim = NCDataset(clim_filename,"r")
     mask = domain.mask

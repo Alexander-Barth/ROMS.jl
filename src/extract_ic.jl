@@ -1,5 +1,12 @@
+"""
+    ROMS.extract_ic(domain,clim_filename,icfile,t0::DateTime;
+                    time_origin = DateTime(1858,11,17))
 
-function extract_ic(domain,bigfile,icfile,t0;
+
+From the climatology `clim_filename` extract a single time instance at the time
+`t0` (or the nearest) and save the result into `icfile`.
+"""
+function extract_ic(domain,clim_filename,icfile,t0;
                     time_origin = DateTime(1858,11,17))
 
 
@@ -10,7 +17,7 @@ function extract_ic(domain,bigfile,icfile,t0;
     end
     ic = def_ic(icfile,domain,missing_value; time_origin = time_origin);
 
-    Dataset(bigfile,"r") do nc
+    Dataset(clim_filename,"r") do nc
         ic["ocean_time"][1] = t0;
 
         # all variables for which IC must be provided
@@ -54,7 +61,6 @@ function extract_ic(domain,bigfile,icfile,t0;
     end
     close(ic)
 
-    time_origin = DateTime(1858,11,17)
     dstart = Dates.value(t0 - time_origin) / (24*60*60*1000)
     @info "DSTART = $dstart"
 

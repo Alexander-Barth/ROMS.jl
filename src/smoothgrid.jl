@@ -1,13 +1,16 @@
 """
+    hsmooth = smoothgrid(h,hmin,rmax)
 
-Smooth the topography to get a maximum r factor = rmax
+Smooth the topography to get a maximum `r` factor equalt to `rmax`
+
+The original code is from Pierrick Penven from [Roms_tools](http://forge.ipsl.jussieu.fr/roms_locean/browser/Roms_tools/Preprocessing_tools/smoothgrid.m?rev=1).
 Copyright (c) 2002-2006 by Pierrick Penven, GPL
 """
 function smoothgrid(h,hmin,rmax)
     println(" Smooth the topography...")
     h = copy(h)
 
-    in=findall(isnan.(h))
+    in = findall(isnan.(h))
     if length(in) > 0
         println("NaN values found in interpolated h, set to mindepth");
         h[in] .= hmin;

@@ -6,6 +6,18 @@
 <!-- [![documentation stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://alexander-barth.github.io/ROMS.jl/stable/) -->
 [![documentation latest](https://img.shields.io/badge/docs-dev-blue.svg)](https://alexander-barth.github.io/ROMS.jl/dev/)
 
+# Installation
+
+Install ROMS.jl with in julia 1.5 or later:
+
+```julia
+using Pkg
+Pkg.add(url="https://github.com/Alexander-Barth/ROMS.jl", rev="master")
+```
+
+# Documentations
+
+Documentation is available [here](https://alexander-barth.github.io/ROMS.jl/dev/).
 
 # Credits
 

@@ -1,5 +1,12 @@
 """
-    Non-rotated grids
+    ROMS.create_grid(fname,h,f,lon_r,lat_r,mask_r,angle,pm,pn,dndx,dmde)
+
+Create a NetCDF grid file `fname` using the bathymetry `h`, Coriolis parameter
+`f` and longitude, latitude, mask, angle and strechting factors are rho-points.
+
+!!! note
+    This function currently only work for non-rotated grids (angle = 0) and
+    the spherical grids.
 """
 function create_grid(fname,h,f,lon_r,lat_r,mask_r,angle,pm,pn,dndx,dmde)
     @assert all(angle .== 0)
@@ -16,7 +23,7 @@ function create_grid(fname,h,f,lon_r,lat_r,mask_r,angle,pm,pn,dndx,dmde)
     lon_u,lon_v,lon_psi = stagger(lon_r)
     lat_u,lat_v,lat_psi = stagger(lat_r)
 
-    m = pi/180 * earthradius
+    m = π/180 * earthradius
 
     x_rho,y_rho = sg_mercator(lon_r,lat_r)
     x_psi,y_psi = sg_mercator(lon_psi,lat_psi)
