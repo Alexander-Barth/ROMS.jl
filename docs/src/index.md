@@ -22,7 +22,7 @@ cd My\ Directory\ Name
 ### Registration
 
 Please register at:
-* [ROMS (Regional Ocean Modeling System)](https://www.myroms.org/index.php?page=RomsCode)
+* [ROMS (Regional Ocean Modeling System)](https://www.myroms.org/index.php?page=RomsCode). This example uses the subversion revision 1042.
 * [CMEMS (Copernicus Marine Environment Monitoring Service)](http://marine.copernicus.eu/services-portfolio/register-now/)
 
 To generate new forcing fields, register at (optional):
@@ -69,10 +69,10 @@ Note that all libraries (NetCDF and MPI) must be compiled with the same Fortran 
 
 On Windows, various ways exist to install gfortran, GNU make and other dependencies:
 * Windows Subsystem for Linux
-     * Installation: (https://msdn.microsoft.com/en-us/commandline/wsl/install_guide)
-     * FAQ (in particular exchanging files) https://docs.microsoft.com/en-us/windows/wsl/faq
-* Cygwin (https://www.cygwin.com/)
-* MINGW http://www.mingw.org/
+     * [Installation guide](https://msdn.microsoft.com/en-us/commandline/wsl/install_guide)
+     * [FAQ (in particular exchanging files)](https://docs.microsoft.com/en-us/windows/wsl/faq)
+* [Cygwin](https://www.cygwin.com/)
+* [MINGW](http://www.mingw.org/)
 * Linux virtual machine using e.g. VirtualBox
 * ...
 
@@ -86,7 +86,7 @@ On Debian/Ubuntu, these packages can be installed by this command:
 sudo apt install gfortran make perl netcdf-bin libnetcdff-dev libopenmpi-dev openmpi-bin subversion git python3-pip python3-setuptools
 ```
 
-* For CMEMS data, you need the python package `motuclient`. Read the installation instructions at https://github.com/clstoulouse/motu-client-python#Installation
+* For CMEMS data, you need the python package `motuclient`. Read the [installation instructions](https://github.com/clstoulouse/motu-client-python#Installation)
 For example:
 
 ```bash
@@ -107,7 +107,7 @@ source ~/.bashrc
 ```
 
 
-* For ECMWF data, you need the pacakge `ecmwf-api-client-python` (optional). Follow the installation instructions (including the ECMWF key) at https://software.ecmwf.int/wiki/display/WEBAPI/Access+ECMWF+Public+Datasets
+* For ECMWF data, you need the pacakge `ecmwf-api-client-python` (optional). Follow the [installation instructions](https://software.ecmwf.int/wiki/display/WEBAPI/Access+ECMWF+Public+Datasets) (including the ECMWF key)
      * Note that the ECMWF key is different from your password
 
 ### Check your environment
@@ -150,19 +150,20 @@ These commands should return a basic usage info or the version number if they ar
 
 ### Source code and data
 
-* Extract the file `ROMS-implementation.zip` available at https://dox.ulg.ac.be/index.php/s/nH8u2DrI1m9mMbC
-* The full GEBCO bathymetry (the file `gebco_30sec_1.nc`) is available at http://modb.oce.ulg.ac.be/mediawiki/upload/OCEA0036/gebco_30sec_1.nc (optional)
+* Extract the file [ROMS-implementation.zip](https://dox.ulg.ac.be/index.php/s/nH8u2DrI1m9mMbC)
+* The full [GEBCO bathymetry](http://modb.oce.ulg.ac.be/mediawiki/upload/OCEA0036/gebco_30sec_1.nc) (the file `gebco_30sec_1.nc`, optional)
 
 
 ### Area
 
-Choose an area
+Choose an area:
+
 * What interesting processes are present in your studied area? (note: now we all use the Ligurian Sea)
 * Are there in situ measurements available for your area? Look for temperature and salinity within your areas (for any time frame)
      * Check with [World Ocean Database](https://www.nodc.noaa.gov/OC5/SELECT/dbsearch/dbsearch.html)
      * [CMEMS in situ Thematic Assemble Centre (TAC)](http://marine.copernicus.eu/)
 * Visualize a couple of downloaded profiles:
-     * Hints: in Julia you can use the package `NCDatasets` (https://github.com/Alexander-Barth/NCDatasets.jl)
+     * Hints: in Julia you can use the package [`NCDatasets`](https://github.com/Alexander-Barth/NCDatasets.jl)
      * How would you distribute the vertical resolution in your model represent this profile?
 
 * Check that your longitude/latitude/time range model of your nested model is within longitude/latitude/time range of the outer model providing the boundary conditions
@@ -458,14 +459,14 @@ p2.set_clim(p1.get_clim())
 ### Validation
 
 Check out satellite data (e.g. sea surface temperature, sea surface height) at:
-* CMEMS http://marine.copernicus.eu/
-* PODAAC NASA https://podaac.jpl.nasa.gov/
+* [CMEMS](http://marine.copernicus.eu/)
+* [PODAAC NASA](https://podaac.jpl.nasa.gov/)
 
 Make some comparison with satellite and the downloaded in situ observation
 
 ### Hydrodynamic model troubleshooting
 
-https://github.com/gher-ulg/Documentation/wiki/Hydrodynamic-model-troubleshooting
+[Hydrodynamic model troubleshooting](https://github.com/gher-ulg/Documentation/wiki/Hydrodynamic-model-troubleshooting)
 
 
 ### More information
