@@ -10,7 +10,11 @@ BUILD_DIR="$HOME/ROMS-implementation-test"
 mkdir -p ~/src/
 cd ~/src/
 svn checkout --no-auth-cache --non-interactive  --username "$ROMS_USERNAME" --password "$ROMS_PASSWORD" https://www.myroms.org/svn/src/trunk roms
+
+cd ~/src/roms
 svn up -r1042
+
+echo svnversion $(svnversion)
 
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
@@ -23,6 +27,10 @@ cp ~/src/roms/ROMS/Bin/build_roms.sh build_roms.sh
 
 # modify compile script
 patch < build_roms.sh.patch
+
+if [ -e build_roms.sh.rej ]; then
+    cat build_roms.sh.rej
+fi
 
 # Compile ROMS
 ./build_roms.sh -j 2 -noclean
