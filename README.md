@@ -15,7 +15,7 @@ using Pkg
 Pkg.add(url="https://github.com/Alexander-Barth/ROMS.jl", rev="master")
 ```
 
-# Documentations
+# Documentation
 
 Documentation is available [here](https://alexander-barth.github.io/ROMS.jl/dev/).
 

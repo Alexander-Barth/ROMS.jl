@@ -9,11 +9,10 @@ BUILD_DIR="$HOME/ROMS-implementation-test"
 
 mkdir -p ~/src/
 cd ~/src/
-svn checkout --no-auth-cache --non-interactive  --username "$ROMS_USERNAME" --password "$ROMS_PASSWORD" https://www.myroms.org/svn/src/trunk roms
+svn checkout --no-auth-cache --non-interactive  --username "$ROMS_USERNAME" \
+    --password "$ROMS_PASSWORD" --revision 1042 https://www.myroms.org/svn/src/trunk roms
 
 cd ~/src/roms
-svn up -r1042
-
 echo svnversion $(svnversion)
 
 mkdir -p "$BUILD_DIR"

@@ -12,8 +12,12 @@ vapor_pressure(T) = 6.11 * 10.0 ^ (7.5 * T / (237.7 + T))
 
 
 """
+    rh = relative_humidity(temperature_2m_C,dew_temperature_2m_C)
 
-https://web.archive.org/web/20200926200733/https://www.weather.gov/media/epz/wxcalc/vaporPressure.pdf
+Compute the relative humidity (between 0 and 100) from temperature at 2 m, and dew_temperature at
+2 m) both in degree Celsius)
+
+[1] https://web.archive.org/web/20200926200733/https://www.weather.gov/media/epz/wxcalc/vaporPressure.pdf
 """
 function relative_humidity(temperature_2m_C,dew_temperature_2m_C)
     100 * vapor_pressure(dew_temperature_2m_C) / vapor_pressure(temperature_2m_C)
@@ -38,7 +42,13 @@ Vnames = ["sustr","svstr","shflux","swflux","swrad","Uwind","Vwind","lwrad",
 prepare_ecmwf(atmo_fname,Vnames,filename_prefix,domain_name)
 )
 ```
-Based on forcing/d_ecmwf2roms.m
+
+Based on forcing/d_ecmwf2roms.m:
+
+    Copyright (c) 2002-2017 The ROMS/TOMS Group      Hernan G. Arango
+    Licensed under a MIT/X style license             John Wilkin
+    See License_ROMS.txt
+
 """
 function prepare_ecmwf(atmo_fname,Vnames,filename_prefix,domain_name;
                        time_origin = DateTime(1858,11,17)

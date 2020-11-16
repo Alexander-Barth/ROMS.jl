@@ -4,7 +4,7 @@ This package allows to setup necessary files for the [ROMS ocean model](https://
 
 ## Tutorial
 
-This tutorial is for students following the ULiege lecture OCEA0036-1 but might be useful for others as well.
+This tutorial is for students following the ULiège lecture OCEA0036-1 but might be useful for others as well.
 
 ### Using for the first time a UNIX/Linux-like environment?
 
@@ -483,45 +483,3 @@ Modules = [ROMS]
 Order   = [:function, :type]
 ```
 
-
-
-<!--  LocalWords:  ROMS cd CMEMS ECMWF Centre sudo wget xvf ln PyPlot
- -->
-<!--  LocalWords:  NCDatasets julia url gfortran NetCDF ncdump nf MPI
- -->
-<!--  LocalWords:  config perl Cygwin MINGW VirtualBox MacOS Homebrew
- -->
-<!--  LocalWords:  netcdf libnetcdff dev libopenmpi openmpi pacakge
- -->
-<!--  LocalWords:  setuptools motuclient ecmwf api Datasets mpif nc
- -->
-<!--  LocalWords:  mpirun vUnknown GEBCO bathymetry gebco Ligurian jl
- -->
-<!--  LocalWords:  situ TAC yourdomain motu OGCM basedir clim py msl
- -->
-<!--  LocalWords:  metre dewpoint tcc sshf strd ssr str ewss nsss ro
- -->
-<!--  LocalWords:  tp sst Photosynthetically advection GRADPS NONLIN
- -->
-<!--  LocalWords:  Jacobian Shchepetkin EOS HADVECTION VADVECTION DIF
- -->
-<!--  LocalWords:  VIS QDRAG ifdef HORAVG KANTHA CLAYSON endif BSFLUX
- -->
-<!--  LocalWords:  BTFLUX SSFLUX LONGWAVE roms CPP UPWELLING PWD SRC
- -->
-<!--  LocalWords:  LigurianSea makefile mk OpenMP ifort pgi HDF fi eq
- -->
-<!--  LocalWords:  BINDIR dprint MyAppCPP VARNAME GRDNAME ININAME Lm
- -->
-<!--  LocalWords:  BRYNAME CLMNAME FRCNAME NFFILES LBC refrence DT np
- -->
-<!--  LocalWords:  DSTART DateTime NTIMES NHIS NAVG NRST LtracerCLM
- -->
-<!--  LocalWords:  LnudgeTCLM TNUDG OBCFAC nondimensional romsS randn
- -->
-<!--  LocalWords:  NtileI NtileJ pcolor colorbar NLM barotropic ENRG
- -->
-<!--  LocalWords:  baroclinic Courant POTEN Cv PODAAC Hedström OCS
- -->
-<!--  LocalWords:  BOEM
- -->
