@@ -142,7 +142,6 @@ function set_depth(Vtransform, Vstretching,
 
     s,C = stretching(Vstretching, theta_s, theta_b, hc, N, kgrid, report = report);
 
-    z = zeros(Lp,Mp,(igrid == 5 ? Np : N))
     #--------------------------------------------------------------------------
     #  Average bathymetry and free-surface at requested C-grid type.
     #--------------------------------------------------------------------------
@@ -150,19 +149,24 @@ function set_depth(Vtransform, Vstretching,
     if igrid == 1
         hr=h;
         zetar=zeta;
+        z = zeros(Lp,Mp,N)
     elseif igrid == 2
         hp=0.25.*(h[1:L,1:M]+h[2:Lp,1:M]+h[1:L,2:Mp]+h[2:Lp,2:Mp]);
         zetap=0.25.*(zeta[1:L,1:M ]+zeta[2:Lp,1:M ]+
                      zeta[1:L,2:Mp]+zeta[2:Lp,2:Mp]);
+        z = zeros(L,M,N)
     elseif igrid == 3
         hu=0.5.*(h[1:L,1:Mp]+h[2:Lp,1:Mp]);
         zetau=0.5.*(zeta[1:L,1:Mp]+zeta[2:Lp,1:Mp]);
+        z = zeros(L,Mp,N)
     elseif igrid == 4
         hv=0.5.*(h[1:Lp,1:M]+h[1:Lp,2:Mp]);
         zetav=0.5.*(zeta[1:Lp,1:M]+zeta[1:Lp,2:Mp]);
+        z = zeros(Lp,M,N)
     elseif igrid == 5
         hr=h;
         zetar=zeta;
+        z = zeros(Lp,Mp,Np)
     end
 
     #--------------------------------------------------------------------------
