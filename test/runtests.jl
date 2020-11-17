@@ -45,11 +45,13 @@ end
 
     @test z[10,10,:] ≈ z_ref
 
-    for Vstretching = 1:5
-        for Vtransform = 1:2
-            local z
-            z = ROMS.set_depth(Vtransform, Vstretching, theta_s, theta_b, hc, N,  igrid, h;
-                               zeta = zeta);
+    for igrid = 1:5
+        for Vstretching = 1:5
+            for Vtransform = 1:2
+                local z
+                z = ROMS.set_depth(Vtransform, Vstretching, theta_s, theta_b, hc, N,  igrid, h;
+                                   zeta = zeta);
+            end
         end
     end
 end
