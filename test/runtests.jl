@@ -90,6 +90,10 @@ end
 
 
 @testset "Forcing" begin
+    # reference values from https://en.wikipedia.org/w/index.php?title=Vapour_pressure_of_water&oldid=987479989
+    @test ROMS.vapor_pressure(20) ≈ 23.388 rtol=0.01
+    @test ROMS.vapor_pressure_Buck(20) ≈ 23.388 rtol=0.01
+
     include("test_forcing.jl")
 end
 

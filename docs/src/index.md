@@ -55,6 +55,12 @@ Pkg.add("NCDatasets")
 Pkg.develop(url="https://github.com/Alexander-Barth/ROMS.jl")
 ```
 
+Under Linux, you need to install also `python3-matplotlib` for PyPlot using the following shell command
+
+```bash
+sudo apt install python3-matplotlib
+```
+
 Other required software typically available from a package manager:
 * A Fortran 90 compiler (e.g. gfortran)
 * GNU make

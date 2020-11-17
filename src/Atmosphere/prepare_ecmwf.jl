@@ -1,9 +1,31 @@
+
+vapor_pressure_Tetens(T) = 6.1078 * exp( 17.27 * T / (T + 237.3))
+
+
+"""
+    e = vapor_pressure_Buck(T)
+
+actual vapor pressure in hPa (millibars) from dewpoint temperature `T` in degree Celsius
+using using [Buck (1996)](https://en.wikipedia.org/w/index.php?title=Arden_Buck_equation&oldid=946509994). If `T` is the air temperature, then  `e` is the saturated vapor
+pressure over liquid water is given by:
+
+``
+e(T) = 6.1121 \\exp \\left(\\left( 18.678 - \\frac{T} {234.5}\\right)\\left( \\frac{T} {257.14 + T} \\right)\\right)
+``
+"""
+vapor_pressure_Buck(T) = 6.1121 * exp( (18.678 - T/234.5) * T / (257.14 + T))
+
+
 """
     e = vapor_pressure(T)
 
 actual vapor pressure in hPa (millibars) from dewpoint temperature `T` in degree Celsius
-using [1]. If `T` is the air temperature, then  `e` is the saturated vapor
-pressure.
+using using [1]. If `T` is the air temperature, then  `e` is the saturated vapor
+pressure over liquid water is given by:
+
+``
+e(T) = 6.11 \\cdot 10 ^ {\\left(  \\frac{7.5 T}{237.7 + T} \\right)}
+``
 
 [1] https://web.archive.org/web/20200926200733/https://www.weather.gov/media/epz/wxcalc/vaporPressure.pdf
 """
