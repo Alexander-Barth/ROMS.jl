@@ -119,7 +119,7 @@ forcing_filenames = ROMS.prepare_ecmwf(ecmwf_fname,Vnames,filename_prefix,domain
 romsdir = expanduser("~/src/roms")
 simulationdir = joinpath(basedir,"Simulation1")
 
-intemplate = joinpath(romsdir,"ROMS","External","roms_upwelling.in")
+intemplate = joinpath(romsdir,"User","External","roms.in")
 varname_template = joinpath(romsdir,"ROMS","External","varinfo.dat")
 
 mkpath(simulationdir)
@@ -177,3 +177,14 @@ substitutions = Dict(
 )
 
 ROMS.infilereplace(intemplate,infile,substitutions)
+
+
+# NBCFILES and NCLMFILES missing in roms.in but required
+
+text = String(read(infile));
+index = findfirst("BRYNAME",text)[1]
+text = text[1:index-1] * "NBCFILES == 1\n     NCLMFILES == 1\n     " * text[index:end]
+write(infile,text);
+
+
+nothing

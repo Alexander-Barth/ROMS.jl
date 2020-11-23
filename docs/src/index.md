@@ -22,7 +22,7 @@ cd My\ Directory\ Name
 ### Registration
 
 Please register at:
-* [ROMS (Regional Ocean Modeling System)](https://www.myroms.org/index.php?page=RomsCode). This example uses the subversion revision 1042.
+* [ROMS (Regional Ocean Modeling System)](https://www.myroms.org/index.php?page=RomsCode).
 * [CMEMS (Copernicus Marine Environment Monitoring Service)](http://marine.copernicus.eu/services-portfolio/register-now/)
 
 To generate new forcing fields, register at (optional):
@@ -55,11 +55,24 @@ Pkg.add("NCDatasets")
 Pkg.develop(url="https://github.com/Alexander-Barth/ROMS.jl")
 ```
 
-Under Linux, you need to install also `python3-matplotlib` for PyPlot using the following shell command
+Under Linux, you need to install also `python3-matplotlib` for PyPlot. On Debian/Ubuntu, this packages can be installed by this command:
+
 
 ```bash
 sudo apt install python3-matplotlib
 ```
+
+* ROMS source. This example uses the subversion revision 1042. We assume that the ROMS source is copied in `~/src/roms`:
+
+```bash
+mkdir ~/src/
+cd ~/src/
+svn checkout  --non-interactive  --username "$ROMS_USERNAME" \
+    --password "$ROMS_PASSWORD" --revision 1042 https://www.myroms.org/svn/src/trunk roms
+```
+
+In the previous command, you need to replace `$ROMS_USERNAME` and `$ROMS_PASSWORD` by your username and password.
+
 
 Other required software typically available from a package manager:
 * A Fortran 90 compiler (e.g. gfortran)
@@ -331,10 +344,12 @@ List of variables (*: quantities accumulated over the integration period ("step"
 diff /path/to/previous/build_roms.bash build_roms.bash
 ```
 
+ * copy `varinfo.dat` from `~/src/roms/ROMS/External/varinfo.dat` in your current directory
+
 
 ### ROMS model domain configuration
 
- * copy `roms.in` from `roms/User/External/roms.in`
+ * copy `roms.in` from `~/src/roms/User/External/roms.in`
  * check the glossary at the end of this file for the meaning of the keys that we will change
  * when editing this file, do not use "tabs".
 
@@ -342,6 +357,13 @@ diff /path/to/previous/build_roms.bash build_roms.bash
  * adapt `MyAppCPP`
 
  * adapt file names `VARNAME`, `GRDNAME`, `ININAME`, `BRYNAME`, `CLMNAME`,  `FRCNAME` and `NFFILES`
+
+ * also make sure that these variables are set (number of files with boundary conditions and climatology). If they do not exist, they need to be added (near `BRYNAME` for example).
+
+```
+ NBCFILES == 1
+NCLMFILES == 1
+```
 
  * change `Lm`, `Mm` and `N` based on the dimensions of your grid (make sure to read the glossary for these variable)
 
@@ -373,6 +395,7 @@ Use `DateTime` if you want to specify hour, minutes or seconds.
     * `NTIMES` -> 1 day
     * `NHIS`, `NAVG`-> should correspond to 1 hour
     * `NRST` -> should correspond to 1 hour
+
 
 ### Nudging towards "climatology"
 
