@@ -21,19 +21,11 @@ end
 
 
 """
-    ds = ROMS.CMEMS(username,password,cachedir;
-                   service_id = "MEDSEA_ANALYSIS_FORECAST_PHY_006_013-TDS",
+    ds = ROMS.CMEMS(username,password,service_id,mapping,cachedir;
                    motu_server = "http://nrt.cmems-du.eu/motu-web/Motu",
                    # Put here the path of the script motuclient
                    motu_program = "motuclient",
-                   mapping = Dict(
-                       # var  product_id
-                       :sea_surface_height_above_geoid => ("zos","med00-cmcc-ssh-an-fc-d"),
-                       :sea_water_potential_temperature => ("thetao", "med00-cmcc-tem-an-fc-d"),
-                       :sea_water_salinity => ("so","med00-cmcc-sal-an-fc-d"),
-                       :eastward_sea_water_velocity => ("uo", "med00-cmcc-cur-an-fc-d"),
-                       :northward_sea_water_velocity => ("vo", "med00-cmcc-cur-an-fc-d"),
-               ))
+               )
 
 Returns a structure `ds` to connect to a CMEMS Motu server using the python
 tools `motuclient` (which must be available in your `PATH`).
@@ -42,24 +34,33 @@ to the underlying NetCDF variable names and the product identifers (more
 information is available in the product user manual).
 `cachedir` is a directory where the products are downloaded for caching.
 
-!!! note
-    The default values of `service_id` and `mapping` are specific to the
-    Mediterranean  Sea and must be adapted for other domains.
+## Example
+
+The  values of `service_id` and `mapping` below are specific to the
+Mediterranean Sea and must be adapted for other domains.
+
+```julia
+cmems_username = "Alice"
+cmems_password = "rabbit"
+outdir = "/tmp"
+service_id = "MEDSEA_ANALYSIS_FORECAST_PHY_006_013-TDS"
+mapping = Dict(
+    # var  product_id
+    :sea_surface_height_above_geoid => ("zos","med00-cmcc-ssh-an-fc-d"),
+    :sea_water_potential_temperature => ("thetao", "med00-cmcc-tem-an-fc-d"),
+    :sea_water_salinity => ("so","med00-cmcc-sal-an-fc-d"),
+    :eastward_sea_water_velocity => ("uo", "med00-cmcc-cur-an-fc-d"),
+    :northward_sea_water_velocity => ("vo", "med00-cmcc-cur-an-fc-d"),
+)
+dataset = ROMS.CMEMS(cmems_username,cmems_password,service_id,mapping,outdir)
+```
+
 """
-function CMEMS(username,password,cachedir;
-               service_id = "MEDSEA_ANALYSIS_FORECAST_PHY_006_013-TDS",
+function CMEMS(username,password,service_id,mapping,cachedir;
                motu_server = "http://nrt.cmems-du.eu/motu-web/Motu",
                # Put here the path of the script motuclient
                motu_program = "motuclient",
-               mapping = Dict(
-                   # var  product_id
-                   :sea_surface_height_above_geoid => ("zos","med00-cmcc-ssh-an-fc-d"),
-                   :sea_water_potential_temperature => ("thetao", "med00-cmcc-tem-an-fc-d"),
-                   :sea_water_salinity => ("so","med00-cmcc-sal-an-fc-d"),
-                   :eastward_sea_water_velocity => ("uo", "med00-cmcc-cur-an-fc-d"),
-                   :northward_sea_water_velocity => ("vo", "med00-cmcc-cur-an-fc-d"),
-               ))
-
+)
     return CMEMS(
         username,
         password,
