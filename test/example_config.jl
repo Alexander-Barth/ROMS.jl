@@ -97,7 +97,17 @@ domain = ROMS.Grid(grid_fname,opt);
 outdir = joinpath(basedir,"OGCM")
 mkpath(outdir)
 
-dataset = ROMS.CMEMS(cmems_username,cmems_password,outdir)
+service_id = "MEDSEA_ANALYSIS_FORECAST_PHY_006_013-TDS"
+mapping = Dict(
+    # var  product_id
+    :sea_surface_height_above_geoid => ("zos","med00-cmcc-ssh-an-fc-d"),
+    :sea_water_potential_temperature => ("thetao", "med00-cmcc-tem-an-fc-d"),
+    :sea_water_salinity => ("so","med00-cmcc-sal-an-fc-d"),
+    :eastward_sea_water_velocity => ("uo", "med00-cmcc-cur-an-fc-d"),
+    :northward_sea_water_velocity => ("vo", "med00-cmcc-cur-an-fc-d"),
+)
+
+dataset = ROMS.CMEMS(cmems_username,cmems_password,service_id,mapping,outdir)
 
 # take one extra day
 tr = [t0-Dates.Day(1), t1+Dates.Day(1)]

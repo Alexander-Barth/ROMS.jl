@@ -37,6 +37,7 @@ jobs:
             ${{ runner.os }}-
       - uses: julia-actions/julia-buildpkg@latest
       - run: |
+          sudo apt-get update
           sudo apt-get install libnetcdf-dev gfortran make perl netcdf-bin libnetcdff-dev libopenmpi-dev openmpi-bin subversion git python3-pip wget python3-setuptools python3-matplotlib
           sudo python3 -m pip install --upgrade pip
           sudo python3 -m pip install motuclient
