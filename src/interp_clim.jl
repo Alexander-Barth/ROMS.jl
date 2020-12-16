@@ -53,44 +53,63 @@ function interp_clim(domain,clim_filename,dataset,timerange;
     ctemp = ds["temp"]
     csalt = ds["salt"]
 
-    for ni = 1:N
-        t = time[ni];
-        @info "load $t"
 
+    #netcdf_lock = ReentrantLock()
+
+    #Threads.@threads for ni = 1:N
+    for ni = 1:N
         zz = zeros(size(zeta,1),size(zeta,2));
 
+        # lock(netcdf_lock) do
+        # global t
+        # global zv
+        # global sv
+        # global tv
+        # global uv
+        # global vv
+
+            t = time[ni];
+            @info "load $t"
+            zv = nomissing(zeta[:,:,ni],NaN)
+            sv = nomissing(salt[:,:,:,ni],NaN)
+            tv = nomissing(temp[:,:,:,ni],NaN)
+            uv = nomissing(u[:,:,:,ni],NaN)
+            vv = nomissing(v[:,:,:,ni],NaN)
+            @debug "loaded $t"
+#        end
+
         @info "interpolate $t"
-        climtime[ni] = time[ni]
-        czeta[:,:,ni] = ROMS.model_interp3(zx,zy,zz,nomissing(zeta[:,:,ni],NaN),
-                                           x,y,z_r[:,:,end],missing = :ufill);
+        @debug "zeta $t"
+        zetai = ROMS.model_interp3(zx,zy,zz,zv,x,y,z_r[:,:,end],missing = :ufill);
 
-        sv = nomissing(salt[:,:,:,ni],NaN)
-        csalt[:,:,:,ni] = ROMS.model_interp3(sx,sy,sz,sv,x,y,z_r,missing = :ufill);
+        @debug "salt $t"
+        salti = ROMS.model_interp3(sx,sy,sz,sv,x,y,z_r,missing = :ufill);
 
-        tv = nomissing(temp[:,:,:,ni],NaN)
-        ctemp[:,:,:,ni] = ROMS.model_interp3(tx,ty,tz,tv,x,y,z_r,missing = :ufill);
+        @debug "temp $t"
+        tempi = ROMS.model_interp3(tx,ty,tz,tv,x,y,z_r,missing = :ufill);
 
-        uv = nomissing(u[:,:,:,ni],NaN)
-        vv = nomissing(v[:,:,:,ni],NaN)
-
+        @debug "vel $t"
         ui_rc = ROMS.model_interp3(ux,uy,uz,uv,x,y,z_r,missing = :zero);
         vi_rc = ROMS.model_interp3(vx,vy,vz,vv,x,y,z_r,missing = :zero);
 
+        @debug "rotate $t"
 
         # rotate velocity
         ui_r =  cos.(angle) .* ui_rc + sin.(angle) .* vi_rc;
         vi_r = -sin.(angle) .* ui_rc + cos.(angle) .* vi_rc;
 
+        @debug "stagger $t"
         # stagger on C grid
         ui =  (ui_r[1:end-1,:,:] + ui_r[2:end,:,:])/2;
         vi =  (vi_r[:,1:end-1,:] + vi_r[:,2:end,:])/2;
 
+        @debug "ubar/vbar $t"
 
         # depth-averaged current
         U, = ROMS.vinteg(uv,uz);
         V, = ROMS.vinteg(vv,vz);
 
-        @show size(U)
+        @debug "stagger $t"
         Ui_rc = ROMS.model_interp3(ux,uy,uz,U,x,y,z_r[:,:,end],missing = :zero);
         Vi_rc = ROMS.model_interp3(vx,vy,vz,V,x,y,z_r[:,:,end],missing = :zero);
 
@@ -117,12 +136,23 @@ function interp_clim(domain,clim_filename,dataset,timerange;
             @show maximum(abs.(vbar - vbar2c))
         end
 
-        cu[:,:,:,ni] = ui;
-        cv[:,:,:,ni] = vi;
+        # write to NetCDF files
+        # the lock will become unnecessary once netcdf is thread safe
+        # https://github.com/Unidata/netcdf-c/issues/1373
+#        lock(netcdf_lock) do
+            @debug "saving $t"
+            climtime[ni] = t
+            czeta[:,:,ni] = zetai
+            csalt[:,:,:,ni] = salti
+            ctemp[:,:,:,ni] = tempi
 
-        cubar[:,:,ni] = ubar;
-        cvbar[:,:,ni] = vbar;
+            cu[:,:,:,ni] = ui
+            cv[:,:,:,ni] = vi
 
+            cubar[:,:,ni] = ubar
+            cvbar[:,:,ni] = vbar
+            @debug "saved $t"
+ #       end
     end
     close(ds)
 end

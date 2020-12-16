@@ -9,6 +9,7 @@ using DIVAnd
 using Statistics
 using PyPlot
 import Base: getindex, download
+using Base.Threads
 
 include("constants.jl")
 include("types.jl")

@@ -45,11 +45,17 @@ function model_interp3_(x::AbstractVector,y::AbstractVector,z,v,xi,yi,zi;
     zt = zeros(xi_rho, eta_rho, kmax);
 
     # horizontal interpolation
+    @debug "horizontal interpolation"
     @inbounds for k = 1:kmax
-        itpv = interpolate((x,y),view(v,:,:,k),Gridded(Linear()))
+        v_k = v[:,:,k]
+        if any(isfinite.(v_k))
+            v_k = DIVAnd.ufill(v_k,isfinite.(v_k))
+        end
+
+        itpv = interpolate((x,y),v_k,Gridded(Linear()))
         itpz = interpolate((x,y),view(z,:,:,k),Gridded(Linear()))
 
-        for j = 1:eta_rho
+        Threads.@threads for j = 1:eta_rho
             for i = 1:xi_rho
                 vt[i,j,k] = itpv(xi[i,j],yi[i,j]);
                 zt[i,j,k] = itpz(xi[i,j],yi[i,j]);
@@ -60,7 +66,9 @@ function model_interp3_(x::AbstractVector,y::AbstractVector,z,v,xi,yi,zi;
     if kmax == 1
         vii = vt;
     else
+        @debug "vertical interpolation"
         # vertical interpolation
+
         vii = interp1z(zt,vt,zi;
                        extrap_surface = extrap_surface,
                        extrap_bottom = extrap_bottom)
@@ -73,6 +81,7 @@ function model_interp3_(x::AbstractVector,y::AbstractVector,z,v,xi,yi,zi;
     elseif missing == :zero
         vii[isnan.(vii)] .= 0
     end
+    @debug "end model_interp3"
 
     #@show extrema(vii)
     return vii
