@@ -141,7 +141,7 @@ whenopen(BC) = join(map(d -> (d in openbc ? BC : "Clo"),directions)," ")
 DT = 300.
 # output frequency of ROMS in time steps
 NHIS = round(Int,24*60*60 / DT)
-NAVG = NHIS
+NRST = NAVG = NHIS
 # number of time steps
 NTIMES = floor(Int,Dates.value(t1-t0) / (DT * 1000))
 
@@ -173,6 +173,7 @@ substitutions = Dict(
     "DT" => DT,
     "NHIS" => NHIS,
     "NAVG" => NAVG,
+    "NRST" => NRST,
     "NTIMES" => NTIMES,
 )
 
