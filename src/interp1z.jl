@@ -9,10 +9,13 @@ function interp1z(z,v,zi; extrap_surface = false, extrap_bottom = false);
 
     # vertical interpolation
     vii = fill(NaN,size(zi))
-    tmpzi = zeros(size(zi,3))
+    _tmpzi = zeros(size(zi,3),nthreads())
 
+    ϵ = 10*eps(Float32)
     @debug "vertical interpolation"
     Threads.@threads for j=1:size(v,2)
+        tmpzi = @view _tmpzi[:,threadid()]
+
         @inbounds for i=1:size(v,1)
             tmpz = @view z[i,j,:]
 
@@ -20,14 +23,14 @@ function interp1z(z,v,zi; extrap_surface = false, extrap_bottom = false);
                 tmpzi[k] = zi[i,j,k]
 
                 if extrap_surface
-                    max_tmpz = maximum(tmpz)
+                    max_tmpz = maximum(tmpz) - ϵ
                     if tmpzi[k] > max_tmpz
                         tmpzi[k] = max_tmpz
                     end
                 end
 
                 if extrap_bottom
-                    min_tmpz = minimum(tmpz)
+                    min_tmpz = minimum(tmpz) + ϵ
                     if tmpzi[k] < min_tmpz
                         tmpzi[k] = min_tmpz
                     end
