@@ -80,7 +80,8 @@ function Grid(grid_fname,opt)
     mask = Bool.(nomissing(ds["mask_rho"][:,:]))
     mask_u = Bool.(nomissing(ds["mask_u"][:,:]))
     mask_v = Bool.(nomissing(ds["mask_v"][:,:]))
-    mask_psi = Bool.(nomissing(ds["mask_psi"][:,:]))
+    # note mask_psi can be 2 on coast
+    mask_psi = nomissing(ds["mask_psi"][:,:]) .== 1
     pm = nomissing(ds["pm"][:,:])
     pn = nomissing(ds["pn"][:,:])
     lon = nomissing(ds["lon_rho"][:,:])
@@ -91,7 +92,13 @@ function Grid(grid_fname,opt)
     lat_v = nomissing(ds["lat_v"][:,:])
     lon_psi = nomissing(ds["lon_psi"][:,:])
     lat_psi = nomissing(ds["lat_psi"][:,:])
-    angle = nomissing(ds["angle"][:,:])
+
+    angle =
+        if haskey(ds,"angle")
+            nomissing(ds["angle"][:,:])
+        else
+            zeros(size(mask))
+        end
     close(ds)
 
     hmin = minimum(h)
@@ -164,4 +171,22 @@ function Grid(grid_fname,opt)
         z_v,
         z_w,
     )
+end
+
+
+
+function Grid(his_fname)
+    opt =
+        Dataset(his_fname,"r") do ds
+            (Tcline = ds["Tcline"][:],
+             theta_s = ds["theta_s"][:],
+             theta_b = ds["theta_b"][:],
+             nlevels = Int(ds.dim["s_rho"]),
+             Vtransform  = Int(ds["Vtransform"][:]),
+             Vstretching = Int(ds["Vstretching"][:]),
+             )
+        end
+
+    grid = ROMS.Grid(his_fname,opt)
+    return grid
 end
