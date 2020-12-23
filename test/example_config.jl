@@ -117,6 +117,19 @@ ROMS.interp_clim(domain,clim_filename,dataset,tr)
 ROMS.extract_ic(domain,clim_filename,ic_filename, t0);
 ROMS.extract_bc(domain,clim_filename,bc_filename)
 
+# nudging coefficient
+
+tscale = 5; # days
+alpha = 0.3;
+halo = 1;
+Niter = 20
+max_tscale = 5e5
+
+nudge_filename = joinpath(basedir,"roms_nud.nc")
+tracer_NudgeCoef = ROMS.nudgecoef(domain,nudge_filename,alpha,Niter,
+          halo,tscale; max_tscale = max_tscale)
+@show tracer_NudgeCoef[1:5,10]
+@test tracer_NudgeCoef[1,10] ≈ 1/tscale
 
 filename_prefix = joinpath(basedir,"liguriansea2019_")
 domain_name = "Ligurian Sea Region"
