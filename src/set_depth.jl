@@ -78,6 +78,7 @@ function set_depth(Vtransform, Vstretching,
     #  Copyright (c) 2002-2020 The ROMS/TOMS Group                            #
     #    Licensed under a MIT/X style license                                 #
     #    See License_ROMS.txt                           Hernan G. Arango      #
+    #    https://www.myroms.org/main.php?page=License_ROMS                    #
     #=========================================================================#
 
 

@@ -41,6 +41,7 @@ coordinate transformation. Check the following (link)[https://www.myroms.org/wik
 The code is ported from the matlab code `stretching.m` from Hernan G. Arango.
 Copyright (c) 2002-2020 The ROMS/TOMS Group, Licensed under a MIT/X style license
 See License_ROMS.txt, Hernan G. Arango
+https://www.myroms.org/main.php?page=License_ROMS
 """
 function stretching(Vstretching, theta_s, theta_b, hc, N, kgrid;
                     report = false)
