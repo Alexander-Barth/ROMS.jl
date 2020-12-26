@@ -1,17 +1,11 @@
 """
-     f2 = diffusion2(f1,alpha,Niter)
+     diffusion2!(f,alpha,Niter)
 
-Two-dimensional diffusion of field f
-
- Input:
-   f1: initial condition of field.
-   alpha: vector of two elements. Diffusion coefficient (multiplied by grid spacing) for the two dimensions.
-   Niter: number of iterations.
-
- Output:
-   f2: field after Niter iterations.
-
-# Author: Alexander Barth <a.barth@ulg.ac.be>, 2010
+Two-dimensional diffusion of field `f`. `f` is the initial condition of field.
+`alpha` is a vector or tuple with two elements corresponding to the diffusion
+coefficient (multiplied by grid spacing) for the two dimensions.
+`Niter` is the number of iterations.
+On output, `f` is the field after `Niter` iterations.
 """
 function diffusion2!(f,alpha,Niter,bc! = nothing)
 
@@ -48,18 +42,3 @@ end
 
     return f
 end
-
-# Copyright (C) 2010,2020 Alexander Barth <a.barth@ulg.ac.be>
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; If not, see <http://www.gnu.org/licenses/>.
