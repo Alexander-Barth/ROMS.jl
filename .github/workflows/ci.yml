@@ -40,7 +40,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install libnetcdf-dev gfortran make perl netcdf-bin libnetcdff-dev libopenmpi-dev openmpi-bin subversion git python3-pip wget python3-setuptools python3-matplotlib
           sudo python3 -m pip install --upgrade pip
-          sudo python3 -m pip install motuclient
+          sudo python3 -m pip install motuclient==1.8.6
+          motuclient --version
           git config --global user.name Tester
           git config --global user.email te@st.er
       - uses: julia-actions/julia-runtest@latest
