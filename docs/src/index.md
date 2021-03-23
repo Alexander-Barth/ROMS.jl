@@ -169,7 +169,7 @@ motuclient --version
 
 These commands should return a basic usage info or the version number if they are correctly installed.
 
-### Source code and data
+### Data
 
 * Extract the file [ROMS-implementation.zip](https://dox.ulg.ac.be/index.php/s/nH8u2DrI1m9mMbC)
 * The full [GEBCO bathymetry](http://modb.oce.ulg.ac.be/mediawiki/upload/OCEA0036/gebco_30sec_1.nc) (the file `gebco_30sec_1.nc`, optional)
