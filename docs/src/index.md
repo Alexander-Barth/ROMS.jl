@@ -62,13 +62,13 @@ Under Linux, you need to install also `python3-matplotlib` for PyPlot. On Debian
 sudo apt install python3-matplotlib
 ```
 
-* ROMS source. This example uses the subversion revision 1042. We assume that the ROMS source is copied in `~/src/roms`:
+* ROMS source. This example uses the version 3.9 of ROMS. We assume that the ROMS source is copied in `~/src/roms`:
 
 ```bash
 mkdir ~/src/
 cd ~/src/
-svn checkout  --non-interactive  --username "$ROMS_USERNAME" \
-    --password "$ROMS_PASSWORD" --revision 1042 https://www.myroms.org/svn/src/trunk roms
+svn checkout --non-interactive  --username "$ROMS_USERNAME" \
+    --password "$ROMS_PASSWORD" https://www.myroms.org/svn/src/tags/roms-3.9 roms
 ```
 
 In the previous command, you need to replace `$ROMS_USERNAME` and `$ROMS_PASSWORD` by your username and password.
@@ -110,6 +110,8 @@ For example:
 
 ```bash
 python3 -m pip install motuclient
+# or to install a specific version use for example
+# python3 -m pip install motuclient==1.8.6
 ```
 
 Normally you will see the warning `WARNING: The script motuclient is installed in '.../.local/bin' which is not on PATH. Consider adding this directory to PATH`.
@@ -326,16 +328,6 @@ List of variables (*: quantities accumulated over the integration period ("step"
  #export   USE_PARALLEL_IO=on            # Parallel I/O with NetCDF-4/HDF5
 
 
-@@ -265,6 +265,9 @@
-   make clean
- fi
-
-+export NF_CONFIG=/usr/bin/nf-config
-+export NC_CONFIG=/usr/bin/nf-config
-+
- # Compile (the binary will go to BINDIR set above).
-
- if [ $dprint -eq 1 ]; then
 ```
 
 * Review your changes with:
