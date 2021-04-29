@@ -129,7 +129,8 @@ source ~/.bashrc
 
 
 * For ECMWF data, you need the pacakge `ecmwf-api-client-python` (optional). Follow the [installation instructions](https://software.ecmwf.int/wiki/display/WEBAPI/Access+ECMWF+Public+Datasets) (including the ECMWF key)
-     * Note that the ECMWF key is different from your password
+* For questions related to ECMWF data access please also consult [this document](https://www.ecmwf.int/en/forecasts/access-forecasts/ecmwf-web-api).
+* Note that the ECMWF key is different from your password
 
 ### Check your environment
 
@@ -503,4 +504,3 @@ Make some comparison with satellite and the downloaded in situ observation
 Modules = [ROMS]
 Order   = [:function, :type]
 ```
-
