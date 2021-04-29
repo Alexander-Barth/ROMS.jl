@@ -11,7 +11,7 @@ This tutorial is for students following the ULiège lecture OCEA0036-1 but might
 * Please pay attention to the difference between upper- and lowercase letters
 * Presence and absence of white space is also significant
 * Check out the [basic shell commands](https://diyhacking.com/linux-commands-for-beginners/) and [this tutorial](https://ryanstutorials.net/linuxtutorial/)
-* Avoid using directories and file names with a space in them, otherwise you need to put the directory in quotes (single or double quotes) or use black-slash (\\) in front of the white space. For example, `cd My Directory Name` does not work, use one of the following instead:
+* Avoid using directories and file names with a space in them, otherwise you need to put the directory in quotes (single or double quotes) or use black-slash (\\) in front of the white space. For example, shell command `cd My Directory Name` does not work, use one of the following instead:
 
 ```bash
 cd "My Directory Name"
@@ -38,13 +38,20 @@ If you do not use this virtual machine the following software need to be install
 
 ```bash
 cd /opt/
-sudo wget https://julialang-s3.julialang.org/bin/linux/x64/1.5/julia-1.5.3-linux-x86_64.tar.gz
-sudo tar -xvf julia-1.5.3-linux-x86_64.tar.gz
-sudo rm julia-1.5.3-linux-x86_64.tar.gz
-sudo ln -s /opt/julia-1.5.3/bin/julia /usr/local/bin/julia
+sudo wget https://julialang-s3.julialang.org/bin/linux/x64/1.5/julia-1.6.1-linux-x86_64.tar.gz
+sudo tar -xvf julia-1.6.1-linux-x86_64.tar.gz
+sudo rm julia-1.6.1-linux-x86_64.tar.gz
+sudo ln -s /opt/julia-1.6.1/bin/julia /usr/local/bin/julia
 ```
 
 More information is available at: https://julialang.org/downloads/platform/
+
+Under Linux, you need to install also `python3-matplotlib` for PyPlot. On Debian/Ubuntu, this packages can be installed by this command:
+
+
+```bash
+sudo apt install python3-matplotlib
+```
 
 * Julia package, `PyPlot`, `NCDatasets`, `ROMS` which can be installed by:
 
@@ -53,13 +60,6 @@ using Pkg
 Pkg.add("PyPlot")
 Pkg.add("NCDatasets")
 Pkg.develop(url="https://github.com/Alexander-Barth/ROMS.jl")
-```
-
-Under Linux, you need to install also `python3-matplotlib` for PyPlot. On Debian/Ubuntu, this packages can be installed by this command:
-
-
-```bash
-sudo apt install python3-matplotlib
 ```
 
 * ROMS source. This example uses the version 3.9 of ROMS. We assume that the ROMS source is copied in `~/src/roms`:
@@ -114,8 +114,9 @@ python3 -m pip install motuclient
 # python3 -m pip install motuclient==1.8.6
 ```
 
+I advice you to use version 1.8.6 of motuclient because of [this issue](https://github.com/clstoulouse/motu-client-python/issues/27).
 Normally you will see the warning `WARNING: The script motuclient is installed in '.../.local/bin' which is not on PATH. Consider adding this directory to PATH`.
-You need to add the following line to the file `.bashrc`:
+You need to add the following line to the file `.bashrc` (at the end of this file on a separate line):
 
 ```
 export PATH="$HOME/.local/bin:$PATH"
@@ -128,8 +129,7 @@ source ~/.bashrc
 ```
 
 
-* For ECMWF data, you need the pacakge `ecmwf-api-client-python` (optional). Follow the [installation instructions](https://software.ecmwf.int/wiki/display/WEBAPI/Access+ECMWF+Public+Datasets) (including the ECMWF key)
-* For questions related to ECMWF data access please also consult [this document](https://www.ecmwf.int/en/forecasts/access-forecasts/ecmwf-web-api).
+* For ECMWF data, you need the pacakge `ecmwf-api-client-python` (optional). Follow the [installation instructions](https://software.ecmwf.int/wiki/display/WEBAPI/Access+ECMWF+Public+Datasets) (including the ECMWF key). For questions related to ECMWF data access please also consult [this document](https://www.ecmwf.int/en/forecasts/access-forecasts/ecmwf-web-api).
 * Note that the ECMWF key is different from your password
 
 ### Check your environment
@@ -194,8 +194,8 @@ Choose an area:
 
 ### Generate initial and boundary conditions
 
-* Adapt a `example_config.jl` file and call it `yourdomain_config.jl`
-    * bounding box
+* Adapt a `example_config.jl` file and call it `yourdomain_config.jl` where you replace `yourdomain` by the the name of your domain (lowercase and without space).
+    * Longitude/latitude bounding box
     * File paths
     * Time range
     * ...
@@ -214,7 +214,7 @@ include("yourdomain_config.jl")
 
 ### Atmospheric forcing fields (not needed now)
 
-* Adapt the file name, longitude/latitude and time range (start one day earlier, and finish one day later) in `forcing_ecmwf.py` and execute the script as follows:
+* Adapt the file name, longitude/latitude and time range (start one day earlier, and finish one day later) in [`forcing_ecmwf.py`](https://github.com/Alexander-Barth/ROMS.jl/blob/master/examples/forcing_ecmwf.py) and execute the script as follows:
 
 ```bash
 python3 forcing_ecmwf.py
@@ -246,7 +246,7 @@ List of variables (*: quantities accumulated over the integration period ("step"
 
 * Create a directory (avoid directory names with spaces) for your model configuration
 * Compile ROMS:
-    * configure ROMS by creating a file `yourdomain.h`:
+    * configure ROMS by creating a file `yourdomain.h` (e.g. `liguriansea.h` for the Ligurian Sea):
 
 ```C
 #define UV_ADV                    /* turn ON advection terms */
@@ -337,6 +337,8 @@ List of variables (*: quantities accumulated over the integration period ("step"
 diff /path/to/previous/build_roms.bash build_roms.bash
 ```
 
+where you need to replace `/path/to/previous` by the appropriate file path.
+
  * copy `varinfo.dat` from `~/src/roms/ROMS/External/varinfo.dat` in your current directory
 
 
@@ -358,16 +360,16 @@ diff /path/to/previous/build_roms.bash build_roms.bash
 NCLMFILES == 1
 ```
 
- * change `Lm`, `Mm` and `N` based on the dimensions of your grid (make sure to read the glossary for these variable)
+ * change `Lm`, `Mm` and `N` based on the dimensions of your grid (make sure to read the glossary for these variable in `roms.in`)
 
- * boundaries `LBC`
- * time reference
+ * adapt boundaries `LBC`
+ * set the starting time and time reference
 ```
 DSTART = ...
 TIME_REF =  18581117
 ```
 
-where `DSTART` is the number of days since 1858-11-17. For instance the number of days since 2014-01-01 can be computed by of following line in Julia
+where `DSTART` is here the number of days since 1858-11-17 or November 17, 1858 (see also [modified Julia day](https://en.wikipedia.org/wiki/Julian_day#Variants)). For instance the number of days since 2014-01-01 (year-month-day) can be computed by of following commands in Julia:
 
 ```julia
 using Dates
@@ -381,13 +383,13 @@ using Dates
 Date(1858,11,17) + Day(58849)
 ```
 
-Use `DateTime` if you want to specify hour, minutes or seconds.
+You can use `DateTime` if you want to specify hour, minutes or seconds.
 
-* Adapt the length of a time step `DT` and number of time steps `NTIMES`
+* Adapt the length of a time step `DT` (in seconds) and number of time steps `NTIMES`
 * Initially we choose:
-    * `NTIMES` -> 1 day
-    * `NHIS`, `NAVG`-> should correspond to 1 hour
-    * `NRST` -> should correspond to 1 hour
+    * `NTIMES` -> number of time step corresponding to 1 day (e.g. `24*60*60/DT` as `DT` is in seconds)
+    * `NHIS`, `NAVG`-> number of time steps corresponding to 1 hour
+    * `NRST` -> number of time steps correspond to 1 hour
 
 
 ### Nudging towards "climatology"
