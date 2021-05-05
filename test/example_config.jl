@@ -97,7 +97,7 @@ domain = ROMS.Grid(grid_fname,opt);
 outdir = joinpath(basedir,"OGCM")
 mkpath(outdir)
 
-service_id = "MEDSEA_ANALYSIS_FORECAST_PHY_006_013-TDS"
+service_id = "MEDSEA_ANALYSISFORECAST_PHY_006_013-TDS"
 mapping = Dict(
     # var  product_id
     :sea_surface_height_above_geoid => ("zos","med00-cmcc-ssh-an-fc-d"),
