@@ -38,7 +38,7 @@ If you do not use this virtual machine the following software need to be install
 
 ```bash
 cd /opt/
-sudo wget https://julialang-s3.julialang.org/bin/linux/x64/1.5/julia-1.6.1-linux-x86_64.tar.gz
+sudo wget https://julialang-s3.julialang.org/bin/linux/x64/1.6/julia-1.6.1-linux-x86_64.tar.gz
 sudo tar -xvf julia-1.6.1-linux-x86_64.tar.gz
 sudo rm julia-1.6.1-linux-x86_64.tar.gz
 sudo ln -s /opt/julia-1.6.1/bin/julia /usr/local/bin/julia
