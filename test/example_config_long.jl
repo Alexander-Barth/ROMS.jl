@@ -131,6 +131,18 @@ Vnames = ["sustr","svstr","shflux","swflux","swrad","Uwind","Vwind","
 
 forcing_filenames = ROMS.prepare_ecmwf(ecmwf_fname,Vnames,filename_prefix,domain_name)
 
+# nudging coefficient
+
+tscale = 3; # days
+alpha = 0.3;
+halo = 1;
+Niter = 20
+max_tscale = 5e5
+
+nudge_filename = joinpath(basedir,"roms_nud_$(tscale).nc")
+tracer_NudgeCoef = ROMS.nudgecoef(domain,nudge_filename,alpha,Niter,
+          halo,tscale; max_tscale = max_tscale)
+
 
 include("example_config_next.jl")
 romsbin = expanduser("~/ROMS-implementation-test/romsM")
