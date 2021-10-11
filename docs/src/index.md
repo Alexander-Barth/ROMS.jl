@@ -194,7 +194,8 @@ Choose an area:
 
 ### Generate initial and boundary conditions
 
-* Adapt a `example_config.jl` file and call it `yourdomain_config.jl` where you replace `yourdomain` by the the name of your domain (lowercase and without space).
+* Adapt a `example_config.jl` file and call it `yourdomain_config.jl` where you replace `yourdomain` by the the name of your domain (lowercase and without space). For the Ligurian Sea, use `liguriansea_config.jl`.
+
     * Longitude/latitude bounding box
     * File paths
     * Time range
