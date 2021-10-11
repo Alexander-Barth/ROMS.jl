@@ -105,6 +105,7 @@ end
         setupscript = joinpath(@__DIR__,"compile_run_ROMS.sh")
         run(`$setupscript`)
         include("example_config.jl")
+        include("example_config_next.jl")
         romsbin = expanduser("~/ROMS-implementation-test/romsM")
 
         cd(expanduser("~/ROMS-implementation-test/Simulation1")) do
