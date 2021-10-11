@@ -2,23 +2,6 @@ using Dates
 using ROMS
 
 
-
-
-# nudging coefficient
-
-tscale = 5; # days
-alpha = 0.3;
-halo = 1;
-Niter = 20
-max_tscale = 5e5
-
-nudge_filename = joinpath(basedir,"roms_nud.nc")
-tracer_NudgeCoef = ROMS.nudgecoef(domain,nudge_filename,alpha,Niter,
-          halo,tscale; max_tscale = max_tscale)
-@show tracer_NudgeCoef[1:5,10,end]
-@test tracer_NudgeCoef[1,10,end] ≈ 1/tscale
-
-
 # create directories and configuration files
 
 romsdir = expanduser("~/src/roms")
@@ -80,6 +63,11 @@ substitutions = Dict(
     "NAVG" => NAVG,
     "NRST" => NRST,
     "NTIMES" => NTIMES,
+    "NUDNAME" => nudge_filename,
+    "TNUDG" => "10.0d0 10.0d0",
+    "LtracerCLM" => "T T",
+    "LnudgeTCLM" => "T T",
+    "OBCFAC" => 10.0,
 )
 
 ROMS.infilereplace(intemplate,infile,substitutions)

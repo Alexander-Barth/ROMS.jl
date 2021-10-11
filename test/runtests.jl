@@ -90,6 +90,10 @@ end
     @test vi ≈ 2*zi
 end
 
+@testset "Nudging coefficient" begin
+    include("test_nudge.jl")
+end
+
 
 @testset "Forcing" begin
     # reference values from https://en.wikipedia.org/w/index.php?title=Vapour_pressure_of_water&oldid=987479989

@@ -135,3 +135,14 @@ Vnames = ["sustr","svstr","shflux","swflux","swrad","Uwind","Vwind","
 
 forcing_filenames = ROMS.prepare_ecmwf(ecmwf_fname,Vnames,filename_prefix,domain_name)
 
+# nudging coefficient
+
+tscale = 5; # days
+alpha = 0.3;
+halo = 1;
+Niter = 20
+max_tscale = 5e5
+
+nudge_filename = joinpath(basedir,"roms_nud.nc")
+tracer_NudgeCoef = ROMS.nudgecoef(domain,nudge_filename,alpha,Niter,
+          halo,tscale; max_tscale = max_tscale)
