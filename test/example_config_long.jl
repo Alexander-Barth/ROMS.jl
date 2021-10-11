@@ -57,16 +57,12 @@ opt = (
 )
 
 # ECMWF from 2018-12-01 to 2020-01-01 is available at
-# https://dox.ulg.ac.be/index.php/s/tbzNV9Z9UPtG5et/download
 ecmwf_fname = expanduser("~/Data/Atmosphere/ecmwf_operational_archive_2018-12-01T00:00:00_2020-01-01T00:00:00.nc")
 
-# ECMWF from 2019-01-01 03:00:00  to 2019-01-07 03:00:00
-#ecmwf_fname = expanduser("~/Data/Atmosphere/ecmwf_sample_data.nc")
-
-#if !isfile(ecmwf_fname)
-#    mkpath(dirname(ecmwf_fname))
-#    download("https://dox.ulg.ac.be/index.php/s/8NJsCfk53fDFtbz/download",ecmwf_fname)
-#end
+if !isfile(ecmwf_fname)
+   mkpath(dirname(ecmwf_fname))
+   download("https://dox.ulg.ac.be/index.php/s/tbzNV9Z9UPtG5et/download",ecmwf_fname)
+end
 
 
 # CMEMS credentials
