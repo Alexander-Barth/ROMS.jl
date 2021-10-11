@@ -11,7 +11,6 @@ bath_name = expanduser("~/Data/Bathymetry/gebco_30sec_1_ligurian_sea.nc")
 
 if !isfile(bath_name)
     mkpath(dirname(bath_name))
-    #download("http://modb.oce.ulg.ac.be/mediawiki/upload/OCEA0036/gebco_30sec_1.nc",bath_name)
     download("https://dox.ulg.ac.be/index.php/s/piwSaFP3nhM8jSD/download",bath_name)
 end
 
@@ -97,14 +96,16 @@ domain = ROMS.Grid(grid_fname,opt);
 outdir = joinpath(basedir,"OGCM")
 mkpath(outdir)
 
+# Locate the dataset at https://marine.copernicus.eu/
+
 service_id = "MEDSEA_ANALYSISFORECAST_PHY_006_013-TDS"
 mapping = Dict(
     # var  product_id
-    :sea_surface_height_above_geoid => ("zos","med00-cmcc-ssh-an-fc-d"),
-    :sea_water_potential_temperature => ("thetao", "med00-cmcc-tem-an-fc-d"),
-    :sea_water_salinity => ("so","med00-cmcc-sal-an-fc-d"),
-    :eastward_sea_water_velocity => ("uo", "med00-cmcc-cur-an-fc-d"),
-    :northward_sea_water_velocity => ("vo", "med00-cmcc-cur-an-fc-d"),
+    :sea_surface_height_above_geoid => ("zos","med-cmcc-ssh-an-fc-d"),
+    :sea_water_potential_temperature => ("thetao", "med-cmcc-tem-an-fc-d"),
+    :sea_water_salinity => ("so","med-cmcc-sal-an-fc-d"),
+    :eastward_sea_water_velocity => ("uo", "med-cmcc-cur-an-fc-d"),
+    :northward_sea_water_velocity => ("vo", "med-cmcc-cur-an-fc-d"),
 )
 
 dataset = ROMS.CMEMS(cmems_username,cmems_password,service_id,mapping,outdir)

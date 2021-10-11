@@ -172,7 +172,6 @@ These commands should return a basic usage info or the version number if they ar
 
 ### Data
 
-* Extract the file [ROMS-implementation.zip](https://dox.ulg.ac.be/index.php/s/nH8u2DrI1m9mMbC)
 * The full [GEBCO bathymetry](http://modb.oce.ulg.ac.be/mediawiki/upload/OCEA0036/gebco_30sec_1.nc) (the file `gebco_30sec_1.nc`, optional)
 
 
@@ -192,29 +191,13 @@ Choose an area:
 
 * Choose the domain such to avoid unnecessary open ocean boundary conditions
 
-### Generate initial and boundary conditions
+### Atmospheric forcing fields
 
-* Adapt a `example_config.jl` file and call it `yourdomain_config.jl` where you replace `yourdomain` by the the name of your domain (lowercase and without space). For the Ligurian Sea, use `liguriansea_config.jl`.
 
-    * Longitude/latitude bounding box
-    * File paths
-    * Time range
-    * ...
+* For the Ligurian Sea, necessary parameters have already been prepared and are available in the file [ROMS-implementation.zip](https://dox.ulg.ac.be/index.php/s/nH8u2DrI1m9mMbC). It containts data download the from
+the ECMWF operational archive (`Atmosphere/ecmwf_operational_archive_2018-12-01T00:00:00_2020-01-01T00:00:00.nc`). This NetCDF file needs to be converted by the julia function `ROMS.prepare_ecmwf`.
 
-* For CMEMS boundary conditions:
-    * You may need to adapt `service_id`, `motu_server` and `mapping` (if model is outside the Mediterranean Sea)
-    * Data will be downloaded and saved in NetCDF by "chunks" of 60 days in the folder `OGCM` under the content of the variable `basedir`
-    * You need to remove the files in this directory if you rerun the script with a different time range.
-
-* Run in Julia
-```julia
-include("yourdomain_config.jl")
-```
-
-* Check the resulting files: initial conditions, boundary conditions, interpolated model (`clim` file) and visualize the these files along some sections
-
-### Atmospheric forcing fields (not needed now)
-
+* The remaining of this section explained how to download data from the ECMWF operational archive (e.g. for a different domain). These instructions are not needed now.
 * Adapt the file name, longitude/latitude and time range (start one day earlier, and finish one day later) in [`forcing_ecmwf.py`](https://github.com/Alexander-Barth/ROMS.jl/blob/master/examples/forcing_ecmwf.py) and execute the script as follows:
 
 ```bash
@@ -242,6 +225,27 @@ List of variables (*: quantities accumulated over the integration period ("step"
 | tp | Total precipitation* |
 | sst | Sea surface temperature |
 | par | Photosynthetically active radiation at the surface* |
+
+### Generate initial, boundary conditions and forcing files
+
+* Adapt a [`example_config.jl`](https://raw.githubusercontent.com/Alexander-Barth/ROMS.jl/master/test/example_config.jl) file and call it `yourdomain_config.jl` where you replace `yourdomain` by the the name of your domain (lowercase and without space). For the Ligurian Sea, use `liguriansea_config.jl`.
+
+    * Longitude/latitude bounding box
+    * File paths
+    * Time range
+    * ...
+
+* For CMEMS boundary conditions:
+    * You may need to adapt `service_id`, `motu_server` and `mapping` (if model is outside the Mediterranean Sea)
+    * Data will be downloaded and saved in NetCDF by "chunks" of 60 days in the folder `OGCM` under the content of the variable `basedir`
+    * You need to remove the files in this directory if you rerun the script with a different time range.
+
+* Run in Julia
+```julia
+include("yourdomain_config.jl")
+```
+
+* Check the resulting files: initial conditions, boundary conditions, interpolated model (`clim` file) and visualize the these files along some sections.
 
 ### ROMS compilation
 

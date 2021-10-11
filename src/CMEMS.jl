@@ -46,11 +46,11 @@ outdir = "/tmp"
 service_id = "MEDSEA_ANALYSISFORECAST_PHY_006_013-TDS"
 mapping = Dict(
     # var  product_id
-    :sea_surface_height_above_geoid => ("zos","med00-cmcc-ssh-an-fc-d"),
-    :sea_water_potential_temperature => ("thetao", "med00-cmcc-tem-an-fc-d"),
-    :sea_water_salinity => ("so","med00-cmcc-sal-an-fc-d"),
-    :eastward_sea_water_velocity => ("uo", "med00-cmcc-cur-an-fc-d"),
-    :northward_sea_water_velocity => ("vo", "med00-cmcc-cur-an-fc-d"),
+    :sea_surface_height_above_geoid => ("zos","med-cmcc-ssh-an-fc-d"),
+    :sea_water_potential_temperature => ("thetao", "med-cmcc-tem-an-fc-d"),
+    :sea_water_salinity => ("so","med-cmcc-sal-an-fc-d"),
+    :eastward_sea_water_velocity => ("uo", "med-cmcc-cur-an-fc-d"),
+    :northward_sea_water_velocity => ("vo", "med-cmcc-cur-an-fc-d"),
 )
 dataset = ROMS.CMEMS(cmems_username,cmems_password,service_id,mapping,outdir)
 ```
