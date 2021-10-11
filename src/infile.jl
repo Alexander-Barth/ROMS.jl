@@ -12,9 +12,11 @@ function infilereplace(intemplate,infile,substitutions)
         return line
     end
 
-    fout = open(infile,"w")
     # read file in memory as intemplate can be the same as infile
-    for line in collect(readlines(intemplate))
+    template = collect(readlines(intemplate))
+
+    fout = open(infile,"w")
+    for line in template
         comments = ""
         m = match(r" +!.*$",line)
 
