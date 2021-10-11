@@ -116,7 +116,7 @@ python3 -m pip install motuclient
 
 I advice you to use version 1.8.6 of motuclient because of [this issue](https://github.com/clstoulouse/motu-client-python/issues/27).
 Normally you will see the warning `WARNING: The script motuclient is installed in '.../.local/bin' which is not on PATH. Consider adding this directory to PATH`.
-You need to add the following line to the file `.bashrc` (at the end of this file on a separate line):
+You need to add the following line to the file `.bashrc` located in your home directory (at the end of this file on a separate line):
 
 ```
 export PATH="$HOME/.local/bin:$PATH"
@@ -172,7 +172,7 @@ These commands should return a basic usage info or the version number if they ar
 
 ### Data
 
-* The full [GEBCO bathymetry](http://modb.oce.ulg.ac.be/mediawiki/upload/OCEA0036/gebco_30sec_1.nc) (the file `gebco_30sec_1.nc`, optional)
+* The full [GEBCO bathymetry](http://modb.oce.ulg.ac.be/mediawiki/upload/OCEA0036/gebco_30sec_1.nc) (the file `gebco_30sec_1.nc` is already included in the virtual machine)
 
 
 ### Area
@@ -228,7 +228,7 @@ List of variables (*: quantities accumulated over the integration period ("step"
 
 ### Generate initial, boundary conditions and forcing files
 
-* Adapt a [`example_config.jl`](https://raw.githubusercontent.com/Alexander-Barth/ROMS.jl/master/test/example_config.jl) file and call it `yourdomain_config.jl` where you replace `yourdomain` by the the name of your domain (lowercase and without space). For the Ligurian Sea, use `liguriansea_config.jl`.
+* Adapt the [`example_config.jl`](https://raw.githubusercontent.com/Alexander-Barth/ROMS.jl/master/test/example_config.jl) file and call it `yourdomain_config.jl` where you replace `yourdomain` by the the name of your domain (lowercase and without space). For the Ligurian Sea, use `liguriansea_config.jl`.
 
     * Longitude/latitude bounding box
     * File paths
@@ -286,7 +286,13 @@ include("yourdomain_config.jl")
 #define SOLAR_SOURCE
 ```
 
-* Locate the script `build_roms.bash`, copy it to this directory and adapt it. Here is a list of changes that I made highlighted with the [diff tool](https://en.wikipedia.org/wiki/Diff_utility#Unified_format).
+* Locate the script `build_roms.sh`. For example use:
+
+```bash
+find ~/src/roms -name build_roms.sh
+```
+
+* Copy it to this directory and adapt it. Here is a list of changes that I made highlighted with the [diff tool](https://en.wikipedia.org/wiki/Diff_utility#Unified_format).
 
 
 ```diff
@@ -339,7 +345,7 @@ include("yourdomain_config.jl")
 * Review your changes with:
 
 ```bash
-diff /path/to/previous/build_roms.bash build_roms.bash
+diff /path/to/previous/build_roms.sh build_roms.sh
 ```
 
 where you need to replace `/path/to/previous` by the appropriate file path.
@@ -416,7 +422,7 @@ OBCFAC == 10.0d0                      ! nondimensional
 
 #### Run ROMS without MPI
 
-* To run ROMS without MPI, one need to disable MPI in `build_roms.bash`. The ROMS binary will be called `romsS` and call be called by:
+* To run ROMS without MPI, one need to disable MPI in `build_roms.sh`. The ROMS binary will be called `romsS` and call be called by:
 
 ```bash
 ./romsS < roms.in | tee roms.out
@@ -425,7 +431,7 @@ OBCFAC == 10.0d0                      ! nondimensional
 #### Run ROMS with MPI
 
 * How many CPU cores does your machine have? You can use the command `top` in a shell terminal followed by `1`.
-* In `build_roms.bash` set `USE_MPI=on` (which is actually the default value)
+* In `build_roms.sh` set `USE_MPI=on` (which is actually the default value)
  * Recompile ROMS
  * Change `roms.in`, `NtileI` and `NtileJ`. The number of CPU cores should be `NtileI` * `NtileJ`.
  * Run ROMS with, e.g.
