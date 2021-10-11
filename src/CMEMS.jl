@@ -96,22 +96,22 @@ function download(ds::CMEMS,name::Symbol;
 
         if !isfile(fullname)
             cmd = `$(ds.motu_program)
-         -u $(ds.username)
-         -p $(ds.password)
-         -m $(ds.motu_server)
-         -s $(ds.service_id)
-         -d $product_id
-         -x $(xr[1])
-         -X $(xr[2])
-         -y $(yr[1])
-         -Y $(yr[2])
+         --user $(ds.username)
+         --pwd $(ds.password)
+         --motu $(ds.motu_server)
+         --service-id $(ds.service_id)
+         --product-id $product_id
+         --longitude-min $(xr[1])
+         --longitude-max $(xr[2])
+         --latitude-min $(yr[1])
+         --latitude-max $(yr[2])
          --date-min=$(Dates.format(tr2[1],"yyyy-mm-dd HH:MM:SS"))
          --date-max=$(Dates.format(tr2[end]+teps,"yyyy-mm-dd HH:MM:SS"))
          --depth-min=0
          --depth-max=1000000
-         -v $var
-         -o $outdir
-         -f $fname`
+         --variable $var
+         --out-dir $outdir
+         --out-name $fname`
 
             #cmd = `$(ds.motu_program)`
 
