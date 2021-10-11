@@ -137,12 +137,12 @@ forcing_filenames = ROMS.prepare_ecmwf(ecmwf_fname,Vnames,filename_prefix,domain
 
 # nudging coefficient
 
-tscale = 5; # days
+tscale = 7; # days
 alpha = 0.3;
-halo = 1;
-Niter = 20
+halo = 2;
+Niter = 50
 max_tscale = 5e5
 
-nudge_filename = joinpath(basedir,"roms_nud.nc")
+nudge_filename = joinpath(basedir,"roms_nud_$(tscale)_$(Niter).nc")
 tracer_NudgeCoef = ROMS.nudgecoef(domain,nudge_filename,alpha,Niter,
           halo,tscale; max_tscale = max_tscale)
