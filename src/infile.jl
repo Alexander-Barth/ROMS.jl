@@ -13,7 +13,8 @@ function infilereplace(intemplate,infile,substitutions)
     end
 
     fout = open(infile,"w")
-    for line in readlines(intemplate)
+    # read file in memory as intemplate can be the same as infile
+    for line in collect(readlines(intemplate))
         comments = ""
         m = match(r" +!.*$",line)
 

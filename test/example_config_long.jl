@@ -140,6 +140,14 @@ include("example_config_next.jl")
 romsbin = expanduser("~/ROMS-implementation-test/romsM")
 
 cd(simulationdir) do
-    run(`mpirun -np 4 $romsbin roms.in`)
+    NtileI = 2
+    NtileJ = 2
+    ROMS.infilereplace("roms.in","roms.in",Dict(
+        "NtileI" => NtileI,
+        "NtileJ" => NtileJ,
+    ))
+
+    np = NtileI * NtileJ
+    run(`mpirun -np $np $romsbin roms.in`)
     @test isfile("roms_his.nc")
 end

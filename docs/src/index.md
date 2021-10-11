@@ -44,7 +44,7 @@ sudo rm julia-1.6.3-linux-x86_64.tar.gz
 sudo ln -s /opt/julia-1.6.3/bin/julia /usr/local/bin/julia
 ```
 
-More information is available at: https://julialang.org/downloads/platform/
+More information is available [here](https://julialang.org/downloads/platform/).
 
 Under Linux, you need to install also `python3-matplotlib` for PyPlot. On Debian/Ubuntu, this packages can be installed by this command:
 
@@ -105,7 +105,7 @@ On Debian/Ubuntu, these packages can be installed by this command:
 sudo apt install gfortran make perl netcdf-bin libnetcdff-dev libopenmpi-dev openmpi-bin subversion git python3-pip python3-setuptools
 ```
 
-* For CMEMS data, you need the python package `motuclient`. Read the [installation instructions](https://github.com/clstoulouse/motu-client-python#Installation)
+* For CMEMS data, you need the python package `motuclient` ([installation instructions](https://github.com/clstoulouse/motu-client-python#Installation)).
 For example:
 
 ```bash
@@ -130,7 +130,7 @@ source ~/.bashrc
 
 
 * For ECMWF data, you need the pacakge `ecmwf-api-client-python` (optional). Follow the [installation instructions](https://software.ecmwf.int/wiki/display/WEBAPI/Access+ECMWF+Public+Datasets) (including the ECMWF key). For questions related to ECMWF data access please also consult [this document](https://www.ecmwf.int/en/forecasts/access-forecasts/ecmwf-web-api).
-* Note that the ECMWF key is different from your password
+* Note that the ECMWF key is different from your ECMWF password.
 
 ### Check your environment
 
@@ -362,7 +362,7 @@ where you need to replace `/path/to/previous` by the appropriate file path.
 ### File names
  * adapt `MyAppCPP`
 
- * adapt file names `VARNAME`, `GRDNAME`, `ININAME`, `BRYNAME`, `CLMNAME`,  `FRCNAME` and `NFFILES`
+ * adapt file names `VARNAME`, `GRDNAME`, `ININAME`, `BRYNAME`, `CLMNAME`, `FRCNAME` and `NFFILES`
 
  * also make sure that these variables are set (number of files with boundary conditions and climatology). If they do not exist, they need to be added (near `BRYNAME` for example).
 
@@ -405,18 +405,21 @@ You can use `DateTime` if you want to specify hour, minutes or seconds.
 
 ### Nudging towards "climatology"
 
+A flow relexation zone can be implemented in ROMS by using the followings settings:
+
 ```
 LtracerCLM == T T  ! enable processing of CLIM data
 LnudgeTCLM == T T  ! nudge to CLIM data
 TNUDG == 2*10.0d0                    ! days
 ```
 
-make nudging on inflow is stronger than on outflow
+Make nudging on inflow is stronger than on outflow
 
 ```
 OBCFAC == 10.0d0                      ! nondimensional
 ```
 
+Set also `NUDNAME` to the file name create by the julia script.
 
 ### Run ROMS
 
