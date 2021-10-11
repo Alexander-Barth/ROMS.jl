@@ -98,17 +98,25 @@ mkpath(outdir)
 
 # Locate the dataset at https://marine.copernicus.eu/
 
-service_id = "MEDSEA_ANALYSISFORECAST_PHY_006_013-TDS"
+# Example:
+# https://resources.marine.copernicus.eu/product-detail/MEDSEA_MULTIYEAR_PHY_006_004/INFORMATION
+# Then go to:
+# Data access -> select data set -> Download options -> Subsetter -> View Script
+
+service_id = "MEDSEA_MULTIYEAR_PHY_006_004-TDS"
+motu_server = "https://my.cmems-du.eu/motu-web/Motu"
+
 mapping = Dict(
     # var  product_id
-    :sea_surface_height_above_geoid => ("zos","med-cmcc-ssh-an-fc-d"),
-    :sea_water_potential_temperature => ("thetao", "med-cmcc-tem-an-fc-d"),
-    :sea_water_salinity => ("so","med-cmcc-sal-an-fc-d"),
-    :eastward_sea_water_velocity => ("uo", "med-cmcc-cur-an-fc-d"),
-    :northward_sea_water_velocity => ("vo", "med-cmcc-cur-an-fc-d"),
+    :sea_surface_height_above_geoid => ("zos","med-cmcc-ssh-rean-d"),
+    :sea_water_potential_temperature => ("thetao", "med-cmcc-tem-rean-d"),
+    :sea_water_salinity => ("so","med-cmcc-sal-rean-d"),
+    :eastward_sea_water_velocity => ("uo", "med-cmcc-cur-rean-d"),
+    :northward_sea_water_velocity => ("vo", "med-cmcc-cur-rean-d"),
 )
 
-dataset = ROMS.CMEMS(cmems_username,cmems_password,service_id,mapping,outdir)
+dataset = ROMS.CMEMS(cmems_username,cmems_password,service_id,mapping,outdir,
+                     motu_server = motu_server)
 
 # take one extra day
 tr = [t0-Dates.Day(1), t1+Dates.Day(1)]
