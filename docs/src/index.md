@@ -102,7 +102,7 @@ On MacOS X:
 On Debian/Ubuntu, these packages can be installed by this command:
 
 ```bash
-sudo apt install gfortran make perl netcdf-bin libnetcdff-dev libopenmpi-dev openmpi-bin subversion git python3-pip python3-setuptools
+sudo apt install gfortran make perl netcdf-bin libnetcdff-dev libopenmpi-dev openmpi-bin subversion git python3-pip python3-setuptools unzip
 ```
 
 * For CMEMS data, you need the python package `motuclient`. Read the [installation instructions](https://github.com/clstoulouse/motu-client-python#Installation)
