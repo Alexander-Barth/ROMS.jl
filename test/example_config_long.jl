@@ -32,10 +32,10 @@ hmin = 2; # m
 # name of folders and files
 
 # grid file
-modeldir = expanduser("~/ROMS-implementation-test")
+modeldir = expanduser("~/tmp/ROMS-implementation-2-month")
 grid_fname = joinpath(modeldir,domain_name * ".nc")
 
-basedir = expanduser("~/ROMS-implementation-test")
+basedir = modeldir
 
 # GCM interpolated on model grid
 clim_filename =  joinpath(basedir,"clim2019.nc")
@@ -57,15 +57,11 @@ opt = (
 )
 
 # ECMWF from 2018-12-01 to 2020-01-01 is available at
-# https://dox.ulg.ac.be/index.php/s/tbzNV9Z9UPtG5et/download
-#ecmwf_fname = expanduser("~/Data/Atmosphere/ecmwf_operational_archive_2018-12-01T00:00:00_2020-01-01T00:00:00.nc")
-
-# ECMWF from 2019-01-01 03:00:00  to 2019-01-07 03:00:00
-ecmwf_fname = expanduser("~/Data/Atmosphere/ecmwf_sample_data.nc")
+ecmwf_fname = expanduser("~/Data/Atmosphere/ecmwf_operational_archive_2018-12-01T00:00:00_2020-01-01T00:00:00.nc")
 
 if !isfile(ecmwf_fname)
-    mkpath(dirname(ecmwf_fname))
-    download("https://dox.ulg.ac.be/index.php/s/8NJsCfk53fDFtbz/download",ecmwf_fname)
+   mkpath(dirname(ecmwf_fname))
+   download("https://dox.ulg.ac.be/index.php/s/tbzNV9Z9UPtG5et/download",ecmwf_fname)
 end
 
 
@@ -78,8 +74,8 @@ cmems_password = ENV["CMEMS_PASSWORD"]
 # t0 start time
 # t1 end time
 
-t0 = DateTime(2019,1,2);
-t1 = DateTime(2019,1,4);
+t0 = DateTime(2019,1,1);
+t1 = DateTime(2019,3,1);
 
 # setup dir
 
@@ -146,3 +142,20 @@ max_tscale = 5e5
 nudge_filename = joinpath(basedir,"roms_nud_$(tscale)_$(Niter).nc")
 tracer_NudgeCoef = ROMS.nudgecoef(domain,nudge_filename,alpha,Niter,
           halo,tscale; max_tscale = max_tscale)
+
+
+include("example_config_next.jl")
+romsbin = expanduser("~/ROMS-implementation-test/romsM")
+
+cd(simulationdir) do
+    NtileI = 2
+    NtileJ = 2
+    ROMS.infilereplace("roms.in","roms.in",Dict(
+        "NtileI" => NtileI,
+        "NtileJ" => NtileJ,
+    ))
+
+    np = NtileI * NtileJ
+    run(`mpirun -np $np $romsbin roms.in`)
+    @test isfile("roms_his.nc")
+end

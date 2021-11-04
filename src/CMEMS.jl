@@ -43,14 +43,14 @@ Mediterranean Sea and must be adapted for other domains.
 cmems_username = "Alice"
 cmems_password = "rabbit"
 outdir = "/tmp"
-service_id = "MEDSEA_ANALYSIS_FORECAST_PHY_006_013-TDS"
+service_id = "MEDSEA_ANALYSISFORECAST_PHY_006_013-TDS"
 mapping = Dict(
     # var  product_id
-    :sea_surface_height_above_geoid => ("zos","med00-cmcc-ssh-an-fc-d"),
-    :sea_water_potential_temperature => ("thetao", "med00-cmcc-tem-an-fc-d"),
-    :sea_water_salinity => ("so","med00-cmcc-sal-an-fc-d"),
-    :eastward_sea_water_velocity => ("uo", "med00-cmcc-cur-an-fc-d"),
-    :northward_sea_water_velocity => ("vo", "med00-cmcc-cur-an-fc-d"),
+    :sea_surface_height_above_geoid => ("zos","med-cmcc-ssh-an-fc-d"),
+    :sea_water_potential_temperature => ("thetao", "med-cmcc-tem-an-fc-d"),
+    :sea_water_salinity => ("so","med-cmcc-sal-an-fc-d"),
+    :eastward_sea_water_velocity => ("uo", "med-cmcc-cur-an-fc-d"),
+    :northward_sea_water_velocity => ("vo", "med-cmcc-cur-an-fc-d"),
 )
 dataset = ROMS.CMEMS(cmems_username,cmems_password,service_id,mapping,outdir)
 ```
@@ -96,22 +96,22 @@ function download(ds::CMEMS,name::Symbol;
 
         if !isfile(fullname)
             cmd = `$(ds.motu_program)
-         -u $(ds.username)
-         -p $(ds.password)
-         -m $(ds.motu_server)
-         -s $(ds.service_id)
-         -d $product_id
-         -x $(xr[1])
-         -X $(xr[2])
-         -y $(yr[1])
-         -Y $(yr[2])
+         --user $(ds.username)
+         --pwd $(ds.password)
+         --motu $(ds.motu_server)
+         --service-id $(ds.service_id)
+         --product-id $product_id
+         --longitude-min $(xr[1])
+         --longitude-max $(xr[2])
+         --latitude-min $(yr[1])
+         --latitude-max $(yr[2])
          --date-min=$(Dates.format(tr2[1],"yyyy-mm-dd HH:MM:SS"))
          --date-max=$(Dates.format(tr2[end]+teps,"yyyy-mm-dd HH:MM:SS"))
          --depth-min=0
          --depth-max=1000000
-         -v $var
-         -o $outdir
-         -f $fname`
+         --variable $var
+         --out-dir $outdir
+         --out-name $fname`
 
             #cmd = `$(ds.motu_program)`
 

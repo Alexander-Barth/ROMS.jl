@@ -38,13 +38,13 @@ If you do not use this virtual machine the following software need to be install
 
 ```bash
 cd /opt/
-sudo wget https://julialang-s3.julialang.org/bin/linux/x64/1.5/julia-1.6.1-linux-x86_64.tar.gz
-sudo tar -xvf julia-1.6.1-linux-x86_64.tar.gz
-sudo rm julia-1.6.1-linux-x86_64.tar.gz
-sudo ln -s /opt/julia-1.6.1/bin/julia /usr/local/bin/julia
+sudo wget https://julialang-s3.julialang.org/bin/linux/x64/1.6/julia-1.6.3-linux-x86_64.tar.gz
+sudo tar -xvf julia-1.6.3-linux-x86_64.tar.gz
+sudo rm julia-1.6.3-linux-x86_64.tar.gz
+sudo ln -s /opt/julia-1.6.3/bin/julia /usr/local/bin/julia
 ```
 
-More information is available at: https://julialang.org/downloads/platform/
+More information is available [here](https://julialang.org/downloads/platform/).
 
 Under Linux, you need to install also `python3-matplotlib` for PyPlot. On Debian/Ubuntu, this packages can be installed by this command:
 
@@ -105,7 +105,7 @@ On Debian/Ubuntu, these packages can be installed by this command:
 sudo apt install gfortran make perl netcdf-bin libnetcdff-dev libopenmpi-dev openmpi-bin subversion git python3-pip python3-setuptools unzip
 ```
 
-* For CMEMS data, you need the python package `motuclient`. Read the [installation instructions](https://github.com/clstoulouse/motu-client-python#Installation)
+* For CMEMS data, you need the python package `motuclient` ([installation instructions](https://github.com/clstoulouse/motu-client-python#Installation)).
 For example:
 
 ```bash
@@ -116,7 +116,7 @@ python3 -m pip install motuclient
 
 I advice you to use version 1.8.6 of motuclient because of [this issue](https://github.com/clstoulouse/motu-client-python/issues/27).
 Normally you will see the warning `WARNING: The script motuclient is installed in '.../.local/bin' which is not on PATH. Consider adding this directory to PATH`.
-You need to add the following line to the file `.bashrc` (at the end of this file on a separate line):
+You need to add the following line to the file `.bashrc` located in your home directory (at the end of this file on a separate line):
 
 ```
 export PATH="$HOME/.local/bin:$PATH"
@@ -130,7 +130,7 @@ source ~/.bashrc
 
 
 * For ECMWF data, you need the pacakge `ecmwf-api-client-python` (optional). Follow the [installation instructions](https://software.ecmwf.int/wiki/display/WEBAPI/Access+ECMWF+Public+Datasets) (including the ECMWF key). For questions related to ECMWF data access please also consult [this document](https://www.ecmwf.int/en/forecasts/access-forecasts/ecmwf-web-api).
-* Note that the ECMWF key is different from your password
+* Note that the ECMWF key is different from your ECMWF password.
 
 ### Check your environment
 
@@ -172,8 +172,7 @@ These commands should return a basic usage info or the version number if they ar
 
 ### Data
 
-* Extract the file [ROMS-implementation.zip](https://dox.ulg.ac.be/index.php/s/nH8u2DrI1m9mMbC)
-* The full [GEBCO bathymetry](http://modb.oce.ulg.ac.be/mediawiki/upload/OCEA0036/gebco_30sec_1.nc) (the file `gebco_30sec_1.nc`, optional)
+* The full [GEBCO bathymetry](http://modb.oce.ulg.ac.be/mediawiki/upload/OCEA0036/gebco_30sec_1.nc) (the file `gebco_30sec_1.nc` is already included in the virtual machine)
 
 
 ### Area
@@ -192,28 +191,13 @@ Choose an area:
 
 * Choose the domain such to avoid unnecessary open ocean boundary conditions
 
-### Generate initial and boundary conditions
+### Atmospheric forcing fields
 
-* Adapt a `example_config.jl` file and call it `yourdomain_config.jl` where you replace `yourdomain` by the the name of your domain (lowercase and without space).
-    * Longitude/latitude bounding box
-    * File paths
-    * Time range
-    * ...
 
-* For CMEMS boundary conditions:
-    * You may need to adapt `service_id`, `motu_server` and `mapping` (if model is outside the Mediterranean Sea)
-    * Data will be downloaded and saved in NetCDF by "chunks" of 60 days in the folder `OGCM` under the content of the variable `basedir`
-    * You need to remove the files in this directory if you rerun the script with a different time range.
+* For the Ligurian Sea, necessary parameters have already been prepared and are available in the file [ROMS-implementation.zip](https://dox.ulg.ac.be/index.php/s/nH8u2DrI1m9mMbC). It containts data download the from
+the ECMWF operational archive (`Atmosphere/ecmwf_operational_archive_2018-12-01T00:00:00_2020-01-01T00:00:00.nc`). This NetCDF file needs to be converted by the julia function `ROMS.prepare_ecmwf`.
 
-* Run in Julia
-```julia
-include("yourdomain_config.jl")
-```
-
-* Check the resulting files: initial conditions, boundary conditions, interpolated model (`clim` file) and visualize the these files along some sections
-
-### Atmospheric forcing fields (not needed now)
-
+* The remaining of this section explained how to download data from the ECMWF operational archive (e.g. for a different domain). These instructions are not needed now.
 * Adapt the file name, longitude/latitude and time range (start one day earlier, and finish one day later) in [`forcing_ecmwf.py`](https://github.com/Alexander-Barth/ROMS.jl/blob/master/examples/forcing_ecmwf.py) and execute the script as follows:
 
 ```bash
@@ -241,6 +225,27 @@ List of variables (*: quantities accumulated over the integration period ("step"
 | tp | Total precipitation* |
 | sst | Sea surface temperature |
 | par | Photosynthetically active radiation at the surface* |
+
+### Generate initial, boundary conditions and forcing files
+
+* Adapt the [`example_config.jl`](https://raw.githubusercontent.com/Alexander-Barth/ROMS.jl/master/test/example_config.jl) file and call it `yourdomain_config.jl` where you replace `yourdomain` by the the name of your domain (lowercase and without space). For the Ligurian Sea, use `liguriansea_config.jl`.
+
+    * Longitude/latitude bounding box
+    * File paths
+    * Time range
+    * ...
+
+* For CMEMS boundary conditions:
+    * You may need to adapt `service_id`, `motu_server` and `mapping` (if model is outside the Mediterranean Sea)
+    * Data will be downloaded and saved in NetCDF by "chunks" of 60 days in the folder `OGCM` under the content of the variable `basedir`
+    * You need to remove the files in this directory if you rerun the script with a different time range.
+
+* Run in Julia
+```julia
+include("yourdomain_config.jl")
+```
+
+* Check the resulting files: initial conditions, boundary conditions, interpolated model (`clim` file) and visualize the these files along some sections.
 
 ### ROMS compilation
 
@@ -281,7 +286,13 @@ List of variables (*: quantities accumulated over the integration period ("step"
 #define SOLAR_SOURCE
 ```
 
-* Locate the script `build_roms.bash`, copy it to this directory and adapt it. Here is a list of changes that I made highlighted with the [diff tool](https://en.wikipedia.org/wiki/Diff_utility#Unified_format).
+* Locate the script `build_roms.sh`. For example use:
+
+```bash
+find ~/src/roms -name build_roms.sh
+```
+
+* Copy it to this directory and adapt it. Here is a list of changes that I made highlighted with the [diff tool](https://en.wikipedia.org/wiki/Diff_utility#Unified_format).
 
 
 ```diff
@@ -334,7 +345,7 @@ List of variables (*: quantities accumulated over the integration period ("step"
 * Review your changes with:
 
 ```bash
-diff /path/to/previous/build_roms.bash build_roms.bash
+diff /path/to/previous/build_roms.sh build_roms.sh
 ```
 
 where you need to replace `/path/to/previous` by the appropriate file path.
@@ -351,7 +362,7 @@ where you need to replace `/path/to/previous` by the appropriate file path.
 ### File names
  * adapt `MyAppCPP`
 
- * adapt file names `VARNAME`, `GRDNAME`, `ININAME`, `BRYNAME`, `CLMNAME`,  `FRCNAME` and `NFFILES`
+ * adapt file names `VARNAME`, `GRDNAME`, `ININAME`, `BRYNAME`, `CLMNAME`, `FRCNAME` and `NFFILES`
 
  * also make sure that these variables are set (number of files with boundary conditions and climatology). If they do not exist, they need to be added (near `BRYNAME` for example).
 
@@ -394,24 +405,27 @@ You can use `DateTime` if you want to specify hour, minutes or seconds.
 
 ### Nudging towards "climatology"
 
+A flow relexation zone can be implemented in ROMS by using the followings settings:
+
 ```
 LtracerCLM == T T  ! enable processing of CLIM data
 LnudgeTCLM == T T  ! nudge to CLIM data
 TNUDG == 2*10.0d0                    ! days
 ```
 
-make nudging on inflow is stronger than on outflow
+Make nudging on inflow is stronger than on outflow
 
 ```
 OBCFAC == 10.0d0                      ! nondimensional
 ```
 
+Set also `NUDNAME` to the file name create by the julia script.
 
 ### Run ROMS
 
 #### Run ROMS without MPI
 
-* To run ROMS without MPI, one need to disable MPI in `build_roms.bash`. The ROMS binary will be called `romsS` and call be called by:
+* To run ROMS without MPI, one need to disable MPI in `build_roms.sh`. The ROMS binary will be called `romsS` and call be called by:
 
 ```bash
 ./romsS < roms.in | tee roms.out
@@ -420,7 +434,7 @@ OBCFAC == 10.0d0                      ! nondimensional
 #### Run ROMS with MPI
 
 * How many CPU cores does your machine have? You can use the command `top` in a shell terminal followed by `1`.
-* In `build_roms.bash` set `USE_MPI=on` (which is actually the default value)
+* In `build_roms.sh` set `USE_MPI=on` (which is actually the default value)
  * Recompile ROMS
  * Change `roms.in`, `NtileI` and `NtileJ`. The number of CPU cores should be `NtileI` * `NtileJ`.
  * Run ROMS with, e.g.
