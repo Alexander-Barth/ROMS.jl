@@ -109,9 +109,10 @@ sudo apt install gfortran make perl netcdf-bin libnetcdff-dev libopenmpi-dev ope
 For example:
 
 ```bash
-python3 -m pip install motuclient
-# or to install a specific version use for example
-# python3 -m pip install motuclient==1.8.6
+# to install a specific version use
+python3 -m pip install --user motuclient==1.8.6
+# or to install the latest version use:
+# python3 -m pip install --user motuclient
 ```
 
 I advice you to use version 1.8.6 of motuclient because of [this issue](https://github.com/clstoulouse/motu-client-python/issues/27).
@@ -161,6 +162,13 @@ nf-config --all
 ```bash
 nc-config --all
 ```
+
+If you have `nc-config` (with Fortran support) but not `nf-config`, you can run the following:
+
+``` bash
+ln -s /usr/bin/nc-config $HOME/bin/nf-config
+```
+Or set later the environemt variable `NF_CONFIG` to `nc-config`.
 
 * Check the `motuclient` (it may return `vUnknown`, but it should not return `No module named motuclient`)
 
@@ -341,6 +349,9 @@ find ~/src/roms -name build_roms.sh
 
 
 ```
+
+If you do not have the tool `nf-config`, you need to add this line `export NF_CONFIG=nc-config`.
+
 
 * Review your changes with:
 
