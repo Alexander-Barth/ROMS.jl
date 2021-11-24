@@ -31,7 +31,7 @@ To generate new forcing fields, register at (optional):
 
 ### Required software
 
-A preconfigured virtual machine is available [here](http://data-assimilation.net/upload/OCEA0036/Ubuntu-20.04-MATE-Julia-ROMS.ova). The `account` student has the password `tritro`. In this virtual machine, all software is already pre-installed. The OVA file must be [imported in Virtual Box](https://docs.oracle.com/cd/E26217_01/E26796/html/qs-import-vm.html).
+A preconfigured virtual machine is available [here](http://data-assimilation.net/upload/OCEA0036/Ubuntu-20.04-MATE-Julia-ROMS.ova). The account `student` has the password `tritro`. In this virtual machine, all software is already pre-installed. The OVA file must be [imported in Virtual Box](https://docs.oracle.com/cd/E26217_01/E26796/html/qs-import-vm.html).
 If you do not use this virtual machine the following software need to be installed:
 
 * [Julia](https://julialang.org/downloads/). Under Linux, you can install Julia with the following shell commands:
