@@ -5,7 +5,7 @@ Create a NetCDF grid file `fname` using the bathymetry `h`, Coriolis parameter
 `f` and longitude, latitude, mask, angle and strechting factors are rho-points.
 
 !!! note
-    This function currently only work for non-rotated grids (angle = 0) and
+    This function currently only works for non-rotated grids (angle = 0) and
     the spherical grids.
 """
 function create_grid(fname,h,f,lon_r,lat_r,mask_r,angle,pm,pn,dndx,dmde)
