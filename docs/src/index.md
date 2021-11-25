@@ -294,10 +294,11 @@ include("yourdomain_config.jl")
 #define SOLAR_SOURCE
 ```
 
-* Locate the script `build_roms.sh`. For example use:
+* Copy the script `build_roms.sh` to the directory `~/ROMS-implementation-test`
 
 ```bash
-find ~/src/roms -name build_roms.sh
+cd ~/ROMS-implementation-test
+cp ~/src/roms/ROMS/Bin/build_roms.sh build_roms.sh
 ```
 
 * Copy it to this directory and adapt it. Here is a list of changes that I made highlighted with the [diff tool](https://en.wikipedia.org/wiki/Diff_utility#Unified_format).
@@ -356,22 +357,30 @@ If you do not have the tool `nf-config`, you need to add this line `export NF_CO
 * Review your changes with:
 
 ```bash
-diff /path/to/previous/build_roms.sh build_roms.sh
+diff ~/src/roms/ROMS/Bin/build_roms.sh build_roms.sh
 ```
 
 where you need to replace `/path/to/previous` by the appropriate file path.
 
- * copy `varinfo.dat` from `~/src/roms/ROMS/External/varinfo.dat` in your current directory
+ * copy `varinfo.dat` from `~/src/roms/ROMS/External/varinfo.dat` in your current directory:
+
+ ```bash
+ cp ~/src/roms/ROMS/External/varinfo.dat .
+ ```
 
 
 ### ROMS model domain configuration
 
- * copy `roms.in` from `~/src/roms/User/External/roms.in`
+ * copy `roms.in` from `~/src/roms/User/External/roms.in` in the directory `~/ROMS-implementation-test`:
+
+```bash
+cp  ~/src/roms/User/External/roms.in .
+```
+
  * check the glossary at the end of this file for the meaning of the keys that we will change
  * when editing this file, do not use "tabs".
 
-### File names
- * adapt `MyAppCPP`
+ * adapt `MyAppCPP` and change it to `LIGURIANSEA`
 
  * adapt file names `VARNAME`, `GRDNAME`, `ININAME`, `BRYNAME`, `CLMNAME`, `FRCNAME` and `NFFILES`
 
