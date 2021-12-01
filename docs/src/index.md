@@ -360,13 +360,19 @@ If you do not have the tool `nf-config`, you need to add this line `export NF_CO
 diff ~/src/roms/ROMS/Bin/build_roms.sh build_roms.sh
 ```
 
+*  compile ROMS by running:
+
+```bash
+./build_roms.sh -j 2
+```
+
 where you need to replace `/path/to/previous` by the appropriate file path.
 
  * copy `varinfo.dat` from `~/src/roms/ROMS/External/varinfo.dat` in your current directory:
 
- ```bash
- cp ~/src/roms/ROMS/External/varinfo.dat .
- ```
+```bash
+cp ~/src/roms/ROMS/External/varinfo.dat .
+```
 
 
 ### ROMS model domain configuration
@@ -456,7 +462,7 @@ Set also `NUDNAME` to the file name create by the julia script.
 * How many CPU cores does your machine have? You can use the command `top` in a shell terminal followed by `1`.
 * In `build_roms.sh` set `USE_MPI=on` (which is actually the default value)
  * Recompile ROMS
- * Change `roms.in`, `NtileI` and `NtileJ`. The number of CPU cores should be `NtileI` * `NtileJ`.
+ * Change in `roms.in` the parameters `NtileI` and `NtileJ`. The number of CPU cores should be `NtileI` * `NtileJ`.
  * Run ROMS with, e.g.
 
 ```bash
