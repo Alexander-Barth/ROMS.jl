@@ -47,6 +47,8 @@ include("def_nudgecoef.jl")
 
 # Data sources
 include("CMEMS.jl")
+include("opendap.jl")
+include("HYCOM.jl")
 include("Atmosphere/prepare_ecmwf.jl")
 
 end
