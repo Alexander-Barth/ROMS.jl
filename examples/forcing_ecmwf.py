@@ -35,13 +35,21 @@ def download(xr,yr,tr,filename):
 
 
 if __name__ == '__main__':
-    # longitude range
+    fmt = '%Y-%m-%d'
+
+    # range of longitude (east, west)
     xr = [7.5, 12.375]
-    # latitude range
+
+    # range of latitude (south, north)
     yr = [41.875, 44.625]
-    # time range range
+
+    # time range (stard, end)
+    # the datetime function expects year, month and day
+    # Note: it should contain 1 day more than the simulation time range of ROMS
+    # If ROMS starts at 1 January 2000, you will need data the 31 December 2000
     tr = [datetime(2018,12,1),datetime(2020,1,1)]
-    # file name
-    filename = 'ecmwf_operational_archive_' + tr[0].isoformat() + '_' + tr[1].isoformat() + '.nc'
+
+    # output file name
+    filename = 'ecmwf_operational_archive_' + tr[0].strftime(fmt) + '_' + tr[1].strftime(fmt) + '.nc'
 
     download(xr,yr,tr,filename)
