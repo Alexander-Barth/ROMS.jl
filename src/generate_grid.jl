@@ -30,7 +30,8 @@ opt = (
 ```
 
 """
-function generate_grid(grid_fname,bath_name,xr,yr,red,opt,hmin,rmax; do_plot = false)
+function generate_grid(grid_fname,bath_name,xr,yr,red,opt,hmin,rmax;
+                       do_plot = false, postprocess_mask = identity)
 
     xo,yo,bo = ROMS.gebco_load(bath_name,xr,yr);
 
@@ -73,6 +74,8 @@ function generate_grid(grid_fname,bath_name,xr,yr,red,opt,hmin,rmax; do_plot = f
     mask[1,:] =   mask[1,:]   .& mask[2,:]
     mask[end,:] = mask[end,:] .& mask[end-1,:]
 
+
+    mask = postprocess_mask(x,y,mask)
 
     b[b .> 0] .= 0;
     b = -b;
