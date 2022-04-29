@@ -5,6 +5,13 @@
 # https://www.ecmwf.int/en/forecasts/access-forecasts/ecmwf-web-api
 # https://confluence.ecmwf.int/display/WEBAPI/Access+ECMWF+Public+Datasets
 
+
+# Parameter database
+# https://apps.ecmwf.int/codes/grib/param-db
+# For example, code 146 represents "Surface sensible heat flux"
+# https://apps.ecmwf.int/codes/grib/param-db?id=146
+# https://confluence.ecmwf.int/display/CKB/ERA5%3A+data+documentation#ERA5:datadocumentation-Meanrates/fluxesandaccumulations
+
 import ecmwfapi
 from datetime import datetime
 from ecmwfapi import ECMWFDataServer

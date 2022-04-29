@@ -3,6 +3,13 @@ using NCDatasets
 using Test
 using Dates
 
+# Compare to d_ecmwf2roms.m (svn revision 1102)
+
+# generate reference data:
+# * apply patch d_ecmwf2roms.m.patch
+# * run matlab d_ecmwf2roms.m script to generate gom_*_era.nc files
+
+
 datadir = joinpath(dirname(@__FILE__),"..","data")
 
 if !isdir(datadir)
@@ -28,34 +35,34 @@ filenames = @time ROMS.prepare_ecmwf(atmo_fname,Vnames,filename_prefix,domain_na
 
 basedir_ref = datadir
 
-for i = 1:length(filenames)
-    Vname,fname = filenames[i]
+@testset "Compare to d_ecmwf2roms.m" begin
+    for Vname = Vnames
+        ncname = Vname
+        if Vname in ("sustr","svstr")
+            ncname = "sms"
+        end
+        if Vname in ("Uwind","Vwind")
+            ncname = "wind"
+        end
+        if Vname == "lwrad_down"
+            ncname = "lwrad"
+        end
 
-    Tname = ROMS.metadata[Vname].Tname
-    output = replace(replace(fname,filename_prefix => ""),".nc" => "")
+        ds_ref = NCDataset(joinpath(basedir_ref,"gom_$(ncname)_era.nc"))
+        ds = NCDataset("$(filename_prefix)$(ncname).nc")
 
-    fname_ref = joinpath(basedir_ref,"liguriansea_$(output)_era_ref.nc")
+        Tname = ROMS.metadata[Vname].Tname
 
-    dsout = Dataset(fname)
-    ds_ref = Dataset(fname_ref)
+        data_ref = ds_ref[Vname][:,:,:]
+        data = ds[Vname][:,:,:]
 
-    #@show ds_ref[Vname][1,1,1]
-    #@show dsout[Vname][1,1,1]
+        diff = data - data_ref
+        @show maximum(abs.(diff))
 
-    tindex = 1:length(ds_ref[Tname])
-    #tindex = 1:2
-    #@show ds_ref[Tname][1:2]
-    #@show dsout[Tname][1:2]
+        @test data_ref ≈ data
+        @test ds_ref[Tname][:] == ds[Tname][:]
 
-    diff = ds_ref[Tname][tindex] - dsout[Tname][tindex]
-    @test all(Dates.value.(diff) .== 0)
-
-    diff = ds_ref[Vname][:,:,tindex] - dsout[Vname][:,:,tindex]
-
-    #@show std(ds_ref[Vname][:,:,end])
-    #@show std(dsout[Vname][:,:,end])
-    @test maximum(abs.(diff)) < 1e-4
-
-    close(dsout)
-    close(ds_ref)
+        close(ds)
+        close(ds_ref)
+    end
 end

@@ -46,11 +46,15 @@ function relative_humidity(temperature_2m_C,dew_temperature_2m_C)
 end
 
 """
-    prepare_ecmwf(atmo_fname,Vnames,filename_prefix,domain_name;
-                       time_origin = DateTime(1858,11,17)
+    ROMS.prepare_ecmwf(
+       atmo_fname,Vnames,filename_prefix,domain_name;
+       time_origin = DateTime(1858,11,17),
+       reset_accumulation = time -> Time(time) in (Time(0,0),Time(12,0)),
     )
 
 Generate ROMS forcing fields from the ECMWF data file `atmo_fname`.
+Note that some variables are [accumulated](https://www.myroms.org/forum/viewtopic.php?f=30&t=3003). Per default, the accumulation is reset at 00:00 and 12:00 UTC.
+The accumulation period is determined from the time resolution (usually 3 hours).
 
 # Example
 
@@ -65,15 +69,17 @@ prepare_ecmwf(atmo_fname,Vnames,filename_prefix,domain_name)
 )
 ```
 
-Based on forcing/d_ecmwf2roms.m:
+Based on forcing/d_ecmwf2roms.m (svn revision 1102):
 
     Copyright (c) 2002-2017 The ROMS/TOMS Group      Hernan G. Arango
     Licensed under a MIT/X style license             John Wilkin
     See License_ROMS.txt
 
 """
-function prepare_ecmwf(atmo_fname,Vnames,filename_prefix,domain_name;
-                       time_origin = DateTime(1858,11,17)
+function prepare_ecmwf(
+    atmo_fname,Vnames,filename_prefix,domain_name;
+    time_origin = DateTime(1858,11,17),
+    reset_accumulation = time -> Time(time) in (Time(0,0),Time(12,0)),
 )
 
     ds_ecmwf = NCDataset(atmo_fname)
@@ -86,6 +92,9 @@ function prepare_ecmwf(atmo_fname,Vnames,filename_prefix,domain_name;
         lat = reverse(lat)
     end
 
+    # time resolution for accumulation
+    Δt = time[2]-time[1]
+    Δt_seconds = Dates.value(Δt) / 1000 # ms to s
     flag_cartesian = 0
     flag_spherical = 1
 
@@ -95,35 +104,35 @@ function prepare_ecmwf(atmo_fname,Vnames,filename_prefix,domain_name;
             ECMWFname = "ewss",
             accumulation = true,
             output = "sms",
-            scale = 1/(3*60*60), # 3 hours accumulation
+            scale = 1/Δt_seconds, # 3 hours accumulation
         ),
         (
             Vname  = "svstr",
             ECMWFname = "nsss",
             accumulation = true,
             output = "sms",
-            scale  = 1.0/(3*3600.0),
+            scale  = 1.0/Δt_seconds,
         ),
         (
             Vname  = "shflux",
             ECMWFname = "",
             accumulation = true,
             output = "shflux",
-            scale  = 1.0/(3*3600.0),
+            scale  = 1.0/Δt_seconds,
         ),
         (
             Vname  = "swflux",
             ECMWFname = "",
             accumulation = true,
             output = "swflux",
-            scale  = 100.0/(3*3600.0)*(24*3600.0),
+            scale  = 100.0/Δt_seconds*(24*3600.0),
         ),
         (
             Vname  = "swrad",
             ECMWFname = "ssr",
             accumulation = true,
             output = "swrad",
-            scale  = 1.0/(3*3600.0),
+            scale  = 1.0/Δt_seconds,
         ),
         (
             Vname  = "Uwind",
@@ -144,28 +153,28 @@ function prepare_ecmwf(atmo_fname,Vnames,filename_prefix,domain_name;
             ECMWFname = "str",
             accumulation = true,
             output = "lwrad",
-            scale  = 1.0/(3*3600.0),
+            scale  = 1.0/Δt_seconds,
         ),
         (
             Vname  = "lwrad_down",
             ECMWFname = "strd",
             accumulation = true,
             output = "lwrad",
-            scale  = 1.0/(3*3600.0),
+            scale  = 1.0/Δt_seconds,
         ),
         (
             Vname  = "latent",
             ECMWFname = "slhf",
             accumulation = true,
             output = "latent",
-            scale  = 1.0/(3*3600.0),
+            scale  = 1.0/Δt_seconds,
         ),
         (
             Vname  = "sensible",
             ECMWFname = "sshf",
             accumulation = true,
             output = "sensible",
-            scale  = 1.0/(3*3600.0),
+            scale  = 1.0/Δt_seconds,
         ),
         (
             Vname  = "cloud",
@@ -179,7 +188,7 @@ function prepare_ecmwf(atmo_fname,Vnames,filename_prefix,domain_name;
             ECMWFname = "tp",
             accumulation = true,
             output = "rain",
-            scale  = 1000.0/(3*3600.0),
+            scale  = 1000.0/Δt_seconds,
         ),
         (
             Vname  = "Pair",
@@ -207,7 +216,7 @@ function prepare_ecmwf(atmo_fname,Vnames,filename_prefix,domain_name;
             ECMWFname = "par",
             accumulation = true,
             output = "PAR",
-            scale  = 1.0/(3*3600.0),
+            scale  = 1.0/Δt_seconds,
         )
     ]
 
@@ -264,9 +273,6 @@ function prepare_ecmwf(atmo_fname,Vnames,filename_prefix,domain_name;
         dsout["lon"][:] = repeat(lon,inner=(1,length(lat)))
         dsout["lat"][:] = repeat(lat',inner=(length(lon),1))
 
-        Dates.Hour(time[1]) == Dates.Hour(3)
-
-        Δt =  Dates.Hour(3)
         scale = F[i].scale
         previous_field = zeros(length(lon),length(lat))
 
@@ -287,7 +293,7 @@ function prepare_ecmwf(atmo_fname,Vnames,filename_prefix,domain_name;
             elseif Vname == "swflux"
                 evap = Float64.(nomissing(ds_ecmwf["e"][:,:,irec],NaN))
                 prec = Float64.(nomissing(ds_ecmwf["tp"][:,:,irec],NaN))
-                field = (-evap - prec) .* scale;
+                field = (evap - prec) .* scale;
             elseif Vname == "shflux"
                 sensible = Float64.(nomissing(ds_ecmwf["sshf"][:,:,irec],NaN))
                 latent = Float64.(nomissing(ds_ecmwf["slhf"][:,:,irec],NaN))
@@ -308,8 +314,7 @@ function prepare_ecmwf(atmo_fname,Vnames,filename_prefix,domain_name;
                 # compute the accumulation over a single 3h time step
                 field,previous_field = (field - previous_field,field)
 
-                if (Dates.Hour(time_rec) == Dates.Hour(0)) || (
-                    Dates.Hour(time_rec) == Dates.Hour(12))
+                if reset_accumulation(time_rec)
                     # reset accumulation at 00:00:00 or 12:00:00
                     previous_field .= 0
                 end
