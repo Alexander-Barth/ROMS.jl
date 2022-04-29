@@ -11,7 +11,7 @@ is the minimum depth and `rmax` is the smoothness parameter of the bathymetry.
 The ``r`` parameter is defined as:
 
 ``
-r = \\max\\left( \\underset{ij}{\\max} \\frac{|h_{i,j} - h_{i+1,j}|}{h_{i,j} + h_{i+1,j}}, 
+r = \\max\\left( \\underset{ij}{\\max} \\frac{|h_{i,j} - h_{i+1,j}|}{h_{i,j} + h_{i+1,j}},
  \\underset{ij}{\\max} \\frac{|h_{i,j} - h_{i,j+1}|}{h_{i,j} + h_{i,j+1}} \\right)
 ``
 
@@ -31,7 +31,8 @@ opt = (
 
 """
 function generate_grid(grid_fname,bath_name,xr,yr,red,opt,hmin,rmax;
-                       do_plot = false, postprocess_mask = identity)
+                       do_plot = false,
+                       postprocess_mask = (x,y,mask) -> mask)
 
     xo,yo,bo = ROMS.gebco_load(bath_name,xr,yr);
 
