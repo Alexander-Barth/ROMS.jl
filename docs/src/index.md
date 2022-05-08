@@ -399,13 +399,13 @@ NCLMFILES == 1
 
  * change `Lm`, `Mm` and `N` based on the dimensions of your grid (make sure to read the glossary for these variable in `roms.in`)
 
- * adapt boundaries `LBC`
+ * read the desciption about "lateral boundary conditions" and adapt boundaries `LBC`:
     * use closed (`Clo`) for boundaries without sea-point
     * for open boundaries:
-          * free-surface: Chapman implicit (`Cha`)
-          * 2D U/V-momentum: Flather (`Fla`)
-          * 3D U/V-momentum, temperature, salinity: Radiation with nudging (`RadNud`)
-          * mixing TKE: Radiation (`Rad`)
+       * free-surface: Chapman implicit (`Cha`)
+       * 2D U/V-momentum: Flather (`Fla`)
+       * 3D U/V-momentum, temperature, salinity: Radiation with nudging (`RadNud`)
+       * mixing TKE: Radiation (`Rad`)
 
  * set the starting time and time reference
 ```
