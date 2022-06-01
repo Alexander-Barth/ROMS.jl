@@ -7,10 +7,10 @@ BUILD_DIR="$HOME/ROMS-implementation-test"
 
 mkdir -p ~/src/
 cd ~/src/
-svn checkout --no-auth-cache --non-interactive  --username "$ROMS_USERNAME" \
-    --password "$ROMS_PASSWORD" https://www.myroms.org/svn/src/tags/roms-3.9 roms
-cd ~/src/roms
-echo svnversion $(svnversion)
+
+git clone "https://$ROMS_USERNAME:$ROMS_PASSWORD@www.myroms.org/git/src" roms
+cd roms
+git checkout roms-3.9
 
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"

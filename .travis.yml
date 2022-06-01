@@ -25,7 +25,6 @@ addons:
     - python3-pip
     - python3-setuptools
     - python3-matplotlib
-    - subversion
     - wget
 
 before_install:
@@ -41,7 +40,7 @@ after_success:
 jobs:
   include:
     - stage: "Documentation"
-      julia: 1.5
+      julia: 1.7
       os: linux
       script:
         - julia --project=docs/ -e 'using Pkg; Pkg.instantiate();

@@ -67,11 +67,12 @@ Pkg.develop(url="https://github.com/Alexander-Barth/ROMS.jl")
 ```bash
 mkdir ~/src/
 cd ~/src/
-svn checkout --non-interactive  --username "$ROMS_USERNAME" \
-    --password "$ROMS_PASSWORD" https://www.myroms.org/svn/src/tags/roms-3.9 roms
+git clone "https://www.myroms.org/git/src" roms
+cd roms
+git checkout roms-3.9
 ```
 
-In the previous command, you need to replace `$ROMS_USERNAME` and `$ROMS_PASSWORD` by your username and password.
+For the git command, you will cneed to provide your ROMS username and password.
 
 
 Other required software typically available from a package manager:
@@ -81,7 +82,6 @@ Other required software typically available from a package manager:
 * perl
 * Python and pip
 * MPI (optional)
-* subversion (optional)
 * git (optional)
 
 Note that all libraries (NetCDF and MPI) must be compiled with the same Fortran compiler.
@@ -102,7 +102,7 @@ On MacOS X:
 On Debian/Ubuntu, these packages can be installed by this command:
 
 ```bash
-sudo apt install gfortran make perl netcdf-bin libnetcdff-dev libopenmpi-dev openmpi-bin subversion git python3-pip python3-setuptools unzip
+sudo apt install gfortran make perl netcdf-bin libnetcdff-dev libopenmpi-dev openmpi-bin git python3-pip python3-setuptools unzip
 ```
 
 * For CMEMS data, you need the python package `motuclient` ([installation instructions](https://github.com/clstoulouse/motu-client-python#Installation)).
