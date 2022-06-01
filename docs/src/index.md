@@ -62,14 +62,14 @@ Pkg.add("NCDatasets")
 Pkg.develop(url="https://github.com/Alexander-Barth/ROMS.jl")
 ```
 
-* ROMS source. This example uses the version 3.9 of ROMS. We assume that the ROMS source is copied in `~/src/roms`:
+* ROMS source. This example uses the version 4.0 of ROMS. We assume that the ROMS source is copied in `~/src/roms`:
 
 ```bash
 mkdir ~/src/
 cd ~/src/
 git clone "https://www.myroms.org/git/src" roms
 cd roms
-git checkout roms-3.9
+git checkout roms-4.0
 ```
 
 For the git command, you will cneed to provide your ROMS username and password.

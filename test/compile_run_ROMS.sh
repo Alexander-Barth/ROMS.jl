@@ -10,7 +10,7 @@ cd ~/src/
 
 git clone "https://$ROMS_USERNAME:$ROMS_PASSWORD@www.myroms.org/git/src" roms
 cd roms
-git checkout roms-3.9
+git checkout roms-4.0
 
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
