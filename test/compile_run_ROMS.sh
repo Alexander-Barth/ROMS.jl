@@ -8,7 +8,9 @@ BUILD_DIR="$HOME/ROMS-implementation-test"
 mkdir -p ~/src/
 cd ~/src/
 
-git clone "https://$ROMS_USERNAME:$ROMS_PASSWORD@www.myroms.org/git/src" roms
+git config credential.helper '!f() { sleep 1; echo "username=${ROMS_USERNAME}"; echo "password=${ROMS_PASSWORD}"; }; f'
+
+git clone https://www.myroms.org/git/src roms
 cd roms
 git checkout roms-4.0
 
