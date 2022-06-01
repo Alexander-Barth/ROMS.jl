@@ -8,7 +8,7 @@ BUILD_DIR="$HOME/ROMS-implementation-test"
 mkdir -p ~/src/
 cd ~/src/
 
-git config credential.helper '!f() { sleep 1; echo "username=${ROMS_USERNAME}"; echo "password=${ROMS_PASSWORD}"; }; f'
+git config --global credential.helper '!f() { sleep 1; echo "username=${ROMS_USERNAME}"; echo "password=${ROMS_PASSWORD}"; }; f'
 
 git clone https://www.myroms.org/git/src roms
 cd roms
