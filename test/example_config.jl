@@ -58,10 +58,10 @@ opt = (
 
 # ECMWF from 2018-12-01 to 2020-01-01 is available at
 # https://dox.ulg.ac.be/index.php/s/tbzNV9Z9UPtG5et/download
-#ecmwf_fname = expanduser("~/Data/Atmosphere/ecmwf_operational_archive_2018-12-01T00:00:00_2020-01-01T00:00:00.nc")
+ecmwf_fname = expanduser("~/Data/Atmosphere/ecmwf_operational_archive_2018-12-01T00:00:00_2020-01-01T00:00:00.nc")
 
 # ECMWF from 2019-01-01 03:00:00  to 2019-01-07 03:00:00
-ecmwf_fname = expanduser("~/Data/Atmosphere/ecmwf_sample_data.nc")
+#ecmwf_fname = expanduser("~/Data/Atmosphere/ecmwf_sample_data.nc")
 
 if !isfile(ecmwf_fname)
     mkpath(dirname(ecmwf_fname))
@@ -79,7 +79,8 @@ cmems_password = ENV["CMEMS_PASSWORD"]
 # t1 end time
 
 t0 = DateTime(2019,1,2);
-t1 = DateTime(2019,1,4);
+#t1 = DateTime(2019,1,4);
+t1 = DateTime(2019,3,3);
 
 # setup dir
 
