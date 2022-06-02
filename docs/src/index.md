@@ -475,7 +475,7 @@ Set also `NUDNAME` to the file name create by the julia script.
 ```bash
 mpirun -np 4 ./romsM  roms.in | tee roms.out
 ```
-where 4 is the number of cores to use.
+where 4 is the number of cores to use. To use 4 CPUs, you need to set `NtileI` to 2 and `NtileJ` to 2.
 
 
 With the command `tee` the normal screen output will be place in the file `roms.out` but still be printed on the screen.
