@@ -86,3 +86,21 @@ function model_interp3_(x::AbstractVector,y::AbstractVector,z,v,xi,yi,zi;
     #@show extrema(vii)
     return vii
 end
+
+
+
+function model_interp3(x::AbstractMatrix,y::AbstractMatrix,z,v,xi,yi,zi;
+                       tol = 1e-5,
+                       kwargs...)
+
+    sz = size(v)
+    @assert repeat(x[:,1:1],inner=(1,sz[2])) == x
+    @assert repeat(y[1:1,:],inner=(sz[1],1)) == y
+
+    if (zi isa AbstractVector) && (xi isa AbstractMatrix)
+        szi = size(xi)
+        zi = repeat(reshape(zi,(1,1,length(zi))),inner=(szi[1],szi[2],1))
+    end
+
+    model_interp3(x[:,1],y[1,:],z,v,xi,yi,zi; kwargs...)
+end

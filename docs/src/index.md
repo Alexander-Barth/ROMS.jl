@@ -253,7 +253,8 @@ List of variables (*: quantities accumulated over the integration period ("step"
 include("yourdomain_config.jl")
 ```
 
-* Check the resulting files: initial conditions, boundary conditions, interpolated model (`clim` file) and visualize the these files along some sections.
+* Check the resulting files: bathymetry, initial conditions, boundary conditions, interpolated model (`clim` file) and visualize the these files along some sections.
+
 
 ### ROMS compilation
 
