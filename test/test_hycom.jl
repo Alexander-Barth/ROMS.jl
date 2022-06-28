@@ -1,59 +1,38 @@
 using ROMS
 using Test
-
-import Base: getindex, size
-
-function combine_ind(sz,ind1,ind2)
-    ind = ntuple(i -> (1:sz[i]) ,length(ind1))
-    ind = getindex.(ind,ind1)
-    ind = getindex.(ind,ind2)
-    return ind
-end
-
-mutable struct SubView6{T,N,TA,TI} <: AbstractArray{T,N} where TA <: AbstractArray{T,N}
-    data::TA
-    ind::TI
-end
-
-myview(A::AbstractArray{T,N},ind...) where {T,N} = SubView6{T,N,typeof(A),typeof(ind)}(A,ind)
-function getindex(A::SubView6,ind...)
-    indices = combine_ind(size(A.data),A.ind,ind)
-    return A.data[indices...]
-end
-
-size(A::SubView6) = size(A.data)
+using NCDatasets
+using Dates
 
 # URL from https://www.hycom.org/data/glbu0pt08/expt-91pt0
 url = "http://tds.hycom.org/thredds/dodsC/GLBu0.08/expt_91.0"
 
-data = rand(Int,4,5)
-
-ind1 = (:,2:3)
-ind2 = (2:4,1)
-
-ind = combine_ind(size(data),ind1,ind2)
-@test data[ind...] ==  data[ind1...][ind2...]
+cachedir = expanduser("~/tmp/HYCOM")
+mkpath(cachedir)
 
 
-ind1 = (:,1:3)
-ind2 = (2:2,:)
+ds = ROMS.HYCOM(url,cachedir);
 
-ind = combine_ind(size(data),ind1,ind2)
-@test data[ind...] ==  data[ind1...][ind2...]
+# range of longitude
+xr = [7.6, 12.2];
 
-@test myview(data,ind1...)[ind2...] == data[ind1...][ind2...]
+# range of latitude
+yr = [42, 44.5];
+
+t0 = DateTime(2019,1,2);
+t1 = DateTime(2019,1,4);
+t0 = DateTime(2013,9,1);
+t1 = DateTime(2013,9,4);
+tr = [t0-Dates.Day(1), t1+Dates.Day(1)]
+
+ROMS.download(ds,:sea_surface_height_above_geoid,
+              longitude = xr, latitude = yr, time = tr)
 
 
-#=
-h = ROMS.HYCOM(url)
+ncvar,(x,y,t) = ROMS.load(
+    ds,:sea_surface_height_above_geoid,
+    longitude = xr, latitude = yr, time = tr)
 
-name = :sea_water_potential_temperature
 
-v,(x,y,z,t) = load(h,name; query...)
-
-v,(x,y,z,t) = load(h,:sea_water_salinity; query...)
-
-v,(x,y,t) = load(h,:sea_surface_height_above_geoid; query...)
-
-@test ndims(v) == 3
-=#
+T,(x,y,z,t) = ROMS.load(
+    ds,:sea_water_potential_temperature,
+    longitude = xr, latitude = yr, time = tr)

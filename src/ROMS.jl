@@ -1,5 +1,6 @@
 module ROMS
 
+using DataStructures
 using Dates
 using NCDatasets
 using Interpolations
@@ -8,6 +9,7 @@ using DataStructures
 using DIVAnd
 using Statistics
 using PyPlot
+using URIs
 import Base: getindex, download
 using Base.Threads
 

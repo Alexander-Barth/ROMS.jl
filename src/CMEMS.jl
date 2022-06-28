@@ -158,3 +158,28 @@ end
 
 
 export load
+
+
+# form
+# https://my.cmems-du.eu/thredds/dodsC/med-cmcc-ssh-rean-d.html
+# opendap url
+# https://my.cmems-du.eu/thredds/dodsC/med-cmcc-ssh-rean-d
+
+function CMEMS_opendap(username,password,mapping,cachedir;
+                baseurl = "https://my.cmems-du.eu/thredds/dodsC",
+                chunks = 60,
+)
+
+    userinfo = string(username,":",password)
+    baseURI = URI(URI(baseurl),userinfo=userinfo)
+
+    urls = DefaultDict{Symbol,String,String}("unknown")
+    for (k,v) in mapping
+        urls[k] = string(URI(baseURI,path=joinpath(baseURI.path,v[end])))
+    end
+
+    return OPENDAP(
+        urls,cachedir,
+        Dict{Symbol,String}(),
+        chunks)
+end
