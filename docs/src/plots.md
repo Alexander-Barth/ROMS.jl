@@ -1,14 +1,16 @@
-```@meta
-DocTestSetup = quote
-using ROMS
-cd(expanduser("~/ROMS-implementation-test")) do
-if !isfile("liguriansea2019_Qair.nc")
-   include(joinpath(dirname(pathof(ROMS)),"..","test","example_config.jl"))
+
+```@example example_config
+grid_fname = "LS2v.nc"
+
+if !isfile(grid_fname)
+    download("https://dox.ulg.ac.be/index.php/s/J9DXhUPXbyLADJa/download",grid_fname)
 end
-end
+
+fname = "roms_his.nc"
+if !isfile(fname)
+    download("https://dox.ulg.ac.be/index.php/s/17UWsY7tRNMDf4w/download",fname)
 end
 ```
-
 
 
 ```@example example_config
@@ -18,6 +20,7 @@ using ROMS, PyPlot, NCDatasets, GeoDatasets
 using Statistics
 
 datadir = expanduser("~/ROMS-implementation-test")
+datadir = expanduser(".")
 
 
 ds_grid = NCDataset(joinpath(datadir,"LS2v.nc"));
@@ -45,10 +48,11 @@ savefig("smoothed_bathymetry.png"); nothing # hide
 
 ```@example example_config
 # instance to plot
-n = 3
+n = 1
 
+ds = NCDataset(fname)
 #ds = NCDataset(joinpath(datadir,"clim2019.nc"))
-ds = NCDataset(joinpath(datadir,"Simulation1","roms_his.nc"))
+#ds = NCDataset(joinpath(datadir,"Simulation1","roms_his.nc"))
 
 temp = nomissing(ds["temp"][:,:,end,n],NaN);
 temp[mask_rho .== 0] .= NaN;
