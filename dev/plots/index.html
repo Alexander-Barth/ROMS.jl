@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Plots · ROMS.jl</title><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.044/juliamono.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.11/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../">ROMS.jl</a></span></div><form class="docs-search" action="../search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../">Tutorial</a></li><li class="is-active"><a class="tocitem" href>Plots</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Plots</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Plots</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/Alexander-Barth/ROMS.jl/blob/master/docs/src/plots.md" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><pre><code class="language-julia hljs">grid_fname = &quot;LS2v.nc&quot;
+
+if !isfile(grid_fname)
+    download(&quot;https://dox.ulg.ac.be/index.php/s/J9DXhUPXbyLADJa/download&quot;,grid_fname)
+end
+
+fname = &quot;roms_his.nc&quot;
+if !isfile(fname)
+    download(&quot;https://dox.ulg.ac.be/index.php/s/17UWsY7tRNMDf4w/download&quot;,fname)
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">&quot;roms_his.nc&quot;</code></pre><pre><code class="language-julia hljs">using PyPlot, ROMS
+
+using ROMS, PyPlot, NCDatasets, GeoDatasets
+using Statistics
+
+datadir = expanduser(&quot;~/ROMS-implementation-test&quot;)
+datadir = expanduser(&quot;.&quot;)
+
+
+ds_grid = NCDataset(joinpath(datadir,&quot;LS2v.nc&quot;));
+lon = ds_grid[&quot;lon_rho&quot;][:,:];
+lat = ds_grid[&quot;lat_rho&quot;][:,:];
+h = ds_grid[&quot;h&quot;][:,:];
+mask_rho = ds_grid[&quot;mask_rho&quot;][:,:];
+
+
+clf();
+hmask = copy(h)
+hmask[mask_rho .== 0] .= NaN;
+pcolormesh(lon,lat,hmask);
+colorbar(orientation=&quot;horizontal&quot;)
+gca().set_aspect(1/cosd(mean(lat)))
+
+title(&quot;smoothed bathymetry [m]&quot;);</code></pre><p><img src="../smoothed_bathymetry.png" alt/></p><pre><code class="language-julia hljs"># instance to plot
+n = 1
+
+ds = NCDataset(fname)
+#ds = NCDataset(joinpath(datadir,&quot;clim2019.nc&quot;))
+#ds = NCDataset(joinpath(datadir,&quot;Simulation1&quot;,&quot;roms_his.nc&quot;))
+
+temp = nomissing(ds[&quot;temp&quot;][:,:,end,n],NaN);
+temp[mask_rho .== 0] .= NaN;
+
+if haskey(ds,&quot;time&quot;)
+    # for clim files
+    time = ds[&quot;time&quot;][:]
+else
+    # for others files
+    time = ds[&quot;ocean_time&quot;][:]
+end
+
+
+
+clf();
+pcolormesh(lon,lat,temp)
+gca().set_aspect(1/cosd(mean(lat)))
+colorbar(orientation=&quot;horizontal&quot;);
+title(&quot;sea surface temperature [°C]&quot;)</code></pre><p><img src="../SST.png" alt/></p><pre><code class="language-julia hljs">zeta = nomissing(ds[&quot;zeta&quot;][:,:,n],NaN)
+u = nomissing(ds[&quot;u&quot;][:,:,end,n],NaN);
+v = nomissing(ds[&quot;v&quot;][:,:,end,n],NaN);
+
+mask_u = ds_grid[&quot;mask_u&quot;][:,:];
+mask_v = ds_grid[&quot;mask_v&quot;][:,:];
+
+
+u[mask_u .== 0] .= NaN;
+v[mask_v .== 0] .= NaN;
+zeta[mask_rho .== 0] .= NaN;
+
+u_r = cat(u[1:1,:], (u[2:end,:] .+ u[1:end-1,:])/2, u[end:end,:], dims=1);
+v_r = cat(v[:,1:1], (v[:,2:end] .+ v[:,1:end-1])/2, v[:,end:end], dims=2);
+size(u_r), size(v_r), size(mask_rho)
+
+
+clf();
+pcolormesh(lon,lat,zeta)
+r = 3;
+i = 1:r:size(lon,1);
+j = 1:r:size(lon,2);
+q = quiver(lon[i,j],lat[i,j],u_r[i,j],v_r[i,j])
+quiverkey(q,0.9,0.85,1,&quot;1 m/s&quot;,coordinates=&quot;axes&quot;)
+title(&quot;surface currents [m/s] and elevation [m]&quot;);
+colorbar(orientation=&quot;horizontal&quot;);
+gca().set_aspect(1/cosd(mean(lat)))</code></pre><p><img src="../surface_zeta_uv.png" alt/></p><pre><code class="language-julia hljs">opt = (
+    Tcline = 50,   # m
+    theta_s = 5,   # surface refinement
+    theta_b = 0.4, # bottom refinement
+    nlevels = 32,  # number of vertical levels
+    Vtransform  = 2,
+    Vstretching = 4,
+)
+
+hmin = minimum(h)
+hc = min(hmin,opt.Tcline)
+z_r = ROMS.set_depth(opt.Vtransform, opt.Vstretching,
+                   opt.theta_s, opt.theta_b, hc, opt.nlevels,
+                   1, h);
+
+temp = nomissing(ds[&quot;temp&quot;][:,:,:,n],NaN);
+
+mask3 = repeat(mask_rho,inner=(1,1,opt.nlevels))
+lon3 = repeat(lon,inner=(1,1,opt.nlevels))
+lat3 = repeat(lat,inner=(1,1,opt.nlevels))
+
+temp[mask3 .== 0] .= NaN;
+
+i = 20;
+
+clf()
+contourf(lat3[i,:,:],z_r[i,:,:],temp[i,:,:],40)
+ylim(-300,0);
+xlabel(&quot;latitude&quot;)
+ylabel(&quot;depth [m]&quot;)
+title(&quot;temperature at $(round(lon[i,1],sigdigits=4)) °E&quot;)
+colorbar(orientation=&quot;horizontal&quot;);</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Vtransform  = 2   ROMS-UCLA
+   igrid     = 1 at horizontal RHO-points
+
+Vstretching = 4   Shchepetkin (2010)
+   kgrid    = 0   at vertical RHO-points
+   theta_s  = 5
+   theta_b  = 0.4
+   hc       = 2.0
+
+ S-coordinate curves: k, s(k), C(k)
+
+     32    -1.562500000000e-02    -5.060164946710e-05
+     31    -4.687500000000e-02    -4.572401105559e-04
+     30    -7.812500000000e-02    -1.280298055894e-03
+     29    -1.093750000000e-01    -2.539560500182e-03
+     28    -1.406250000000e-01    -4.265266261424e-03
+     27    -1.718750000000e-01    -6.498792311199e-03
+     26    -2.031250000000e-01    -9.293584054181e-03
+     25    -2.343750000000e-01    -1.271634639800e-02
+     24    -2.656250000000e-01    -1.684851356914e-02
+     23    -2.968750000000e-01    -2.178801812466e-02
+     22    -3.281250000000e-01    -2.765138117566e-02
+     21    -3.593750000000e-01    -3.457614600596e-02
+     20    -3.906250000000e-01    -4.272367537770e-02
+     19    -4.218750000000e-01    -5.228232795041e-02
+     18    -4.531250000000e-01    -6.347102015626e-02
+     17    -4.843750000000e-01    -7.654316490419e-02
+     16    -5.156250000000e-01    -9.179095542844e-02
+     15    -5.468750000000e-01    -1.095499286006e-01
+     14    -5.781250000000e-01    -1.302036934689e-01
+     13    -6.093750000000e-01    -1.541886431904e-01
+     12    -6.406250000000e-01    -1.819983765227e-01
+     11    -6.718750000000e-01    -2.141874325067e-01
+     10    -7.031250000000e-01    -2.513737824031e-01
+      9    -7.343750000000e-01    -2.942393202666e-01
+      8    -7.656250000000e-01    -3.435273436662e-01
+      7    -7.968750000000e-01    -4.000357194613e-01
+      6    -8.281250000000e-01    -4.646040954176e-01
+      5    -8.593750000000e-01    -5.380931709292e-01
+      4    -8.906250000000e-01    -6.213537270252e-01
+      3    -9.218750000000e-01    -7.151829201676e-01
+      2    -9.531250000000e-01    -8.202653975901e-01
+      1    -9.843750000000e-01    -9.370972868551e-01</code></pre><p><img src="../temp_section1.png" alt/></p><pre><code class="language-julia hljs">tempi = ROMS.model_interp3(lon,lat,z_r,temp,lon,lat,[-200])
+mlon,mlat,mdata = GeoDatasets.landseamask(resolution=&#39;f&#39;, grid=1.25)
+
+clf();
+pcolormesh(lon,lat,tempi[:,:,1])
+colorbar(orientation=&quot;horizontal&quot;);
+ax = axis()
+contourf(mlon,mlat,mdata&#39;,[0.5, 3],colors=[&quot;gray&quot;])
+axis(ax)
+gca().set_aspect(1/cosd(mean(lat)))
+title(&quot;temperature at 200 m [°C]&quot;)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">[ Info: Downloading file &#39;lsmask_1.25min_f.bin&#39; from &#39;https://raw.githubusercontent.com/matplotlib/basemap/v1.2.2rel/lib/mpl_toolkits/basemap/data/lsmask_1.25min_f.bin&#39; with cURL.</code></pre><p><img src="../temp_hsection_200.png" alt/></p><pre><code class="language-julia hljs">section_lon = LinRange(8.18, 8.7,100);
+section_lat = LinRange(43.95, 43.53,100);
+
+using Interpolations
+
+function section_interp(v)
+    itp = interpolate((lon[:,1],lat[1,:]),v,Gridded(Linear()))
+    return itp.(section_lon,section_lat)
+end
+
+section_temp = mapslices(section_interp,temp,dims=(1,2))
+section_z = mapslices(section_interp,z_r,dims=(1,2))
+
+section_x = repeat(section_lon,inner=(1,size(temp,3)))
+
+clf()
+contourf(section_x,section_z[:,1,:],section_temp[:,1,:],50)
+ylim(-500,0)
+colorbar()
+xlabel(&quot;longitude&quot;)
+ylabel(&quot;depth&quot;)
+title(&quot;temperature section [°C]&quot;);
+
+ax2 = gcf().add_axes([0.5,0.2,0.2,0.15])
+ax2.pcolormesh(lon,lat,temp[:,:,end])
+axis(&quot;on&quot;)
+ax2.set_aspect(1/cosd(mean(lat)))
+ax2.plot(section_lon,section_lat,&quot;m&quot;)
+
+savefig(&quot;temp_vsection.png&quot;);</code></pre><p><img src="../temp_vsection.png" alt/></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Tutorial</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.19 on <span class="colophon-date" title="Tuesday 28 June 2022 18:49">Tuesday 28 June 2022</span>. Using Julia version 1.7.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
