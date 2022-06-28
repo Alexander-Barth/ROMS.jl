@@ -3,8 +3,6 @@ using ROMS
 using Statistics
 using Dates
 using NCDatasets
-using PyPlot
-
 
 @testset "Bathymetry" begin
     include("test_bathymetry.jl")
@@ -36,5 +34,5 @@ end
 end
 
 @testset "ROMS run" begin
-    include("test_run_roms.sh")
+    include("test_run_roms.jl")
 end
