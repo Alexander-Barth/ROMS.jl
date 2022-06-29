@@ -15,6 +15,18 @@ using Pkg
 Pkg.add(url="https://github.com/Alexander-Barth/ROMS.jl", rev="master")
 ```
 
+# Data sources
+
+* Bathymetry
+    * GEBCO
+* Initial and boundary condition from:
+    * CMEMS
+    * HYCOM GOFS
+* Atmospheric forcings:
+    * ECMWF
+
+Contributions to add other data sources are welcome!
+
 # Documentation
 
 Documentation is available [here](https://alexander-barth.github.io/ROMS.jl/dev/).
