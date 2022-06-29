@@ -24,18 +24,13 @@ In this example, the bathymetry defined in the grid file is visualized. Make sur
 contains the file `LS2v.nc` (use e.g. `;cd ~/ROMS-implementation-test`)
 
 ```@example example_config
-using PyPlot, ROMS
-
-using ROMS, PyPlot, NCDatasets, GeoDatasets
-using Statistics
-
+using ROMS, PyPlot, NCDatasets, GeoDatasets, Statistics
 
 ds_grid = NCDataset("LS2v.nc");
 lon = ds_grid["lon_rho"][:,:];
 lat = ds_grid["lat_rho"][:,:];
 h = ds_grid["h"][:,:];
 mask_rho = ds_grid["mask_rho"][:,:];
-
 
 clf();
 figure(figsize=(7,4))
@@ -75,8 +70,6 @@ else
     time = ds["ocean_time"][:]
 end
 
-
-
 clf();
 pcolormesh(lon,lat,temp)
 gca().set_aspect(1/cosd(mean(lat)))
@@ -87,16 +80,13 @@ savefig("SST.png"); nothing # hide
 
 ![](SST.png)
 
-
-Exercise: 
+Exercise:
 * Plot salinity
 * Plot different time instance (`n`)
 * Where do we specify that the surface values are to be plotted? Plot different layers.
 
 
 ## Surface velocity and elevation
-
-
 
 ```@example example_config
 zeta = nomissing(ds["zeta"][:,:,n],NaN)
@@ -106,18 +96,20 @@ v = nomissing(ds["v"][:,:,end,n],NaN);
 mask_u = ds_grid["mask_u"][:,:];
 mask_v = ds_grid["mask_v"][:,:];
 
-
 u[mask_u .== 0] .= NaN;
 v[mask_v .== 0] .= NaN;
 zeta[mask_rho .== 0] .= NaN;
 
+# ROMS uses an Arakawa C grid
 u_r = cat(u[1:1,:], (u[2:end,:] .+ u[1:end-1,:])/2, u[end:end,:], dims=1);
 v_r = cat(v[:,1:1], (v[:,2:end] .+ v[:,1:end-1])/2, v[:,end:end], dims=2);
-size(u_r), size(v_r), size(mask_rho)
 
+# all sizes should be the same
+size(u_r), size(v_r), size(mask_rho)
 
 clf();
 pcolormesh(lon,lat,zeta)
+# plot only a single arrow for r x r grid cells
 r = 3;
 i = 1:r:size(lon,1);
 j = 1:r:size(lon,2);
@@ -131,7 +123,7 @@ savefig("surface_zeta_uv.png"); nothing # hide
 
 ![](surface_zeta_uv.png)
 
-Exercise: 
+Exercise:
 * The surface currents seems to follow lines of constant surface elevation. Explain why this is to be expected.
 
 ## Vertical section
@@ -176,7 +168,7 @@ title("temperature at $(round(lon[i,1],sigdigits=4)) °E")
 colorbar();
 
 # inset plot
-ax2 = gcf().add_axes([0.15,0.2,0.4,0.3])
+ax2 = gcf().add_axes([0.1,0.18,0.4,0.3])
 ax2.pcolormesh(lon,lat,temp[:,:,end])
 ax2.set_aspect(1/cosd(mean(lat)))
 ax2.plot(lon[i,[1,end]],lat[i,[1,end]],"m")
@@ -184,7 +176,10 @@ ax2.plot(lon[i,[1,end]],lat[i,[1,end]],"m")
 savefig("temp_section1.png"); nothing # hide
 ```
 
-![](temp_section1.png)
+![temp_section1](temp_section1.png)
+
+Exercise:
+* Plot a section at different longitude and latitude
 
 ## Horizontal section
 
