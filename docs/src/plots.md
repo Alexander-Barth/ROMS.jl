@@ -1,3 +1,7 @@
+# Plotting ROMS results and input files
+
+The necessary files are already in the directory containing the model simulation and its
+parent file. Downloading the files is only needed if you did not run the simulation.
 
 ```@example example_config
 grid_fname = "LS2v.nc"
@@ -12,6 +16,10 @@ if !isfile(fname)
 end
 ```
 
+
+## Bathymetry
+
+In this example, the bathymetry defined in the grid NetCDF file is plotted.
 
 ```@example example_config
 using PyPlot, ROMS
@@ -44,7 +52,7 @@ savefig("smoothed_bathymetry.png"); nothing # hide
 ![](smoothed_bathymetry.png)
 
 
-
+## Surface temperature
 
 ```@example example_config
 # instance to plot
@@ -77,6 +85,8 @@ savefig("SST.png"); nothing # hide
 
 ![](SST.png)
 
+
+## Surface velocity and elevation
 
 ```@example example_config
 zeta = nomissing(ds["zeta"][:,:,n],NaN)
@@ -111,6 +121,10 @@ savefig("surface_zeta_uv.png"); nothing # hide
 
 ![](surface_zeta_uv.png)
 
+## Vertical section
+
+In this example we will plot a vertical section by slicing the
+model output at a given index.
 
 ```@example example_config
 opt = (
@@ -150,6 +164,7 @@ savefig("temp_section1.png"); nothing # hide
 
 ![](temp_section1.png)
 
+## Horizontal section
 
 
 ```@example example_config
@@ -168,6 +183,8 @@ savefig("temp_hsection_200.png"); nothing # hide
 ```
 
 ![](temp_hsection_200.png)
+
+## Arbitrary vertical section
 
 
 
