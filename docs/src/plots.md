@@ -1,7 +1,8 @@
 # Plotting ROMS results and input files
 
+The aim here is to visualize the model files with generic plotting and analsis packages rather than to use a model specific visualization tool which hides many details and might lack of flexibility.
 The necessary files are already in the directory containing the model simulation and its
-parent file. Downloading the files is only needed if you did not run the simulation.
+parent direction (`ROMS-implementation-test`). Downloading the files is only needed if you did not run the simulation.
 
 ```@example example_config
 grid_fname = "LS2v.nc"
@@ -19,7 +20,8 @@ end
 
 ## Bathymetry
 
-In this example, the bathymetry defined in the grid file is plotted.
+In this example, the bathymetry defined in the grid file is visualized. Make sure that your current working directory
+contains the file `LS2v.nc` (use e.g. `;cd ~/ROMS-implementation-test`)
 
 ```@example example_config
 using PyPlot, ROMS
@@ -27,11 +29,8 @@ using PyPlot, ROMS
 using ROMS, PyPlot, NCDatasets, GeoDatasets
 using Statistics
 
-datadir = expanduser("~/ROMS-implementation-test")
-datadir = expanduser(".")
 
-
-ds_grid = NCDataset(joinpath(datadir,"LS2v.nc"));
+ds_grid = NCDataset("LS2v.nc");
 lon = ds_grid["lon_rho"][:,:];
 lat = ds_grid["lat_rho"][:,:];
 h = ds_grid["h"][:,:];
@@ -57,15 +56,14 @@ savefig("smoothed_bathymetry.png"); nothing # hide
 
 The surface surface temperature (or salinity) of the model output or climatology file can be 
 visualized as follows. The parameter `n` is the time instance to plot.
+Make sure that your current working directory
+contains the file to plot (use e.g. `;cd ~/ROMS-implementation-test/Simulation1` to plot `roms_his.nc`)
 
 ```@example example_config
 # instance to plot
 n = 1
 
-ds = NCDataset(fname)
-#ds = NCDataset(joinpath(datadir,"clim2019.nc"))
-#ds = NCDataset(joinpath(datadir,"Simulation1","roms_his.nc"))
-
+ds = NCDataset("roms_his.nc")
 temp = nomissing(ds["temp"][:,:,end,n],NaN);
 temp[mask_rho .== 0] .= NaN;
 
