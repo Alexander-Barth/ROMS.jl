@@ -10,7 +10,8 @@ makedocs(
         prettyurls = CI,
     ),
     pages = [
-        "Tutorial" => "index.md",
+        "Documentation" => "index.md",
+        "Reference" => "reference.md",
         "Plots" => "plots.md",
     ],
 

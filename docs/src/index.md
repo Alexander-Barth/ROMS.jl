@@ -548,9 +548,3 @@ Make some comparison with satellite and the downloaded in situ observation
 * K. Hedström. 2016. [Technical Manual for a Coupled Sea-Ice/Ocean Circulation Model (Version 4)](https://github.com/kshedstrom/roms_manual/blob/master/roms_manual.pdf). U.S. Dept. of the Interior, Bureau of Ocean Energy Management, Alaska OCS Region. OCS, Study BOEM 2016-037. 176 pp.
 
 
-## Reference
-
-```@autodocs
-Modules = [ROMS]
-Order   = [:function, :type]
-```

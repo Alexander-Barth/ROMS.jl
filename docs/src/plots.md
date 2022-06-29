@@ -19,7 +19,7 @@ end
 
 ## Bathymetry
 
-In this example, the bathymetry defined in the grid NetCDF file is plotted.
+In this example, the bathymetry defined in the grid file is plotted.
 
 ```@example example_config
 using PyPlot, ROMS
@@ -39,10 +39,12 @@ mask_rho = ds_grid["mask_rho"][:,:];
 
 
 clf();
+figure(figsize=(7,4))
 hmask = copy(h)
 hmask[mask_rho .== 0] .= NaN;
 pcolormesh(lon,lat,hmask);
-colorbar(orientation="horizontal")
+#colorbar(orientation="horizontal")
+colorbar()
 gca().set_aspect(1/cosd(mean(lat)))
 
 title("smoothed bathymetry [m]");
@@ -51,8 +53,10 @@ savefig("smoothed_bathymetry.png"); nothing # hide
 
 ![](smoothed_bathymetry.png)
 
-
 ## Surface temperature
+
+The surface surface temperature (or salinity) of the model output or climatology file can be 
+visualized as follows. The parameter `n` is the time instance to plot.
 
 ```@example example_config
 # instance to plot
@@ -66,10 +70,10 @@ temp = nomissing(ds["temp"][:,:,end,n],NaN);
 temp[mask_rho .== 0] .= NaN;
 
 if haskey(ds,"time")
-    # for clim files
+    # for the climatology file
     time = ds["time"][:]
 else
-    # for others files
+    # for ROMS output
     time = ds["ocean_time"][:]
 end
 
@@ -78,7 +82,7 @@ end
 clf();
 pcolormesh(lon,lat,temp)
 gca().set_aspect(1/cosd(mean(lat)))
-colorbar(orientation="horizontal");
+colorbar();
 title("sea surface temperature [°C]")
 savefig("SST.png"); nothing # hide
 ```
@@ -86,7 +90,15 @@ savefig("SST.png"); nothing # hide
 ![](SST.png)
 
 
+Exercise: 
+* Plot salinity
+* Plot different time instance (`n`)
+* Where do we specify that the surface values are to be plotted? Plot different layers.
+
+
 ## Surface velocity and elevation
+
+
 
 ```@example example_config
 zeta = nomissing(ds["zeta"][:,:,n],NaN)
@@ -114,17 +126,22 @@ j = 1:r:size(lon,2);
 q = quiver(lon[i,j],lat[i,j],u_r[i,j],v_r[i,j])
 quiverkey(q,0.9,0.85,1,"1 m/s",coordinates="axes")
 title("surface currents [m/s] and elevation [m]");
-colorbar(orientation="horizontal");
+colorbar();
 gca().set_aspect(1/cosd(mean(lat)))
 savefig("surface_zeta_uv.png"); nothing # hide
 ```
 
 ![](surface_zeta_uv.png)
 
+Exercise: 
+* The surface currents seems to follow lines of constant surface elevation. Explain why this is to be expected.
+
 ## Vertical section
 
 In this example we will plot a vertical section by slicing the
 model output at a given index.
+
+It is very important that the parameters (`opt`) defining the vertical layer match the parameters values choosen when ROMS was setup.
 
 ```@example example_config
 opt = (
@@ -158,7 +175,14 @@ ylim(-300,0);
 xlabel("latitude")
 ylabel("depth [m]")
 title("temperature at $(round(lon[i,1],sigdigits=4)) °E")
-colorbar(orientation="horizontal");
+colorbar();
+
+# inset plot
+ax2 = gcf().add_axes([0.15,0.2,0.4,0.3])
+ax2.pcolormesh(lon,lat,temp[:,:,end])
+ax2.set_aspect(1/cosd(mean(lat)))
+ax2.plot(lon[i,[1,end]],lat[i,[1,end]],"m")
+
 savefig("temp_section1.png"); nothing # hide
 ```
 
@@ -166,6 +190,7 @@ savefig("temp_section1.png"); nothing # hide
 
 ## Horizontal section
 
+A horizontal at the fixed depth of 200 m is extracted and plotted.
 
 ```@example example_config
 tempi = ROMS.model_interp3(lon,lat,z_r,temp,lon,lat,[-200])
@@ -173,7 +198,7 @@ mlon,mlat,mdata = GeoDatasets.landseamask(resolution='f', grid=1.25)
 
 clf();
 pcolormesh(lon,lat,tempi[:,:,1])
-colorbar(orientation="horizontal");
+colorbar();
 ax = axis()
 contourf(mlon,mlat,mdata',[0.5, 3],colors=["gray"])
 axis(ax)
@@ -186,6 +211,8 @@ savefig("temp_hsection_200.png"); nothing # hide
 
 ## Arbitrary vertical section
 
+The vectors `section_lon` and `section_lat` define the coordinates where we want to extract
+the surface temperature.
 
 
 ```@example example_config
@@ -212,7 +239,7 @@ xlabel("longitude")
 ylabel("depth")
 title("temperature section [°C]");
 
-ax2 = gcf().add_axes([0.5,0.2,0.2,0.15])
+ax2 = gcf().add_axes([0.4,0.2,0.4,0.3])
 ax2.pcolormesh(lon,lat,temp[:,:,end])
 axis("on")
 ax2.set_aspect(1/cosd(mean(lat)))
