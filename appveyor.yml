@@ -33,4 +33,5 @@ build_script:
 
 test_script:
   - echo "%JL_TEST_SCRIPT%"
+  - echo HTTP.COOKIEJAR=%PWD%>.dodsrc
   - C:\julia\bin\julia -e "%JL_TEST_SCRIPT%"
