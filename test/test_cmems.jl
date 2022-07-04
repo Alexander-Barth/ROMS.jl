@@ -37,10 +37,12 @@ if haskey(ENV,"CMEMS_USERNAME")
     push!(datasets,dataset_cmems)
 end
 
-url = "https://tds.hycom.org/thredds/dodsC/GLBy0.08/expt_93.0"
-dataset_hycom = ROMS.HYCOM(url,outdir);
-push!(datasets,dataset_hycom)
-
+if !Sys.iswindows()
+    # https://github.com/Unidata/netcdf-c/issues/2380
+    url = "https://tds.hycom.org/thredds/dodsC/GLBy0.08/expt_93.0"
+    dataset_hycom = ROMS.HYCOM(url,outdir);
+    push!(datasets,dataset_hycom)
+end
 
 for dataset in datasets
     v,(x,y,z,t) = ROMS.load(dataset,:sea_water_potential_temperature,

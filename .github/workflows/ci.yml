@@ -16,7 +16,7 @@ jobs:
         os:
           - ubuntu-latest
           - macOS-latest
-          #- windows-latest
+          - windows-latest
         arch:
           - x64
     steps:
@@ -46,9 +46,22 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install openmpi netcdf gcc make perl git python wget
+          which gcc
+          which gfortran
+          echo $PATH
           python3 -m pip install --upgrade pip
           python3 -m pip install matplotlib
           echo "/usr/local/opt/make/libexec/gnubin" >> $GITHUB_PATH
+      - name: Install dependencies (Windows)
+        if: runner.os == 'Windows'
+        uses: msys2/setup-msys2@v2
+        with:
+           msystem: mingw64
+           install: make perl mingw-w64-x86_64-gcc-fortran mingw-w64-x86_64-netcdf git mingw-w64-x86_64-openmpi mingw-w64-x86_64-python3 wget
+        run: |
+          echo "C:\msys64\usr\bin" >> $GITHUB_PATH
+          echo "C:\msys64\mingw64\bin" >> $GITHUB_PATH
+          python3 -m pip install --upgrade pip
       - run: |
           echo $PATH
           python3 -m pip install --upgrade pip
