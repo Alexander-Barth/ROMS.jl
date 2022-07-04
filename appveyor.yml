@@ -34,4 +34,7 @@ build_script:
 test_script:
   - echo "%JL_TEST_SCRIPT%"
   - echo HTTP.COOKIEJAR=%PWD%>.dodsrc
+  - cd
+  - C:\julia\bin\julia -e "write(\".dodsrc\",\"HTTP.COOKIEJAR=$(tempdir())\n\");"
+  - C:\julia\bin\julia -e "write(\"test/.dodsrc\",\"HTTP.COOKIEJAR=$(tempdir())\n\");"
   - C:\julia\bin\julia -e "%JL_TEST_SCRIPT%"

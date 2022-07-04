@@ -2,6 +2,7 @@ using ROMS
 using Test
 using Dates
 
+@show pwd()
 
 # range of longitude
 xr = [7.6, 12.2];
