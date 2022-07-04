@@ -48,7 +48,9 @@ jobs:
           brew install openmpi netcdf gcc make perl git python wget
           python3 -m pip install --upgrade pip
           python3 -m pip install matplotlib
+          echo "/usr/local/opt/make/libexec/gnubin" >> $GITHUB_PATH
       - run: |
+          echo $PATH
           python3 -m pip install --upgrade pip
           python3 -m pip install motuclient==1.8.6
           motuclient --version
