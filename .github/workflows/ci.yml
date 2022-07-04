@@ -58,6 +58,8 @@ jobs:
         with:
            msystem: mingw64
            install: make perl mingw-w64-x86_64-gcc-fortran mingw-w64-x86_64-netcdf git mingw-w64-x86_64-openmpi mingw-w64-x86_64-python3 wget
+      - name: Setup dependencies (Windows)
+        if: runner.os == 'Windows'
         run: |
           echo "C:\msys64\usr\bin" >> $GITHUB_PATH
           echo "C:\msys64\mingw64\bin" >> $GITHUB_PATH
