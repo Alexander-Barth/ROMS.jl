@@ -45,7 +45,7 @@ jobs:
       - name: Install dependencies (macOS)
         if: runner.os == 'macOS'
         run: |
-          brew install openmpi netcdf gcc make perl git python wget matplotlib
+          brew install openmpi netcdf gcc make perl git python wget
           python3 -m pip install --upgrade pip
           python3 -m pip install matplotlib
       - run: |
