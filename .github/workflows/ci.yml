@@ -15,7 +15,18 @@ jobs:
           #- 'nightly'
         os:
           - ubuntu-latest
-          #- macOS-latest
+            install-dependencies: |
+              sudo apt-get update
+              sudo apt-get install libnetcdf-dev gfortran make perl netcdf-bin libnetcdff-dev libopenmpi-dev openmpi-bin git python3-pip wget python3-setuptools python3-matplotlib
+              sudo python3 -m pip install --upgrade pip
+              sudo python3 -m pip install motuclient==1.8.6
+              motuclient --version
+          - macOS-latest
+            install-dependencies: |
+              brew install openmpi netcdf gcc make perl git python wget matplotlib
+              python -m pip install --upgrade pip
+              python -m pip install motuclient==1.8.6
+              motuclient --version
           #- windows-latest
         arch:
           - x64
@@ -36,12 +47,9 @@ jobs:
             ${{ runner.os }}-test-
             ${{ runner.os }}-
       - uses: julia-actions/julia-buildpkg@latest
+      - name: Install dependencies
+        run: ${{ matrix.install-dependencies }}
       - run: |
-          sudo apt-get update
-          sudo apt-get install libnetcdf-dev gfortran make perl netcdf-bin libnetcdff-dev libopenmpi-dev openmpi-bin git python3-pip wget python3-setuptools python3-matplotlib
-          sudo python3 -m pip install --upgrade pip
-          sudo python3 -m pip install motuclient==1.8.6
-          motuclient --version
           git config --global user.name Tester
           git config --global user.email te@st.er
       - uses: julia-actions/julia-runtest@latest
