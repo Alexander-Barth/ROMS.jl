@@ -29,7 +29,8 @@ jobs:
       - name: Install dependencies (macOS)
         if: runner.os == 'macOS'
         run: |
-          brew install openmpi netcdf gcc make perl git python wget
+          brew install openmpi gcc make perl git python wget
+          brew install netcdf
           echo "/usr/local/bin"
           ls /usr/local/bin
           echo "/usr/bin"
@@ -40,6 +41,14 @@ jobs:
           which gcc
           which gfortran
           echo $PATH
+          wget -O - https://downloads.unidata.ucar.edu/netcdf-fortran/4.5.4/netcdf-fortran-4.5.4.tar.gz | tar -xvf -
+          ./configure
+          make
+          make install
+          echo "find netcdf.mod"
+          find / -name netcdf.mod
+          echo "find typesizes.mod"
+          find / -name typesizes.mod
           python3 -m pip install --upgrade pip
           python3 -m pip install matplotlib
           echo "/usr/local/opt/make/libexec/gnubin" >> $GITHUB_PATH
