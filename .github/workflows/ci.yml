@@ -20,22 +20,6 @@ jobs:
         arch:
           - x64
     steps:
-      - uses: actions/checkout@v2
-      - uses: julia-actions/setup-julia@v1
-        with:
-          version: ${{ matrix.version }}
-          arch: ${{ matrix.arch }}
-      - uses: actions/cache@v1
-        env:
-          cache-name: cache-artifacts
-        with:
-          path: ~/.julia/artifacts
-          key: ${{ runner.os }}-test-${{ env.cache-name }}-${{ hashFiles('**/Project.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-test-${{ env.cache-name }}-
-            ${{ runner.os }}-test-
-            ${{ runner.os }}-
-      - uses: julia-actions/julia-buildpkg@latest
       - name: Install dependencies (Linux)
         if: runner.os == 'Linux'
         run: |
@@ -46,8 +30,13 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install openmpi netcdf gcc make perl git python wget
+          echo "/usr/local/bin"
           ls /usr/local/bin
+          echo "/usr/bin"
           ls /usr/bin
+          if ! command -v gfortran &> /dev/null; then
+             ln -s /usr/local/bin/gfortran-11 /usr/local/bin
+          fi
           which gcc
           which gfortran
           echo $PATH
@@ -66,6 +55,22 @@ jobs:
           echo "C:\msys64\usr\bin" >> $GITHUB_PATH
           echo "C:\msys64\mingw64\bin" >> $GITHUB_PATH
           python3 -m pip install --upgrade pip
+      - uses: actions/checkout@v2
+      - uses: julia-actions/setup-julia@v1
+        with:
+          version: ${{ matrix.version }}
+          arch: ${{ matrix.arch }}
+      - uses: actions/cache@v1
+        env:
+          cache-name: cache-artifacts
+        with:
+          path: ~/.julia/artifacts
+          key: ${{ runner.os }}-test-${{ env.cache-name }}-${{ hashFiles('**/Project.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-test-${{ env.cache-name }}-
+            ${{ runner.os }}-test-
+            ${{ runner.os }}-
+      - uses: julia-actions/julia-buildpkg@latest
       - run: |
           echo $PATH
           python3 -m pip install --upgrade pip
