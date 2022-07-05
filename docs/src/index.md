@@ -303,7 +303,7 @@ cp ~/src/roms/ROMS/Bin/build_roms.sh build_roms.sh
 ```
 
 * Copy it to this directory and adapt it. Here is a list of changes that I made highlighted with the [diff tool](https://en.wikipedia.org/wiki/Diff_utility#Unified_format).
-
+The lines in red have been replaced by the lines in green. The plus and minus signes indicates also what has been added or removed and the `@@` indicate line numbers. These markers do not have to be added manually to the file `build_roms.sh`.
 
 ```diff
  diff -u /home/abarth/src/roms/ROMS/Bin/build_roms.sh build_roms.sh

@@ -70,6 +70,7 @@ end
 
 
 # CMEMS credentials
+# Replace ENV["CMEMS_USERNAME"] by "your_username" and likewise ENV["CMEMS_PASSWORD"]
 
 cmems_username = ENV["CMEMS_USERNAME"]
 cmems_password = ENV["CMEMS_PASSWORD"]
