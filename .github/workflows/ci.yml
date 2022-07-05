@@ -35,7 +35,7 @@ jobs:
           echo "/usr/bin"
           ls /usr/bin
           if ! command -v gfortran &> /dev/null; then
-             ln -s /usr/local/bin/gfortran-11 /usr/local/bin
+             ln -s /usr/local/bin/gfortran-11 /usr/local/bin/gfortran
           fi
           which gcc
           which gfortran
