@@ -14,9 +14,9 @@ jobs:
           - '1'
           #- 'nightly'
         os:
-          - ubuntu-latest
+          #- ubuntu-latest
           - macOS-latest
-          - windows-latest
+          #- windows-latest
         arch:
           - x64
     steps:
@@ -46,6 +46,8 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install openmpi netcdf gcc make perl git python wget
+          ls /usr/local/bin
+          ls /usr/bin
           which gcc
           which gfortran
           echo $PATH
