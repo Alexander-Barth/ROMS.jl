@@ -1,8 +1,9 @@
+
 """
 time start time of the forecast (DateTime)
 tau: lead time (hours)
 """
-function gfs_url(time,tau,
+function gfs_url(time,tau;
                  modelname = "gfs",
                  resolution = 0.25,
                  baseurl="https://rda.ucar.edu/thredds/dodsC/files/g/ds084.1/")
@@ -29,6 +30,122 @@ function gfs_depth_index(ds,varname,z_level)
 end
 
 
+function download_gfs(
+    xr,yr,tr,cachedir;
+    modelname = "gfs",
+    resolution = 0.25,
+    baseurl="https://rda.ucar.edu/thredds/dodsC/files/g/ds084.1/"                         )
+
+    times = tr[1]:Dates.Hour(3):tr[end]
+
+    tau = 3
+    fname = gfs_url(
+        times[1],tau,
+        modelname = modelname,
+        resolution = resolution,
+        baseurl = baseurl,
+    )
+
+    ds = NCDataset(fname);
+
+    lon = ds["lon"][:]
+    lat = ds["lat"][:]
+
+    irange = findall(xr[1] .<= lon .<= xr[end])
+    jrange = findall(yr[1] .<= lat .<= yr[end])
+
+
+    irange = irange[1]:irange[end]
+    jrange = jrange[1]:jrange[end]
+
+    lon = lon[irange]
+    lat = lat[jrange]
+
+    mkpath(cachedir)
+
+    for n = 1:length(times)
+        t = times[n]
+
+        if Dates.hour(t)-3 in (0,6,12,18)
+            tau = 3
+        else
+            tau = 6
+        end
+        print("Download ")
+        printstyled(t,color=:green)
+        println(" τ = $tau")
+
+        time_start = t - Dates.Hour(tau)
+        url = gfs_url(
+            time_start, tau;
+            modelname = modelname,
+            resolution = resolution,
+            baseurl = baseurl,
+        )
+
+
+        yyyymmddHH = Dates.format(time_start,"yyyymmddHH")
+
+        fname = joinpath(cachedir,join((
+            modelname,
+            replace(string(resolution),"." => "p"),
+            yyyymmddHH,"f$(@sprintf("%03d",tau)).nc"),'.'))
+
+        if !isfile(fname)
+            ds = NCDataset(url)
+
+            write(fname,view(ds,lon = irange,lat = jrange),
+                  include = intersect(keys(ds),[
+                      "lon","lat","time",
+                      "Pressure_surface",
+                      "height_above_ground",
+                      "height_above_ground1",
+                      "height_above_ground2",
+                      "height_above_ground3",
+                      "height_above_ground4",
+                      "u-component_of_wind_height_above_ground",
+                      "v-component_of_wind_height_above_ground",
+                      "Temperature_height_above_ground",
+                      "Relative_humidity_height_above_ground",
+
+                      "Momentum_flux_u-component_surface_3_Hour_Average",
+                      "Momentum_flux_v-component_surface_3_Hour_Average",
+                      "Convective_Precipitation_Rate_surface_3_Hour_Average",
+                      "Latent_heat_net_flux_surface_3_Hour_Average",
+                      "Sensible_heat_net_flux_surface_3_Hour_Average",
+                      "Upward_Long-Wave_Radp_Flux_atmosphere_top_3_Hour_Average",
+                      "Upward_Long-Wave_Radp_Flux_surface_3_Hour_Average",
+                      "Upward_Short-Wave_Radiation_Flux_atmosphere_top_3_Hour_Average",
+                      "Upward_Short-Wave_Radiation_Flux_surface_3_Hour_Average",
+                      "Downward_Long-Wave_Radp_Flux_atmosphere_top_3_Hour_Average",
+                      "Downward_Long-Wave_Radp_Flux_surface_3_Hour_Average",
+                      "Downward_Short-Wave_Radiation_Flux_atmosphere_top_3_Hour_Average",
+                      "Downward_Short-Wave_Radiation_Flux_surface_3_Hour_Average",
+                      "Total_cloud_cover_entire_atmosphere_3_Hour_Average",
+
+                      "Momentum_flux_u-component_surface_6_Hour_Average",
+                      "Momentum_flux_v-component_surface_6_Hour_Average",
+                      "Convective_Precipitation_Rate_surface_6_Hour_Average",
+                      "Latent_heat_net_flux_surface_6_Hour_Average",
+                      "Sensible_heat_net_flux_surface_6_Hour_Average",
+                      "Upward_Long-Wave_Radp_Flux_atmosphere_top_6_Hour_Average",
+                      "Upward_Long-Wave_Radp_Flux_surface_6_Hour_Average",
+                      "Upward_Short-Wave_Radiation_Flux_atmosphere_top_6_Hour_Average",
+                      "Upward_Short-Wave_Radiation_Flux_surface_6_Hour_Average",
+                      "Downward_Long-Wave_Radp_Flux_atmosphere_top_6_Hour_Average",
+                      "Downward_Long-Wave_Radp_Flux_surface_6_Hour_Average",
+                      "Downward_Short-Wave_Radiation_Flux_atmosphere_top_6_Hour_Average",
+                      "Downward_Short-Wave_Radiation_Flux_surface_6_Hour_Average",
+                      "Total_cloud_cover_entire_atmosphere_6_Hour_Average",
+
+                  ]
+                                      ))
+            close(ds)
+        end
+    end
+end
+
+
 
 """
 Tair: degC
@@ -43,18 +160,14 @@ end
 
 
 function prepare_gfs(
-    atmo_src,Vnames,filename_prefix,domain_name)
+    atmo_src,Vnames,filename_prefix,domain_name;
+    modelname = "gfs",
+    resolution = 0.25,
+    time_origin = DateTime(1858,11,17),
+    )
 
-    modelname = "gfs"
-    resolution = 0.25
-    time_origin = DateTime(1858,11,17)
 
-    Vnames = ["sustr","svstr","sensible","Uwind","Vwind","Tair", "Qair",
-              "rain", "cloud","Pair","swrad"]
-    #Vnames = ["rain"]
-    #Vnames = ["Pair"]
-    #Vnames = ["sustr","svstr","shflux","swflux","swrad","Uwind","Vwind","lwrad",
-    #    "lwrad_down","latent","sensible","cloud","rain","Pair","Tair","Qair"]
+    flag_spherical = 1
 
     F = [
         (
@@ -202,6 +315,12 @@ function prepare_gfs(
 
         dsout = ROMS.def_forcing(outfname,lon,lat,Vname,Tname,ncattrib,ncattrib_time,
                                  domain_name,time_origin)
+
+        # Define variables
+
+        dsout["spherical"][:] = flag_spherical
+        dsout["lon"][:] = repeat(lon,inner=(1,length(lat)))
+        dsout["lat"][:] = repeat(lat',inner=(length(lon),1))
 
         latent_last = NaN
         precip_rate_last = NaN
