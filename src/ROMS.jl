@@ -52,5 +52,6 @@ include("CMEMS.jl")
 include("opendap.jl")
 include("HYCOM.jl")
 include("Atmosphere/prepare_ecmwf.jl")
+include("Atmosphere/prepare_gfs.jl")
 
 end
