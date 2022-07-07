@@ -37,9 +37,10 @@ if haskey(ENV,"CMEMS_USERNAME")
     push!(datasets,dataset_cmems)
 end
 
-url = "https://tds.hycom.org/thredds/dodsC/GLBy0.08/expt_93.0"
-dataset_hycom = ROMS.HYCOM(url,outdir);
-push!(datasets,dataset_hycom)
+
+#url = "https://tds.hycom.org/thredds/dodsC/GLBy0.08/expt_93.0"
+#dataset_hycom = ROMS.HYCOM(url,outdir);
+#push!(datasets,dataset_hycom)
 
 
 for dataset in datasets
