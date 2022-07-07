@@ -1,6 +1,7 @@
 
 # We assume that the OPENDAP server
 
+# https://rda.ucar.edu/thredds/catalog/files/g/ds084.1/catalog.html
 # https://rda.ucar.edu/thredds/catalog/files/g/ds084.1/2015/20150115/catalog.html
 # https://rda.ucar.edu/thredds/dodsC/files/g/ds084.1/2015/20150115/gfs.0p25.2015011500.f003.grib2.html
 
@@ -46,23 +47,19 @@ xr = extrema(ds_ref["lon"][:])
 yr = extrema(ds_ref["lat"][:])
 
 #tr = extrema(time_ref)
-tr = (DateTime(2019,1,1,3),DateTime(2019,1,7,3))
-
-times = tr[1]:Dates.Hour(3):tr[end]
+tr = (DateTime(2019,1,1),DateTime(2019,1,7))
 
 cachedir = expanduser("~/tmp/GFS")
-cachedir = tempname()
-ROMS.download_gfs(xr,yr,tr,cachedir)
+#cachedir = tempname()
+mkpath(cachedir)
+
+atmo_src = ROMS.download_gfs(xr,yr,tr,cachedir)
 
 # outdir = expanduser("~/tmp/GFS-roms")
 outdir = tempname()
-
-mkpath(cachedir)
 mkpath(outdir)
 filename_prefix = joinpath(outdir,"liguriansea_gfs_")
 domain_name = "Ligurian Sea Region"
-
-atmo_src = ( dir = cachedir, times = times)
 
 Vnames = ["sustr","svstr","swflux","swrad","Uwind","Vwind",
           "sensible","cloud","rain","Pair","Tair","Qair"]

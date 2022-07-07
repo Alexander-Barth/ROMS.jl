@@ -131,10 +131,11 @@ ROMS.extract_bc(domain,clim_filename,bc_filename)
 
 filename_prefix = joinpath(basedir,"liguriansea2019_")
 domain_name = "Ligurian Sea Region"
-Vnames = ["sustr","svstr","shflux","swflux","swrad","Uwind","Vwind","
-    lwrad","lwrad_down","latent","sensible","cloud","rain","Pair","Tair","Qair"]
+Vnames = ["sustr","svstr","shflux","swflux","swrad","Uwind","Vwind",
+    "lwrad","lwrad_down","latent","sensible","cloud","rain","Pair","Tair","Qair"]
 
 forcing_filenames = ROMS.prepare_ecmwf(ecmwf_fname,Vnames,filename_prefix,domain_name)
+
 
 # nudging coefficient
 

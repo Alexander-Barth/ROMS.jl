@@ -264,8 +264,11 @@ function prepare_ecmwf(
             "units"                     => "days since $(Dates.format(time_origin,"yyyy-mm-dd HH:MM:SS"))",
             "calendar"                  => "gregorian"))
 
-        dsout = ROMS.def_forcing(outfname,lon,lat,Vname,Tname,ncattrib,ncattrib_time,
-                                 domain_name,time_origin)
+        dsout = ROMS.def_forcing(
+            outfname,lon,lat,Vname,Tname,ncattrib,ncattrib_time,
+            time_origin;
+            title = "ECMWF Dataset $domain_name from $atmo_fname",
+        )
 
         # Define variables
 

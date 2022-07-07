@@ -46,20 +46,23 @@ function download_gfs(
     xr,yr,tr,cachedir;
     modelname = "gfs",
     resolution = 0.25,
-    baseurl="https://rda.ucar.edu/thredds/dodsC/files/g/ds084.1/"                         )
-
+    baseurl = "https://rda.ucar.edu/thredds/dodsC/files/g/ds084.1/",
+    verbose = true,
+)
     # files contain 3 hours and 6 hours averaged. The later are converted to
     # 3 hours averages. Therefore it is not possible to start with a 6 hour average.
 
-    if gfs_analysis(tr[1]+Dates.Hour(GFS_SAVE_STEP_HOURS))
+    #if gfs_analysis(tr[1]+Dates.Hour(GFS_SAVE_STEP_HOURS))
+    if gfs_tau(tr[1]) != 3
         tr = (tr[1]-Dates.Hour(GFS_SAVE_STEP_HOURS),tr[end])
     end
 
     times = tr[1]:Dates.Hour(GFS_SAVE_STEP_HOURS):tr[end]
+    @debug "times $times"
 
-    tau = 3
+    tau = gfs_tau(times[1])
     fname = gfs_url(
-        times[1],tau,
+        times[1] - Dates.Hour(tau),tau,
         modelname = modelname,
         resolution = resolution,
         baseurl = baseurl,
@@ -86,18 +89,15 @@ function download_gfs(
         t = times[n]
         tau = gfs_tau(t)
 
-        print("Download ")
-        printstyled(t,color=:green)
-        println(" τ = $tau")
-
         time_start = t - Dates.Hour(tau)
+        @debug "tt $time_start $tau"
+
         url = gfs_url(
             time_start, tau;
             modelname = modelname,
             resolution = resolution,
             baseurl = baseurl,
         )
-
 
         yyyymmddHH = Dates.format(time_start,"yyyymmddHH")
 
@@ -107,6 +107,12 @@ function download_gfs(
             yyyymmddHH,"f$(@sprintf("%03d",tau)).nc"),'.'))
 
         if !isfile(fname)
+            if verbose
+                print("Download ")
+                printstyled(t,color=:green)
+                println(" τ = $tau")
+            end
+
             ds = NCDataset(url)
 
             write(fname,view(ds,lon = irange,lat = jrange),
@@ -158,6 +164,8 @@ function download_gfs(
             close(ds)
         end
     end
+
+    return (dir = cachedir, times = times)
 end
 
 
@@ -180,7 +188,6 @@ function prepare_gfs(
     resolution = 0.25,
     time_origin = DateTime(1858,11,17),
     )
-
 
     flag_spherical = 1
 
@@ -288,7 +295,18 @@ function prepare_gfs(
             replace(string(resolution),"." => "p"),
             yyyymmddHH,"f$(@sprintf("%03d",tau)).nc"),'.'))
 
+        @debug "opening $time_start τ=$tau"
+
         return NCDataset(fname),tau
+    end
+
+    ds, = gfs_ds(atmo_src,atmo_src.times[1])
+    lon = ds["lon"][:] #:: Vector{Float64}
+    lat = ds["lat"][:] #:: Vector{Float64}
+    close(ds)
+    fliplat = lat[2] < lat[1]
+    if fliplat
+        lat = reverse(lat)
     end
 
     for i = doFields
@@ -316,14 +334,11 @@ function prepare_gfs(
             "units"                     => "days since $(Dates.format(time_origin,"yyyy-mm-dd HH:MM:SS"))",
             "calendar"                  => "gregorian"))
 
-
-        ds, = gfs_ds(atmo_src,atmo_src.times[1])
-        lon = ds["lon"][:] #:: Vector{Float64}
-        lat = ds["lat"][:] #:: Vector{Float64}
-        close(ds)
-
-        dsout = ROMS.def_forcing(outfname,lon,lat,Vname,Tname,ncattrib,ncattrib_time,
-                                 domain_name,time_origin)
+        dsout = ROMS.def_forcing(
+            outfname,lon,lat,Vname,Tname,ncattrib,ncattrib_time,
+            time_origin;
+            title = "GFS Dataset $domain_name from $(atmo_src.dir)",
+        )
 
         # Define variables
 
@@ -338,8 +353,6 @@ function prepare_gfs(
         swrad_down_last = NaN
 
         for irec = 1:length(atmo_src.times)
-            #global latent_last, precip_rate_last, sustr_last, time_start, yyyymmddHH, tau, t
-            #global Tair, fname, ds, field_last, swrad_down_last
             t = atmo_src.times[irec]
 
             ds,tau = gfs_ds(atmo_src,t)
@@ -411,6 +424,10 @@ function prepare_gfs(
                 field = swrad_down - field
             else
                 field = field * F[i].scale
+            end
+
+            if fliplat
+                field = reverse(field,dims=2)
             end
 
             dsout[Tname][irec] = time_rec
