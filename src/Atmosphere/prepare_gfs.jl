@@ -5,14 +5,13 @@ gfs_analysis(t) = Dates.hour(t) in (0,6,12,18)
 const GFS_SAVE_STEP_HOURS = 3
 
 """
-   url = ROMS.gfs_url(time,tau;
-                 modelname = "gfs",
-                 resolution = 0.25,
-                 baseurl = "https://rda.ucar.edu/thredds/dodsC/files/g/ds084.1/")
+    url = ROMS.gfs_url(time,tau;
+             modelname = "gfs",
+             resolution = 0.25,
+             baseurl = "https://rda.ucar.edu/thredds/dodsC/files/g/ds084.1/")
 
 Returns the OPeNDAP url for the GFS data at time `time` (DateTime) and the forecast
 time `tau` (hours) from the archive specified at `baseurl`.
-
 """
 function gfs_url(time::TimeType,tau::Integer;
                  modelname = "gfs",
