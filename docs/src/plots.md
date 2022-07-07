@@ -49,8 +49,9 @@ savefig("smoothed_bathymetry.png"); nothing # hide
 
 ## Surface temperature
 
-The surface surface temperature (or salinity) of the model output or climatology file can be 
-visualized as follows. The parameter `n` is the time instance to plot.
+The surface surface temperature (or salinity) of the model output or
+climatology file can be visualized as follows.
+The parameter `n` is the time instance to plot.
 Make sure that your current working directory
 contains the file to plot (use e.g. `;cd ~/ROMS-implementation-test/Simulation1` to plot `roms_his.nc`)
 
@@ -109,6 +110,7 @@ size(u_r), size(v_r), size(mask_rho)
 
 clf();
 pcolormesh(lon,lat,zeta)
+colorbar();
 # plot only a single arrow for r x r grid cells
 r = 3;
 i = 1:r:size(lon,1);
@@ -116,7 +118,6 @@ j = 1:r:size(lon,2);
 q = quiver(lon[i,j],lat[i,j],u_r[i,j],v_r[i,j])
 quiverkey(q,0.9,0.85,1,"1 m/s",coordinates="axes")
 title("surface currents [m/s] and elevation [m]");
-colorbar();
 gca().set_aspect(1/cosd(mean(lat)))
 savefig("surface_zeta_uv.png"); nothing # hide
 ```

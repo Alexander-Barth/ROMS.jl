@@ -30,6 +30,7 @@ end
 
 @testset "Forcing" begin
     include("test_forcing.jl")
+    include("test_gfs.jl")
     include("test_cmems.jl")
 end
 

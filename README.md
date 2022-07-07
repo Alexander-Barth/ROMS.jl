@@ -19,9 +19,11 @@ Pkg.add(url="https://github.com/Alexander-Barth/ROMS.jl", rev="master")
     * GEBCO
 * Initial and boundary condition from:
     * CMEMS
-    * HYCOM GOFS
+    * [HYCOM GOFS](https://www.hycom.org/dataserver/)
 * Atmospheric forcings:
     * ECMWF
+    * GFS from the [NCAR Research Data Archive](https://rda.ucar.edu/thredds/catalog/files/g/ds084.1/catalog.html)
+
 
 Contributions to add other data sources are welcome!
 

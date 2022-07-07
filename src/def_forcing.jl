@@ -1,5 +1,7 @@
 function def_forcing(outfname,lon,lat,Vname,Tname,ncattrib,ncattrib_time,
-                     domain_name,time_origin)
+                     time_origin;
+                     title = "ECMWF ERA-Interim Dataset, $domain_name",
+                     )
 
 
     if isfile(outfname)
@@ -7,10 +9,12 @@ function def_forcing(outfname,lon,lat,Vname,Tname,ncattrib,ncattrib_time,
     else
         ds = NCDataset(outfname,"c", attrib = OrderedDict(
             "type"                      => "FORCING file",
-            "title"                     => "ECMWF ERA-Interim Dataset, $domain_name",
             "history"                   => "Forcing file created with $(@__FILE__) on $(Dates.format(Dates.now(),"E - U d, yyyy - HH:MM:SS.sss"))",
         ))
 
+        if title !== ""
+            ds.attrib["title"] = title
+        end
         # Dimensions
 
         ds.dim["lon"] = length(lon)

@@ -3,8 +3,15 @@ using Test
 using NCDatasets
 using Dates
 
+#=
+# todo: test new URL once HYCOM dataset is back again
+# since to 2018-12-04 to Present *3-hourly* (state 2022-07-21)
+#url = "https://tds.hycom.org/thredds/dodsC/GLBy0.08/expt_93.0"
+
+
 # URL from https://www.hycom.org/data/glbu0pt08/expt-91pt0
-url = "http://tds.hycom.org/thredds/dodsC/GLBu0.08/expt_91.0"
+#url = "http://tds.hycom.org/thredds/dodsC/GLBu0.08/expt_91.0"
+
 
 cachedir = expanduser("~/tmp/HYCOM")
 mkpath(cachedir)
@@ -36,3 +43,5 @@ ncvar,(x,y,t) = ROMS.load(
 T,(x,y,z,t) = ROMS.load(
     ds,:sea_water_potential_temperature,
     longitude = xr, latitude = yr, time = tr)
+
+=#
