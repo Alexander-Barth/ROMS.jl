@@ -191,9 +191,9 @@ end
        time_origin = DateTime(1858,11,17),
     )
 
-Generate ROMS forcing fields from the GFS data file `atmo_src` (a generated
+Generate ROMS forcing fields from GFS data `atmo_src` (a generated
 by `ROMS.download_gfs`). The other arguments are the same as for
-`ROMS.prepage_ecmwf`. The example shows all currently supported values for
+`ROMS.prepage_ecmwf`. The example below shows all currently supported values for
 `Vnames`.
 
 # Example
