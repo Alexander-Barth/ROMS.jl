@@ -51,6 +51,7 @@ include("def_nudgecoef.jl")
 include("CMEMS.jl")
 include("opendap.jl")
 include("HYCOM.jl")
+include("Atmosphere/thermodynamics.jl")
 include("Atmosphere/prepare_ecmwf.jl")
 include("Atmosphere/prepare_gfs.jl")
 

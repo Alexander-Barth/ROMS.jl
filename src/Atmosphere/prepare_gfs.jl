@@ -1,4 +1,9 @@
 
+
+gfs_analysis(t) = Dates.hour(t) in (0,6,12,18)
+
+const GFS_SAVE_STEP_HOURS = 3
+
 """
    url = ROMS.gfs_url(time,tau;
                  modelname = "gfs",
@@ -35,12 +40,9 @@ function gfs_depth_index(ds,varname,z_level)
     return findfirst(z[:] .== z_level)
 end
 
-gfs_analysis(t) = Dates.hour(t) in (0,6,12,18)
-
-const GFS_SAVE_STEP_HOURS = 3
-
 function gfs_tau(t)
     if gfs_analysis(t)
+        # fluxes and averages are missing at analysis time
         return 2*GFS_SAVE_STEP_HOURS
     else
         return GFS_SAVE_STEP_HOURS
@@ -184,19 +186,6 @@ function download_gfs(
 end
 
 
-
-"""
-Tair: degC
-Output: J/kg
-"""
-function latent_heat_of_vaporization(Tair)
-    # equation 2.55 (page 38) of
-    # Foken, T, 2008: Micrometeorology. Springer, Berlin, Germany.
-    # https://link.springer.com/content/pdf/10.1007/978-3-540-74666-9.pdf
-    λ = 2500827 - 2360 * Tair
-end
-
-
 """
     ROMS.prepare_gfs(
        atmo_src,Vnames,filename_prefix,domain_name;
@@ -204,7 +193,9 @@ end
     )
 
 Generate ROMS forcing fields from the GFS data file `atmo_src` (a generated
-by `ROMS.download_gfs`).
+by `ROMS.download_gfs`). The other arguments are the same as for
+`ROMS.prepage_ecmwf`. The example shows all currently supported values for
+`Vnames`.
 
 # Example
 
