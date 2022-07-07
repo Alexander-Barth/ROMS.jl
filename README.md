@@ -21,7 +21,7 @@ Pkg.add(url="https://github.com/Alexander-Barth/ROMS.jl", rev="master")
     * GEBCO
 * Initial and boundary condition from:
     * CMEMS
-    * HYCOM GOFS
+    * [HYCOM GOFS](https://www.hycom.org/dataserver/)
 * Atmospheric forcings:
     * ECMWF
 

@@ -1,21 +1,24 @@
-# https://rda.ucar.edu/thredds/catalog/files/g/ds084.1/2015/20150115/catalog.html
 
 # We assume that the OPENDAP server
-# https://rda.ucar.edu/thredds/dodsC/files/g/ds084.1/2015/20150115/gfs.0p25.2015011500.f000.grib2
+
+# https://rda.ucar.edu/thredds/catalog/files/g/ds084.1/2015/20150115/catalog.html
+# https://rda.ucar.edu/thredds/dodsC/files/g/ds084.1/2015/20150115/gfs.0p25.2015011500.f003.grib2.html
+
+# https://rda.ucar.edu/thredds/dodsC/files/g/ds084.1/2015/20150115/gfs.0p25.2015011500.f003.grib2.das
+# https://rda.ucar.edu/thredds/dodsC/files/g/ds084.1/2015/20150115/gfs.0p25.2015011500.f003.grib2.dds
 
 # produce the same output as:
 
-# https://web.archive.org/web/20220517143017/https://rda.ucar.edu/thredds/dodsC/files/g/ds084.1/2015/20150115/gfs.0p25.2015011500.f000.grib2.dds
-# https://web.archive.org/web/20220517143054/https://rda.ucar.edu/thredds/dodsC/files/g/ds084.1/2015/20150115/gfs.0p25.2015011500.f000.grib2.das
-
+# https://web.archive.org/web/20220707075743/https://rda.ucar.edu/thredds/dodsC/files/g/ds084.1/2015/20150115/gfs.0p25.2015011500.f003.grib2.dds
+# https://web.archive.org/web/20220707075743/https://rda.ucar.edu/thredds/dodsC/files/g/ds084.1/2015/20150115/gfs.0p25.2015011500.f003.grib2.dds
 
 using NCDatasets
 using Dates
-using Printf
-using Statistics
+#using Printf
+#using Statistics
 using Test
 using ROMS
-using DataStructures
+#using DataStructures
 
 
 time = DateTime(2015,1,16)
