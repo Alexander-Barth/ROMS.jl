@@ -65,7 +65,7 @@ filename_prefix = joinpath(datadir,"liguriansea_")
 domain_name = "Ligurian Sea Region"
 Vnames = ["sustr","svstr","shflux","swflux","swrad","Uwind","Vwind","lwrad",
     "lwrad_down","latent","sensible","cloud","rain","Pair","Tair","Qair"]
-prepare_ecmwf(atmo_fname,Vnames,filename_prefix,domain_name)
+ROMS.prepare_ecmwf(atmo_fname,Vnames,filename_prefix,domain_name)
 )
 ```
 

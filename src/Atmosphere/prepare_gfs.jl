@@ -1,12 +1,18 @@
 
 """
-time start time of the forecast (DateTime)
-tau: lead time (hours)
-"""
-function gfs_url(time,tau;
+   url = ROMS.gfs_url(time,tau;
                  modelname = "gfs",
                  resolution = 0.25,
-                 baseurl="https://rda.ucar.edu/thredds/dodsC/files/g/ds084.1/")
+                 baseurl = "https://rda.ucar.edu/thredds/dodsC/files/g/ds084.1/")
+
+Returns the OPeNDAP url for the GFS data at time `time` (DateTime) and the forecast
+time `tau` (hours) from the archive specified at `baseurl`.
+
+"""
+function gfs_url(time::TimeType,tau::Integer;
+                 modelname = "gfs",
+                 resolution = 0.25,
+                 baseurl = "https://rda.ucar.edu/thredds/dodsC/files/g/ds084.1/")
 
     yyyy = Dates.format(time,"yyyy")
     yyyymmdd = Dates.format(time,"yyyymmdd")
@@ -35,13 +41,22 @@ const GFS_SAVE_STEP_HOURS = 3
 
 function gfs_tau(t)
     if gfs_analysis(t)
-        return 6
+        return 2*GFS_SAVE_STEP_HOURS
     else
-        return 3
+        return GFS_SAVE_STEP_HOURS
     end
 end
 
+"""
+    atmo_src = ROMS.download_gfs(xr,yr,tr,cachedir)
 
+Downloads GFS 0.25° model results from the UCAR achieve
+within the longitude range `xr`, latitude range `yr` and time range `tr`.
+Ranges are list of two elements with the start and end value.
+Results are saved in `cachedir`.
+
+See `ROMS.prepage_gfs` for an example.
+"""
 function download_gfs(
     xr,yr,tr,cachedir;
     modelname = "gfs",
@@ -53,7 +68,7 @@ function download_gfs(
     # 3 hours averages. Therefore it is not possible to start with a 6 hour average.
 
     #if gfs_analysis(tr[1]+Dates.Hour(GFS_SAVE_STEP_HOURS))
-    if gfs_tau(tr[1]) != 3
+    if gfs_tau(tr[1]) != GFS_SAVE_STEP_HOURS
         tr = (tr[1]-Dates.Hour(GFS_SAVE_STEP_HOURS),tr[end])
     end
 
@@ -182,6 +197,33 @@ function latent_heat_of_vaporization(Tair)
 end
 
 
+"""
+    ROMS.prepare_gfs(
+       atmo_src,Vnames,filename_prefix,domain_name;
+       time_origin = DateTime(1858,11,17),
+    )
+
+Generate ROMS forcing fields from the GFS data file `atmo_src` (a generated
+by `ROMS.download_gfs`).
+
+# Example
+
+```julia
+tr = (DateTime(2019,1,1),DateTime(2019,1,7))
+xr = (7.5, 12.375)
+yr = (41.875, 44.625)
+
+cachedir = expanduser("~/tmp/GFS")
+atmo_src = ROMS.download_gfs(xr,yr,tr,cachedir)
+
+filename_prefix = "liguriansea_"
+domain_name = "Ligurian Sea Region"
+Vnames = ["sustr","svstr","swflux","swrad","Uwind","Vwind",
+          "sensible","cloud","rain","Pair","Tair","Qair"]
+ROMS.prepare_gfs(atmo_src,Vnames,filename_prefix,domain_name)
+)
+```
+"""
 function prepare_gfs(
     atmo_src,Vnames,filename_prefix,domain_name;
     modelname = "gfs",
@@ -357,7 +399,7 @@ function prepare_gfs(
 
             ds,tau = gfs_ds(atmo_src,t)
 
-            if (tau == 3) || !F[i].accumulation
+            if (tau == GFS_SAVE_STEP_HOURS) || !F[i].accumulation
                 GFSname = F[i].GFSname
                 if Vname in ("Uwind","Vwind")
                     k_wind = gfs_depth_index(ds,"u-component_of_wind_height_above_ground",10)
@@ -407,7 +449,7 @@ function prepare_gfs(
 
 
             if F[i].accumulation
-                time_rec = t - Dates.Minute(3 * 60 ÷ 2)
+                time_rec = t - Dates.Minute(GFS_SAVE_STEP_HOURS * 60 ÷ 2)
             else
                 time_rec = t
             end
