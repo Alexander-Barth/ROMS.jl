@@ -1,6 +1,3 @@
-
-# Untested code
-
 # https://rda.ucar.edu/thredds/catalog/files/g/ds084.1/2015/20150115/catalog.html
 
 # We assume that the OPENDAP server
@@ -19,6 +16,12 @@ using Statistics
 using Test
 using ROMS
 using DataStructures
+
+
+time = DateTime(2015,1,16)
+tau = 0 # hours
+@test occursin("2015",ROMS.gfs_url(time,tau))
+
 
 datadir = joinpath(dirname(@__FILE__),"..","data")
 
@@ -39,28 +42,18 @@ ds_ref = NCDataset(fname_ref)
 xr = extrema(ds_ref["lon"][:])
 yr = extrema(ds_ref["lat"][:])
 
-#time_ref = ds_ref["rain_time"][:]
-#time_ref = ds_ref[timename][:]
-
-
 #tr = extrema(time_ref)
 tr = (DateTime(2019,1,1,3),DateTime(2019,1,7,3))
-#mrain = mean(ds_ref["rain"][:,:,:],dims=3)[:,:,1]
-
-
-
-time = DateTime(2015,1,16)
-tau = 0 # hours
-@test occursin("2015",ROMS.gfs_url(time,tau))
-
 
 times = tr[1]:Dates.Hour(3):tr[end]
 
-cachedir = "/home/abarth/tmp/GFS"
+cachedir = expanduser("~/tmp/GFS")
+cachedir = tempname()
+ROMS.download_gfs(xr,yr,tr,cachedir)
 
-#ROMS.download_gfs(xr,yr,tr,cachedir)
+# outdir = expanduser("~/tmp/GFS-roms")
+outdir = tempname()
 
-outdir = "/home/abarth/tmp/GFS-roms"
 mkpath(cachedir)
 mkpath(outdir)
 filename_prefix = joinpath(outdir,"liguriansea_gfs_")
@@ -72,16 +65,11 @@ Vnames = ["sustr","svstr","swflux","swrad","Uwind","Vwind",
           "sensible","cloud","rain","Pair","Tair","Qair"]
 
 
-#    Vnames = ["sustr","svstr","sensible","Uwind","Vwind","Tair", "Qair",
-#              "rain", "cloud","Pair","swrad"]
-
 filenames = ROMS.prepare_gfs(atmo_src,Vnames,filename_prefix,domain_name)
 
 
-using PyPlot
-
-
 #=
+
 n = 1
 clf()
 
@@ -105,11 +93,11 @@ p2[1].set_clim(cl)
 
 =#
 
-lont = 12
-latt = 44
 
+#=
 lont = 9
 latt = 43.5
+
 
 function tsplot(fname_ref, Tname, Vname; label = nothing)
     ds_ref = NCDataset(fname_ref)
@@ -122,10 +110,8 @@ function tsplot(fname_ref, Tname, Vname; label = nothing)
     close(ds_ref)
 end
 
-(iparam,(Vname,outfname)) = first(enumerate(filenames))
+using PyPlot
 
-
-#for iparam = 1:length(Vnames)
 for (iparam,(Vname,outfname)) in enumerate(filenames)
     figure(iparam)
 
@@ -141,20 +127,12 @@ for (iparam,(Vname,outfname)) in enumerate(filenames)
 
     units = ""
     if hasproperty(ROMS.metadata[Vname].ncattrib,:units)
-        units = ROMS.metadata[Vname].ncattrib.units
+        units = string(
+           "[",ROMS.metadata[Vname].ncattrib.units,"]")
     end
 
-    title("$Vname [$(units)]")
+    title("$Vname $(units)")
     legend()
 end
 
-
-#subplot(2,1,1);
-#plot(output_time,output[i,j,:])
-#=
-pcolormesh(lon,lat,Tair')
-
-
-
-pcolor(mrain'); colorbar()
 =#

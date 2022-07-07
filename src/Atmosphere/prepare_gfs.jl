@@ -29,6 +29,18 @@ function gfs_depth_index(ds,varname,z_level)
     return findfirst(z[:] .== z_level)
 end
 
+gfs_analysis(t) = Dates.hour(t) in (0,6,12,18)
+
+const GFS_SAVE_STEP_HOURS = 3
+
+function gfs_tau(t)
+    if gfs_analysis(t)
+        return 6
+    else
+        return 3
+    end
+end
+
 
 function download_gfs(
     xr,yr,tr,cachedir;
@@ -36,7 +48,14 @@ function download_gfs(
     resolution = 0.25,
     baseurl="https://rda.ucar.edu/thredds/dodsC/files/g/ds084.1/"                         )
 
-    times = tr[1]:Dates.Hour(3):tr[end]
+    # files contain 3 hours and 6 hours averaged. The later are converted to
+    # 3 hours averages. Therefore it is not possible to start with a 6 hour average.
+
+    if gfs_analysis(tr[1]+Dates.Hour(GFS_SAVE_STEP_HOURS))
+        tr = (tr[1]-Dates.Hour(GFS_SAVE_STEP_HOURS),tr[end])
+    end
+
+    times = tr[1]:Dates.Hour(GFS_SAVE_STEP_HOURS):tr[end]
 
     tau = 3
     fname = gfs_url(
@@ -65,12 +84,8 @@ function download_gfs(
 
     for n = 1:length(times)
         t = times[n]
+        tau = gfs_tau(t)
 
-        if Dates.hour(t)-3 in (0,6,12,18)
-            tau = 3
-        else
-            tau = 6
-        end
         print("Download ")
         printstyled(t,color=:green)
         println(" τ = $tau")
@@ -262,13 +277,7 @@ function prepare_gfs(
     end
 
     function gfs_ds(atmo_src,t)
-        if Dates.hour(t)-3 in (0,6,12,18)
-            tau = 3
-        else
-            tau = 6
-        end
-        #@show t,tau,irec
-
+        tau = gfs_tau(t)
         time_start = t - Dates.Hour(tau)
         url = gfs_url(time_start, tau)
 
