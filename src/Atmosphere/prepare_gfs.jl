@@ -52,7 +52,7 @@ end
 """
     atmo_src = ROMS.download_gfs(xr,yr,tr,cachedir)
 
-Downloads GFS 0.25° model results from the UCAR achieve
+Downloads GFS 0.25° model results from the [NCAR Research Data Archive](https://rda.ucar.edu/)
 within the longitude range `xr`, latitude range `yr` and time range `tr`.
 Ranges are list of two elements with the start and end value.
 Results are saved in `cachedir`.
