@@ -1,20 +1,20 @@
 #!/usr/bin/env python
-import ecmwfapi
+import cdsapi
 from datetime import datetime
 
 def download(xr,yr,tr,filename):
-    c = ecmwfapi.ECMWFService('mars')
+    c = cdsapi.Client()
 
     fmt = '%Y-%m-%d'
 
     req2 = {
-        'class':   'ei',
+        'class':   'ea',
         'expver':  '1',
         'dataset': 'interim',
         'date':    tr[0].strftime(fmt) + '/to/' + tr[1].strftime(fmt),
         'levtype': 'sfc',
         'grid':    '0.75/0.75',
-        'param':   '58.128/146.128/147.128/151.128/164.128/165.128/166.128/167.128/168.128/175.128/176.128/177.128/180.128/181.128/182.128/205.128/228.128',
+        'param':   '146.128/147.128/151.128/164.128/165.128/166.128/167.128/168.128/175.128/176.128/177.128/180.128/181.128/182.128/205.128/228.128/34.128/58.128',
         'step':    '3/6/9/12',
         'stream':  'oper',
         'target':  'output',
@@ -25,7 +25,7 @@ def download(xr,yr,tr,filename):
     }
 
     print(req2)
-    c.execute(req2, filename)
+    c.retrieve('reanalysis-era5-complete', req2, 'output')
 
 
 if __name__ == '__main__':
@@ -45,6 +45,6 @@ if __name__ == '__main__':
     tr = [datetime(2018,12,1),datetime(2018,12,5)]
 
     # output file name
-    filename = 'ecmwf_interim_' + tr[0].strftime(fmt) + '_' + tr[1].strftime(fmt) + '.nc'
+    filename = 'ecmwf_era5_' + tr[0].strftime(fmt) + '_' + tr[1].strftime(fmt) + '.nc'
 
     download(xr,yr,tr,filename)
