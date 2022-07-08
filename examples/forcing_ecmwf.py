@@ -22,9 +22,9 @@ def download(xr,yr,tr,filename):
     fmt = '%Y-%m-%d'
 
     req2 = {
-        'class': 'od',
-        'expver': '1',
-        'date': tr[0].strftime(fmt) + '/to/' + tr[1].strftime(fmt),
+        'class':   'od',
+        'expver':  '1',
+        'date':    tr[0].strftime(fmt) + '/to/' + tr[1].strftime(fmt),
         'levtype': 'sfc',
         'grid':    '0.125/0.125',
         'param':   '146.128/147.128/151.128/164.128/165.128/166.128/167.128/168.128/175.128/176.128/177.128/180.128/181.128/182.128/205.128/228.128/34.128/58.128',
