@@ -28,7 +28,7 @@ The following data sources have been tested:
          * ERA 5 (obtained from the [Climate Data store](https://cds.climate.copernicus.eu/) using [CDSAPI.jl](https://github.com/JuliaClimate/CDSAPI.jl))
     * GFS from the [NCAR Research Data Archive](https://rda.ucar.edu/thredds/catalog/files/g/ds084.1/catalog.html)
 
-Download scripts for ECMWF data are in [examples](tree/master/examples).
+Download scripts for ECMWF data are in [examples](/examples).
 
 Contributions to add other data sources are welcome!
 
