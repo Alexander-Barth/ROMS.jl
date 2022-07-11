@@ -74,7 +74,8 @@ yr = [41.875, 44.625]
 # Note: it should contain 1 day more than the simulation time range of ROMS
 # If ROMS starts at 1 January 2000, you will need data the 31 December 2000
 tr = [DateTime(2018,12,1),DateTime(2020,1,1)]
-tr = [DateTime(2018,12,1),DateTime(2018,12,5)]
+tr = [DateTime(2018,12,31),DateTime(2019,1,8)]
+#tr = [DateTime(2018,12,1),DateTime(2018,12,5)]
 
 # output file name
 filename = "ecmwf_era5_" * join(Dates.format.(tr,fmt),"_") * ".nc"

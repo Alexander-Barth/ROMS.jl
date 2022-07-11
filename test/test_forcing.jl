@@ -63,7 +63,7 @@ basedir_ref = datadir
         data = ds[Vname][:,:,:]
 
         diff = data - data_ref
-        @show maximum(abs.(diff))
+        @test maximum(abs.(diff)) < 1e-6
 
         @test data_ref ≈ data
         @test ds_ref[Tname][:] == ds[Tname][:]

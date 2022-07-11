@@ -64,6 +64,7 @@ function download_gfs(
     resolution = 0.25,
     baseurl = "https://rda.ucar.edu/thredds/dodsC/files/g/ds084.1/",
     verbose = true,
+    padding = 1,
 )
     # files contain 3 hours and 6 hours averaged. The later are converted to
     # 3 hours averages. Therefore it is not possible to start with a 6 hour average.
@@ -89,6 +90,9 @@ function download_gfs(
     lon = ds["lon"][:]
     lat = ds["lat"][:]
 
+    xr = xr .+ (-padding,padding)
+    yr = yr .+ (-padding,padding)
+
     irange = findall(xr[1] .<= lon .<= xr[end])
     jrange = findall(yr[1] .<= lat .<= yr[end])
 
@@ -100,6 +104,7 @@ function download_gfs(
     lat = lat[jrange]
 
     mkpath(cachedir)
+    filenames = Vector{String}(undef,length(times))
 
     for n = 1:length(times)
         t = times[n]
@@ -120,7 +125,12 @@ function download_gfs(
         fname = joinpath(cachedir,join((
             modelname,
             replace(string(resolution),"." => "p"),
-            yyyymmddHH,"f$(@sprintf("%03d",tau)).nc"),'.'))
+            yyyymmddHH,"f$(@sprintf("%03d",tau))",
+            "lon" * join(string.(xr),'-'),
+            "lat" * join(string.(yr),'-'),
+            "nc"),'.'))
+
+        filenames[n] = fname
 
         if !isfile(fname)
             if verbose
@@ -181,7 +191,7 @@ function download_gfs(
         end
     end
 
-    return (dir = cachedir, times = times)
+    return (dir = cachedir, times = times, filenames = filenames)
 end
 
 
@@ -315,24 +325,16 @@ function prepare_gfs(
         end
     end
 
-    function gfs_ds(atmo_src,t)
-        tau = gfs_tau(t)
-        time_start = t - Dates.Hour(tau)
-        url = gfs_url(time_start, tau)
+    function gfs_ds(atmo_src,irec)
+        fname = atmo_src.filenames[irec]
+        tau = gfs_tau(atmo_src.times[irec])
 
-        yyyymmddHH = Dates.format(time_start,"yyyymmddHH")
-
-        fname = joinpath(atmo_src.dir,join((
-            modelname,
-            replace(string(resolution),"." => "p"),
-            yyyymmddHH,"f$(@sprintf("%03d",tau)).nc"),'.'))
-
-        @debug "opening $time_start τ=$tau"
+        @debug "opening $fname τ=$tau"
 
         return NCDataset(fname),tau
     end
 
-    ds, = gfs_ds(atmo_src,atmo_src.times[1])
+    ds, = gfs_ds(atmo_src,1)
     lon = ds["lon"][:] #:: Vector{Float64}
     lat = ds["lat"][:] #:: Vector{Float64}
     close(ds)
@@ -387,7 +389,7 @@ function prepare_gfs(
         for irec = 1:length(atmo_src.times)
             t = atmo_src.times[irec]
 
-            ds,tau = gfs_ds(atmo_src,t)
+            ds,tau = gfs_ds(atmo_src,irec)
 
             if (tau == GFS_SAVE_STEP_HOURS) || !F[i].accumulation
                 GFSname = F[i].GFSname
