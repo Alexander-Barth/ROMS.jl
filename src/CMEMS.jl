@@ -139,8 +139,9 @@ function load(ds::CMEMS,name::Symbol; kwargs...)
     ds = NCDataset(filenames,"r",aggdim = "time")
 
     v = ds[var]
-    x = nomissing(ds["lon"][:])
-    y = nomissing(ds["lat"][:])
+
+    x = nomissing(varbyattrib(ds,standard_name = "longitude")[1][:]);
+    y = nomissing(varbyattrib(ds,standard_name = "latitude")[1][:]);
     t = nomissing(ds["time"][:])
 
     if ndims(v) == 3
