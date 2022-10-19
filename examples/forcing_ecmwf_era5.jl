@@ -3,7 +3,7 @@ using DataStructures
 using CDSAPI
 
 
-function download(xr,yr,tr,filename)
+function _download(xr,yr,tr,filename)
     fmt = "yyyy-mm-dd"
 
     req =  Dict(
@@ -34,32 +34,44 @@ function download(xr,yr,tr,filename)
     )
     println(req)
     CDSAPI.retrieve("reanalysis-era5-single-levels",req, filename)
-
-#=
-    req2 = OrderedDict(
-        "class" =>   "ea",
-        "expver" =>  "1",
-        "dataset" => "interim",
-        "date" =>    join(Dates.format.(tr,fmt),"/"),
-        "levtype" => "sfc",
-        "grid" =>    "0.75/0.75",
-        "param" =>   "146.128/147.128/151.128/164.128/165.128/166.128/167.128/168.128/175.128/176.128/177.128/180.128/181.128/182.128/205.128/228.128/34.128/58.128",
-        "step" =>    "3/6/9/12",
-        "stream" =>  "oper",
-        "target" =>  "output",
-        "time" =>    "00:00:00/12:00:00",
-        "type" =>    "fc",
-        "area" =>    join(string.((yr[1],xr[1],yr[2],xr[2])),"/"),
-        "format" =>  "netcdf",
-    )
-
-    println(req2)
-
-    CDSAPI.retrieve("reanalysis-era5-complete", req2, "output")
-    #CDSAPI.retrieve("reanalysis-era5-single-levels",req2, filename)
-=#
 end
 
+
+
+function download(xr,yr,tr,fname_prefix)
+
+    t0 = tr[1]
+    tchunk = Dates.Month(1)
+    teps = Dates.Minute(1)
+    filenames = String[]
+
+    for t = tr[1]:tchunk:tr[end]
+        tr_chunk =
+            if t + tchunk >= tr[end]
+                (t,tr[end])
+            else
+                (t, t+tchunk - teps)
+            end
+
+        filename = fname_prefix *
+            join((
+                "ECMWF","ERA5",
+                Dates.format(t,"yyyy-mm"),
+                "lon" * join(string.(xr),'-'),
+                "lat" * join(string.(yr),'-')),
+                "_") * ".nc"
+
+        if !isfile(filename)
+            @info "get $(tr_chunk[1]) - $(tr_chunk[end])"
+            tmp = filename * ".tmp"
+            _download(xr,yr,tr_chunk,tmp)
+            mv(tmp,filename)
+        end
+        push!(filenames,filename)
+    end
+
+    return filenames
+end
 
 fmt = "yyyy-mm-dd"
 
@@ -73,11 +85,11 @@ yr = [41.875, 44.625]
 # the DateTime function expects year, month and day
 # Note: it should contain 1 day more than the simulation time range of ROMS
 # If ROMS starts at 1 January 2000, you will need data the 31 December 2000
-tr = [DateTime(2018,12,1),DateTime(2020,1,1)]
-tr = [DateTime(2018,12,31),DateTime(2019,1,8)]
+tr = [DateTime(2018,12,1),DateTime(2020,1,31)]
+#tr = [DateTime(2018,12,31),DateTime(2019,1,8)]
 #tr = [DateTime(2018,12,1),DateTime(2018,12,5)]
 
 # output file name
-filename = "ecmwf_era5_" * join(Dates.format.(tr,fmt),"_") * ".nc"
+fname_prefix = expanduser("~/tmp/")
 
-download(xr,yr,tr,filename)
+download(xr,yr,tr,fname_prefix)
