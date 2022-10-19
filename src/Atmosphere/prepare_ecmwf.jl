@@ -9,6 +9,9 @@ Generate ROMS forcing fields from the ECMWF data file `atmo_fname`.
 Note that some variables are [accumulated](https://www.myroms.org/forum/viewtopic.php?f=30&t=3003). Per default, the accumulation is reset at 00:00 and 12:00 UTC.
 The accumulation period is determined from the time resolution (usually 3 hours).
 
+Note ERA5 reanalysis (hourly data): [Accumulations are performed over the hour](https://confluence.ecmwf.int/display/CKB/ERA5%3A+data+documentation#ERA5:datadocumentation-Meanrates/fluxesandaccumulations).
+
+
 # Example
 
 ```julia
