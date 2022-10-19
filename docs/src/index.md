@@ -179,7 +179,7 @@ These commands should return a basic usage info or the version number if they ar
 
 ### Data
 
-* The full [GEBCO bathymetry](http://modb.oce.ulg.ac.be/mediawiki/upload/OCEA0036/gebco_30sec_1.nc) (the file `gebco_30sec_1.nc` is already included in the virtual machine)
+* The full [GEBCO bathymetry](https://dox.ulg.ac.be/index.php/s/iEh7ompNdj8AN2p/download) (the file `gebco_30sec_1.nc` is already included in the virtual machine)
 
 
 ### Area
