@@ -24,7 +24,7 @@ Please register at:
 * [CMEMS (Copernicus Marine Environment Monitoring Service)](http://marine.copernicus.eu/services-portfolio/register-now/)
 
 To generate new forcing fields, register at (optional):
-* [ECMWF (European Centre for Medium-Range Weather Forecasts)](https://apps.ecmwf.int/registration/)
+* [ECMWF (European Centre for Medium-Range Weather Forecasts)](https://apps.ecmwf.int/registration/). To access the operational forecast on the MARS service you will need a special permissions granted by your national weather service (in Europe). The default permission will let you access e.g. ERA5 dataset.
 
 
 ### Required software
