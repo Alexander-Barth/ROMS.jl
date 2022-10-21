@@ -34,17 +34,19 @@ hmin = 2; # m
 
 # grid file
 modeldir = expanduser("~/ROMS-implementation-test")
+
+# This file corresponds to GRDNAME in roms.in
 grid_fname = joinpath(modeldir,domain_name * ".nc")
 
 basedir = expanduser("~/ROMS-implementation-test")
 
-# GCM interpolated on model grid
+# GCM interpolated on model grid (CLMNAME)
 clim_filename =  joinpath(basedir,"clim2019.nc")
 
-# initial conditions
+# initial conditions (ININAME in roms.in)
 ic_filename =  joinpath(basedir,"ic2019.nc")
 
-# boundary conditions
+# boundary conditions (BRYNAME in roms.in)
 bc_filename =  joinpath(basedir,"bc2019.nc")
 
 # model specific parameters
@@ -135,6 +137,7 @@ domain_name = "Ligurian Sea Region"
 Vnames = ["sustr","svstr","shflux","swflux","swrad","Uwind","Vwind",
     "lwrad","lwrad_down","latent","sensible","cloud","rain","Pair","Tair","Qair"]
 
+# forcing_filenames corresponds to FRCNAME in roms.in
 forcing_filenames = ROMS.prepare_ecmwf(ecmwf_fname,Vnames,filename_prefix,domain_name)
 
 
