@@ -14,6 +14,24 @@ git clone https://www.myroms.org/git/src roms
 cd roms
 git checkout roms-4.0
 
+patch Compilers/Linux-gfortran.mk <<EOF
+diff --git a/Compilers/Linux-gfortran.mk b/Compilers/Linux-gfortran.mk
+index a878a381..27ac9004 100644
+--- a/Compilers/Linux-gfortran.mk
++++ b/Compilers/Linux-gfortran.mk
+@@ -30,7 +30,7 @@
+ # First the defaults
+ #
+                FC := gfortran
+-           FFLAGS := -frepack-arrays
++           FFLAGS := -frepack-arrays -fallow-argument-mismatch
+        FIXEDFLAGS := -ffixed-form
+         FREEFLAGS := -ffree-form -ffree-line-length-none
+               CPP := /usr/bin/cpp
+EOF
+
+#git checkout master
+
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
 
