@@ -171,7 +171,9 @@ function CMEMS_opendap(username,password,mapping,cachedir;
                 chunks = 60,
 )
 
-    userinfo = string(username,":",password)
+    username_escaped = URIs.escapeuri(username)
+    password_escaped = URIs.escapeuri(password)
+    userinfo = string(username_escaped,":",password_escaped)
     baseURI = URI(URI(baseurl),userinfo=userinfo)
 
     urls = DefaultDict{Symbol,String,String}("unknown")
