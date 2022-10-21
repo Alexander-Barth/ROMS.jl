@@ -2,6 +2,7 @@ using ROMS
 using NCDatasets
 using Test
 using Dates
+using Downloads: download
 
 
 # reference values from https://en.wikipedia.org/w/index.php?title=Vapour_pressure_of_water&oldid=987479989

@@ -3,6 +3,7 @@ using ROMS
 using Test
 using NCDatasets
 using CDSAPI
+using Downloads: download
 
 # name of the domain
 domain_name = "LS2v";

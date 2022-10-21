@@ -3,6 +3,7 @@ using ROMS
 using Statistics
 using Dates
 using NCDatasets
+using Downloads: download
 
 @testset "Bathymetry" begin
     include("test_bathymetry.jl")

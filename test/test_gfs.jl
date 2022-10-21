@@ -20,6 +20,7 @@ using Dates
 using Test
 using ROMS
 #using DataStructures
+using Downloads: download
 
 
 time = DateTime(2015,1,16)

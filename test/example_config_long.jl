@@ -1,5 +1,6 @@
 using Dates
 using ROMS
+using Downloads: download
 
 # name of the domain
 domain_name = "LS2v";
