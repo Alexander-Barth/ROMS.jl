@@ -353,6 +353,8 @@ The lines in red have been replaced by the lines in green. The plus and minus si
 
 If you do not have the tool `nf-config`, you need to add this line `export NF_CONFIG=nc-config`.
 
+For ROMS 4.0 and gfortran 11.2, you need to add `-fallow-argument-mismatch` to `FFLAGS` in `Compilers/Linux-gfortran.mk` from the 
+ROMS source files. This is expected to be fixed in upcoming version of ROMS.
 
 * Review your changes with:
 
