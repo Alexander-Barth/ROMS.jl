@@ -11,17 +11,18 @@ This tutorial is for students following the ULiège lecture OCEA0036-1 but might
     * `cd directory_name`: change directory
     * `pwd`: print the name of the current working directory
     * `mkdir`: create a directory
-    * `cp source destiation`: copy a file
-    * `mv source destiation`: move a file
+    * `cp source destination`: copy a file
+    * `mv source destination`: move a file
     * `rm file`: remove a file (permanently)
+    * `find directory_name -name "*foo*"`: find all files under `directory_name` (including sub-directories) whose name contains `foo`.
     * `diff file1 file2`: compare two text files
     * `gedit filename &`, `pluma filename &` or `editor filename &`: open a text editor to edit a file.
 
 * Shell keyboard short cuts (also applicable to a julia session):
-    * `up-arrow`: show previous command (similarily `down-arrow` show next command)
-    * `TAB`: complete command or file/directory name if it is unambigous
+    * `up-arrow`: show previous command (similarly `down-arrow` show next command)
+    * `TAB`: complete command or file/directory name if it is unambiguous
     * `TAB TAB`: show all possible commands or file/directory name if multiple possibilities exists
-    * `Control-R` and type `some_string`: Search for a previsouly executed command which includes `some_string`.
+    * `Control-R` and type `some_string`: Search for a previously executed command which includes `some_string`.
     * `Control-C`: cancel the previous command (be careful to not to cancel your text editor session)
     * `Control-D`: close a shell session
 
