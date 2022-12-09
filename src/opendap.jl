@@ -1,8 +1,3 @@
-    using NCDatasets
-using ROMS
-using Dates
-using DataStructures
-
 struct OPENDAP <: ROMS.AbstractDataset
     url::DefaultDict{Symbol,String,String}
     cachedir::String
@@ -73,14 +68,19 @@ function download(dsopendap::OPENDAP,name::Symbol;
         if isfile(fname_subset)
             @info "$fname_subset is in cache"
         else
+            # download to a temporary file in case
+            # the download fails
+            tmp = fname_subset * ".partial-" * randstring(12)
             ds_subset = NCDatasets.SubDataset(_ds, indices0)
 
             @info "download $name in $fname_subset"
-            NCDataset(fname_subset,"c") do ds
+            NCDataset(tmp,"c") do ds
                 NCDatasets.write(
                     ds,ds_subset,
                     include = include_var)
             end
+
+            mv(tmp,fname_subset)
         end
 
         push!(fnames_subset,fname_subset)

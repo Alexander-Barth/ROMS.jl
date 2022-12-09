@@ -1,5 +1,6 @@
 using ROMS
 using Test
+using Downloads: download
 
 bath_name = expanduser("~/Data/Bathymetry/gebco_30sec_1_ligurian_sea.nc")
 

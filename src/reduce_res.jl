@@ -1,6 +1,6 @@
 """
      field = reduce_res(field,red);
-reduce resolution of field "field" by a factor "red"
+reduce resolution of field `field` by a factor "red"
 """
 function reduce_res(field::AbstractArray{T,N},red) where {T,N}
     sz = size(field)

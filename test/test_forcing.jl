@@ -2,6 +2,7 @@ using ROMS
 using NCDatasets
 using Test
 using Dates
+using Downloads: download
 
 
 # reference values from https://en.wikipedia.org/w/index.php?title=Vapour_pressure_of_water&oldid=987479989
@@ -63,7 +64,7 @@ basedir_ref = datadir
         data = ds[Vname][:,:,:]
 
         diff = data - data_ref
-        @show maximum(abs.(diff))
+        @test maximum(abs.(diff)) < 1e-6
 
         @test data_ref ≈ data
         @test ds_ref[Tname][:] == ds[Tname][:]

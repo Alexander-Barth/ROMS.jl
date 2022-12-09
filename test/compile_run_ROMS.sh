@@ -1,3 +1,4 @@
+#!/bin/bash
 # ROMS source code in ~/src/roms
 # ~/Data/Bathymetry/combined_emodnet_bathymetry.nc
 # ~/Data/Atmosphere/ecmwf_operational_archive_2018-12-01T00:00:00_2020-01-01T00:00:00.nc
@@ -13,6 +14,24 @@ git config --global credential.helper '!f() { sleep 1; echo "username=${ROMS_USE
 git clone https://www.myroms.org/git/src roms
 cd roms
 git checkout roms-4.0
+
+if [[ $(gcc -dumpversion) -ge 11 ]]; then
+patch Compilers/Linux-gfortran.mk <<EOF
+diff --git a/Compilers/Linux-gfortran.mk b/Compilers/Linux-gfortran.mk
+index a878a381..27ac9004 100644
+--- a/Compilers/Linux-gfortran.mk
++++ b/Compilers/Linux-gfortran.mk
+@@ -30,7 +30,7 @@
+ # First the defaults
+ #
+                FC := gfortran
+-           FFLAGS := -frepack-arrays
++           FFLAGS := -frepack-arrays -fallow-argument-mismatch
+        FIXEDFLAGS := -ffixed-form
+         FREEFLAGS := -ffree-form -ffree-line-length-none
+               CPP := /usr/bin/cpp
+EOF
+fi
 
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"

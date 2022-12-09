@@ -24,7 +24,7 @@ Please register at:
 * [CMEMS (Copernicus Marine Environment Monitoring Service)](http://marine.copernicus.eu/services-portfolio/register-now/)
 
 To generate new forcing fields, register at (optional):
-* [ECMWF (European Centre for Medium-Range Weather Forecasts)](https://apps.ecmwf.int/registration/)
+* [ECMWF (European Centre for Medium-Range Weather Forecasts)](https://apps.ecmwf.int/registration/). To access the operational forecast on the MARS service you will need a special permissions granted by your national weather service (in Europe). The default permission will let you access e.g. ERA5 dataset.
 
 
 ### Required software
@@ -36,13 +36,13 @@ If you do not use this virtual machine the following software need to be install
 
 ```bash
 cd /opt/
-sudo wget https://julialang-s3.julialang.org/bin/linux/x64/1.7/julia-1.7.3-linux-x86_64.tar.gz
-sudo tar -xvf julia-1.7.3-linux-x86_64.tar.gz
-sudo rm julia-1.7.3-linux-x86_64.tar.gz
-sudo ln -s /opt/julia-1.7.3/bin/julia /usr/local/bin/julia
+sudo wget https://julialang-s3.julialang.org/bin/linux/x64/1.8/julia-1.8.2-linux-x86_64.tar.gz
+sudo tar -xvf julia-1.8.2-linux-x86_64.tar.gz
+sudo rm julia-1.8.2-linux-x86_64.tar.gz
+sudo ln -s /opt/julia-1.8.2/bin/julia /usr/local/bin/julia
 ```
 
-where `1.7.3` should be replaced by the version number of the current stable release.
+where `1.8.2` should be replaced by the version number of the current stable release.
 More information is available [here](https://julialang.org/downloads/platform/).
 
 Under Linux, you need to install also `python3-matplotlib` for PyPlot. On Debian/Ubuntu, this packages can be installed by this command:
@@ -179,7 +179,7 @@ These commands should return a basic usage info or the version number if they ar
 
 ### Data
 
-* The full [GEBCO bathymetry](http://modb.oce.ulg.ac.be/mediawiki/upload/OCEA0036/gebco_30sec_1.nc) (the file `gebco_30sec_1.nc` is already included in the virtual machine)
+* The full [GEBCO bathymetry](https://dox.ulg.ac.be/index.php/s/iEh7ompNdj8AN2p/download) (the file `gebco_30sec_1.nc` is already included in the virtual machine)
 
 
 ### Area
@@ -353,6 +353,8 @@ The lines in red have been replaced by the lines in green. The plus and minus si
 
 If you do not have the tool `nf-config`, you need to add this line `export NF_CONFIG=nc-config`.
 
+For ROMS 4.0 and gfortran 11.2, you need to add `-fallow-argument-mismatch` to `FFLAGS` in `Compilers/Linux-gfortran.mk` from the 
+ROMS source files. This is expected to be fixed in upcoming version of ROMS.
 
 * Review your changes with:
 
