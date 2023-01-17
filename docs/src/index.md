@@ -177,6 +177,21 @@ motuclient --version
 
 These commands should return a basic usage info or the version number if they are correctly installed.
 
+
+Check the presence of `ROMS.jl`, in a julia shell type:
+
+```julia
+using Pkg
+Pkg.status()
+```
+This gives you a list of installed packages which should include the package `ROMS`.
+Install `ROMS.jl` if necessary by:
+
+```julia
+using Pkg
+Pkg.add(url="https://github.com/Alexander-Barth/ROMS.jl")
+```
+
 ### Data
 
 * The full [GEBCO bathymetry](https://dox.ulg.ac.be/index.php/s/iEh7ompNdj8AN2p/download) (the file `gebco_30sec_1.nc` is already included in the virtual machine)
@@ -243,7 +258,7 @@ List of variables (*: quantities accumulated over the integration period ("step"
     * ...
 
 * For CMEMS boundary conditions:
-    * You may need to adapt `service_id`, `motu_server` and `mapping` (if model is outside the Mediterranean Sea)
+    * You may need to adapt `service_id`, `motu_server` and `mapping` (if the model domain is outside of the Mediterranean Sea)
     * Data will be downloaded and saved in NetCDF by "chunks" of 60 days in the folder `OGCM` under the content of the variable `basedir`
     * You need to remove the files in this directory if you rerun the script with a different time range.
 
@@ -368,9 +383,7 @@ diff ~/src/roms/ROMS/Bin/build_roms.sh build_roms.sh
 ./build_roms.sh -j 2
 ```
 
-where you need to replace `/path/to/previous` by the appropriate file path.
-
- * copy `varinfo.dat` from `~/src/roms/ROMS/External/varinfo.dat` in your current directory:
+ * copy `varinfo.dat` from `~/src/roms/ROMS/External/varinfo.dat` in your directory for your simulation (e.g. `Simulation1`):
 
 ```bash
 cp ~/src/roms/ROMS/External/varinfo.dat .
