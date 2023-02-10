@@ -511,6 +511,7 @@ You can use `DateTime` if you want to specify hour, minutes or seconds.
 
 ### Nudging towards "climatology"
 
+The nudging towards "climatology" is an optional step to avoid issue (like sharp gradients) near the open sea boundaries.
 A flow relexation zone can be implemented in ROMS by using the followings settings:
 
 ```
