@@ -433,7 +433,7 @@ You can use `DateTime` if you want to specify hour, minutes or seconds.
 
 * Adapt the length of a time step `DT` (in seconds) and number of time steps `NTIMES`
 * Initially we choose:
-    * `NTIMES` -> number of time step corresponding to 1 day (e.g. `24*60*60/DT` as `DT` is in seconds)
+    * `NTIMES` -> number of time step corresponding to 2 days (e.g. `2*24*60*60/DT` where `DT` is the time steps in seconds)
     * `NHIS`, `NAVG`-> number of time steps corresponding to 1 hour
     * `NRST` -> number of time steps correspond to 1 hour
 
