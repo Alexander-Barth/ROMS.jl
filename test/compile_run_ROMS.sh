@@ -1,3 +1,4 @@
+#!/bin/bash
 # ROMS source code in ~/src/roms
 # ~/Data/Bathymetry/combined_emodnet_bathymetry.nc
 # ~/Data/Atmosphere/ecmwf_operational_archive_2018-12-01T00:00:00_2020-01-01T00:00:00.nc

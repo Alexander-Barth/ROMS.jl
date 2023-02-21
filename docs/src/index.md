@@ -4,18 +4,44 @@ This package allows to setup necessary files for the [ROMS ocean model](https://
 
 This tutorial is for students following the ULiège lecture OCEA0036-1 but might be useful for others as well.
 
-### Using for the first time a UNIX/Linux-like environment?
+### Using for the first time a Linux (or UNIX-like) environment?
+
+* Essential shell commands:
+    * `ls`: list all files and directories
+    * `cd directory_name`: change directory
+    * `pwd`: print the name of the current working directory
+    * `mkdir`: create a directory
+    * `cp source destination`: copy a file
+    * `mv source destination`: move a file
+    * `rm file`: remove a file (permanently)
+    * `find directory_name -name "*foo*"`: find all files under `directory_name` (including sub-directories) whose name contains `foo`.
+    * `diff file1 file2`: compare two text files
+    * `gedit filename &`, `pluma filename &` or `editor filename &`: open a text editor to edit a file.
+
+* Shell keyboard short cuts (also applicable to a julia session):
+    * `up-arrow`: show previous command (similarly `down-arrow` show next command)
+    * `TAB`: complete command or file/directory name if it is unambiguous
+    * `TAB TAB`: show all possible commands or file/directory name if multiple possibilities exists
+    * `Control-R` and type `some_string`: Search for a previously executed command which includes `some_string`.
+    * `Control-C`: cancel the previous command (be careful to not to cancel your text editor session)
+    * `Control-D`: close a shell session
+
+* Special directories:
+    * `.`: current directory
+    * `..`: parent directory
+    * `~`: home directory
 
 * Please pay attention to the difference between upper- and lowercase letters
 * Presence and absence of white space is also significant
-* Check out the [basic shell commands](https://diyhacking.com/linux-commands-for-beginners/) and [this tutorial](https://ryanstutorials.net/linuxtutorial/)
-* Avoid using directories and file names with a space in them, otherwise you need to put the directory in quotes (single or double quotes) or use black-slash (\\) in front of the white space. For example, shell command `cd My Directory Name` does not work, use one of the following instead:
+* Avoid using directories and file names with a space in them, otherwise you need to put the directory in quotes (single or double quotes) or use black-slash (`\\`) in front of the white space. For example, shell command `cd My Directory Name` does not work, use one of the following instead:
 
 ```bash
 cd "My Directory Name"
 cd 'My Directory Name'
 cd My\ Directory\ Name
 ```
+
+* Check out the [basic shell commands](https://diyhacking.com/linux-commands-for-beginners/) and [this tutorial](https://ryanstutorials.net/linuxtutorial/)
 
 ### Registration
 
@@ -29,7 +55,39 @@ To generate new forcing fields, register at (optional):
 
 ### Required software
 
-A preconfigured virtual machine is available [here](http://data-assimilation.net/upload/OCEA0036/Ubuntu-20.04-MATE-Julia-ROMS.ova). The account `student` has the password `tritro`. In this virtual machine, all software is already pre-installed. The OVA file must be [imported in Virtual Box](https://docs.oracle.com/cd/E26217_01/E26796/html/qs-import-vm.html).
+The tutorial can be run either:
+
+1. on your computer using a preconfigured virtual machine
+2. on the machines of the ULiège computer room
+3. directly on your computer (but all software has to be installed beforehand) if you are using Ubuntu/Debian. Other Linux OS will work too, but the installation instructions must be adapted. Mac OS and Windows (using e.g. Windows Subsystem for Linux) might work too. But if you are not using Linux, it is preferable to the the virtual machine.
+
+
+#### Preconfigured virtual machine
+
+A preconfigured virtual machine is available [here](http://data-assimilation.net/upload/OCEA0036/Ubuntu-20.04-MATE-Julia-ROMS.ova).
+
+* Virtual Box requires the [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-170) which should be installed before (as of Virtual Box version 7.0.4).
+* Virtual Box can be installed from [here](https://www.virtualbox.org/wiki/Downloads).
+* The OVA file must be imported in Virtual Box as explained in the [documentation](https://docs.oracle.com/cd/E26217_01/E26796/html/qs-import-vm.html).
+
+The account `student` has the password `tritro`. In this virtual machine, all software is already pre-installed, but must be updated using this shell commands:
+
+```bash
+cd .julia/dev/ROMS
+git pull
+```
+
+Then open a julia session (typing the `julia` command), and update all packages with:
+
+```julia
+using Pkg
+Pkg.update()
+```
+
+Note, it is not necessary of this tutorial to update the whole operating system.
+
+#### Installation on Ubuntu/Linux (or UNIX-like operating systems)
+
 If you do not use this virtual machine the following software need to be installed:
 
 * [Julia](https://julialang.org/downloads/). Under Linux, you can install Julia with the following shell commands:
@@ -129,7 +187,7 @@ source ~/.bashrc
 ```
 
 
-* For ECMWF data, you need the pacakge `ecmwf-api-client-python` (optional). Follow the [installation instructions](https://software.ecmwf.int/wiki/display/WEBAPI/Access+ECMWF+Public+Datasets) (including the ECMWF key). For questions related to ECMWF data access please also consult [this document](https://www.ecmwf.int/en/forecasts/access-forecasts/ecmwf-web-api).
+* For ECMWF data, you need the pacakge `ecmwf-api-client` (optional). Follow the [installation instructions](https://confluence.ecmwf.int/display/WEBAPI/Access+ECMWF+Public+Datasets) (including the ECMWF key). For questions related to ECMWF data access please also consult [this document](https://www.ecmwf.int/en/forecasts/access-forecasts/ecmwf-web-api).
 * Note that the ECMWF key is different from your ECMWF password.
 
 ### Check your environment
@@ -176,6 +234,21 @@ motuclient --version
 ```
 
 These commands should return a basic usage info or the version number if they are correctly installed.
+
+
+Check the presence of `ROMS.jl`, in a julia shell type:
+
+```julia
+using Pkg
+Pkg.status()
+```
+This gives you a list of installed packages which should include the package `ROMS`.
+Install `ROMS.jl` if necessary by:
+
+```julia
+using Pkg
+Pkg.add(url="https://github.com/Alexander-Barth/ROMS.jl")
+```
 
 ### Data
 
@@ -243,7 +316,7 @@ List of variables (*: quantities accumulated over the integration period ("step"
     * ...
 
 * For CMEMS boundary conditions:
-    * You may need to adapt `service_id`, `motu_server` and `mapping` (if model is outside the Mediterranean Sea)
+    * You may need to adapt `service_id`, `motu_server` and `mapping` (if the model domain is outside of the Mediterranean Sea)
     * Data will be downloaded and saved in NetCDF by "chunks" of 60 days in the folder `OGCM` under the content of the variable `basedir`
     * You need to remove the files in this directory if you rerun the script with a different time range.
 
@@ -353,7 +426,7 @@ The lines in red have been replaced by the lines in green. The plus and minus si
 
 If you do not have the tool `nf-config`, you need to add this line `export NF_CONFIG=nc-config`.
 
-For ROMS 4.0 and gfortran 11.2, you need to add `-fallow-argument-mismatch` to `FFLAGS` in `Compilers/Linux-gfortran.mk` from the 
+For ROMS 4.0 and gfortran 11.2, you need to add `-fallow-argument-mismatch` to `FFLAGS` in `Compilers/Linux-gfortran.mk` from the
 ROMS source files. This is expected to be fixed in upcoming version of ROMS.
 
 * Review your changes with:
@@ -368,9 +441,7 @@ diff ~/src/roms/ROMS/Bin/build_roms.sh build_roms.sh
 ./build_roms.sh -j 2
 ```
 
-where you need to replace `/path/to/previous` by the appropriate file path.
-
- * copy `varinfo.dat` from `~/src/roms/ROMS/External/varinfo.dat` in your current directory:
+ * copy `varinfo.dat` from `~/src/roms/ROMS/External/varinfo.dat` in your directory for your simulation (e.g. `Simulation1`):
 
 ```bash
 cp ~/src/roms/ROMS/External/varinfo.dat .
@@ -440,6 +511,7 @@ You can use `DateTime` if you want to specify hour, minutes or seconds.
 
 ### Nudging towards "climatology"
 
+The nudging towards "climatology" is an optional step to avoid issue (like sharp gradients) near the open sea boundaries.
 A flow relexation zone can be implemented in ROMS by using the followings settings:
 
 ```
@@ -547,5 +619,3 @@ Make some comparison with satellite and the downloaded in situ observation
 * [ROMS Wiki](https://www.myroms.org/wiki/)
 * [ROMS Wiki Frequently Asked Questions](https://www.myroms.org/wiki/Frequently_Asked_Questions)
 * K. Hedström. 2016. [Technical Manual for a Coupled Sea-Ice/Ocean Circulation Model (Version 4)](https://github.com/kshedstrom/roms_manual/blob/master/roms_manual.pdf). U.S. Dept. of the Interior, Bureau of Ocean Energy Management, Alaska OCS Region. OCS, Study BOEM 2016-037. 176 pp.
-
-
