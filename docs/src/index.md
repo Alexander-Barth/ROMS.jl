@@ -6,11 +6,13 @@ This tutorial is for students following the ULiège lecture OCEA0036-1 but might
 
 ### Using for the first time a Linux (or UNIX-like) environment?
 
+If you are familiar with Linux and the command line you can skip to section.
+
 * Essential shell commands:
-    * `ls`: list all files and directories
-    * `cd directory_name`: change directory
     * `pwd`: print the name of the current working directory
-    * `mkdir`: create a directory
+    * `ls`: list all files and directories in the current working directory
+    * `cd directory_name`: change directory; "go inside" the directory
+    * `mkdir directory_name`: create a directory
     * `cp source destination`: copy a file
     * `mv source destination`: move a file
     * `rm file`: remove a file (permanently)
@@ -64,7 +66,7 @@ The tutorial can be run either:
 
 #### Preconfigured virtual machine
 
-A preconfigured virtual machine is available [here](http://data-assimilation.net/upload/OCEA0036/Ubuntu-20.04-MATE-Julia-ROMS.ova).
+A preconfigured virtual machine is available [here](http://data-assimilation.net/upload/OCEA0036/Ubuntu-20.04-MATE-Julia-ROMS.ova). You also need:
 
 * Virtual Box requires the [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-170) which should be installed before (as of Virtual Box version 7.0.4).
 * Virtual Box can be installed from [here](https://www.virtualbox.org/wiki/Downloads).
@@ -84,7 +86,7 @@ using Pkg
 Pkg.update()
 ```
 
-Note, it is not necessary of this tutorial to update the whole operating system.
+Note, it is not necessary for this tutorial to update the whole operating system.
 
 #### Installation on Ubuntu/Linux (or UNIX-like operating systems)
 
@@ -153,7 +155,7 @@ On Windows, various ways exist to install gfortran, GNU make and other dependenc
 * ...
 
 On MacOS X:
-* Homebrew https://brew.sh/
+* [Homebrew](https://brew.sh/)
 * ...
 
 On Debian/Ubuntu, these packages can be installed by this command:
@@ -187,7 +189,7 @@ source ~/.bashrc
 ```
 
 
-* For ECMWF data, you need the pacakge `ecmwf-api-client` (optional). Follow the [installation instructions](https://confluence.ecmwf.int/display/WEBAPI/Access+ECMWF+Public+Datasets) (including the ECMWF key). For questions related to ECMWF data access please also consult [this document](https://www.ecmwf.int/en/forecasts/access-forecasts/ecmwf-web-api).
+* For ECMWF data, you need the package `ecmwf-api-client` (optional). Follow the [installation instructions](https://confluence.ecmwf.int/display/WEBAPI/Access+ECMWF+Public+Datasets) (including the ECMWF key). For questions related to ECMWF data access please also consult [this document](https://www.ecmwf.int/en/forecasts/access-forecasts/ecmwf-web-api).
 * Note that the ECMWF key is different from your ECMWF password.
 
 ### Check your environment
@@ -237,7 +239,7 @@ These commands should return a basic usage info or the version number if they ar
 
 ### Data
 
-* The full [GEBCO bathymetry](https://dox.ulg.ac.be/index.php/s/iEh7ompNdj8AN2p/download) (the file `gebco_30sec_1.nc` is already included in the virtual machine)
+* The full [GEBCO bathymetry](https://dox.ulg.ac.be/index.php/s/iEh7ompNdj8AN2p/download) (a subset for the Ligurian Sea is already included in the virtual machine)
 
 
 ### Area
