@@ -40,6 +40,19 @@ if !isdir(datadir)
     datadir = joinpath(temporarydir,"ROMS-test-data")
 end
 
+cachedir = expanduser("~/tmp/GFS")
+
+# pre-fill cache (becase server unreliable)
+# source
+# https://rda.ucar.edu/thredds/catalog/files/g/ds084.1/2019/20190101/catalog.html
+if !isdir(cachedir)
+    gfs_data_zip = download("https://dox.ulg.ac.be/index.php/s/O5MH4WLKJqV8iXm/download")
+    mkpath(cachedir)
+    cd(cachedir) do
+        run(`unzip -j $gfs_data_zip`)
+    end
+end
+
 
 fname_ref = joinpath(datadir,"gom_Tair_era.nc")
 
@@ -50,9 +63,7 @@ yr = extrema(ds_ref["lat"][:])
 #tr = extrema(time_ref)
 tr = (DateTime(2019,1,1),DateTime(2019,1,3))
 
-cachedir = expanduser("~/tmp/GFS")
 #cachedir = tempname()
-mkpath(cachedir)
 
 atmo_src = ROMS.download_gfs(xr,yr,tr,cachedir)
 
