@@ -119,8 +119,7 @@ mapping = Dict(
     :northward_sea_water_velocity => ("vo", "med-cmcc-cur-rean-d"),
 )
 
-dataset = ROMS.CMEMS(cmems_username,cmems_password,service_id,mapping,outdir,
-                     motu_server = motu_server)
+dataset = ROMS.CMEMS_opendap(cmems_username,cmems_password,mapping,outdir)
 
 # take one extra day
 tr = [t0-Dates.Day(1), t1+Dates.Day(1)]
