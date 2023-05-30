@@ -39,6 +39,7 @@ include("extract_bc.jl")
 include("generate_grid.jl")
 include("infile.jl")
 include("nudgecoef.jl")
+include("stiffness_ratio.jl")
 
 # Generate NetCDF files
 include("def_grid.jl")

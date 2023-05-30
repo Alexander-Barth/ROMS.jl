@@ -37,4 +37,5 @@ end
 
 @testset "ROMS run" begin
     include("test_run_roms.jl")
+    include("test_stiffness.jl")
 end
