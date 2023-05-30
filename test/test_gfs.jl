@@ -48,7 +48,7 @@ xr = extrema(ds_ref["lon"][:])
 yr = extrema(ds_ref["lat"][:])
 
 #tr = extrema(time_ref)
-tr = (DateTime(2019,1,1),DateTime(2019,1,7))
+tr = (DateTime(2019,1,1),DateTime(2019,1,3))
 
 cachedir = expanduser("~/tmp/GFS")
 #cachedir = tempname()
