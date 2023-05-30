@@ -2,8 +2,12 @@
 function generate_config(grid_fname,x,y,h,mask,pm,pn,dndx,dmde,opt)
 
     hmin = minimum(h)
-    hc=min(hmin,opt.Tcline)
 
+    if opt.Vtransform == 1
+        hc = min(hmin,opt.Tcline)
+    else
+        hc = opt.Tcline
+    end
 
     report = true;
     z_r = set_depth(opt.Vtransform, opt.Vstretching,

@@ -102,7 +102,12 @@ function Grid(grid_fname,opt)
     close(ds)
 
     hmin = minimum(h)
-    hc = min(hmin,Tcline)
+
+    if opt.Vtransform == 1
+        hc = min(hmin,Tcline)
+    else
+        hc = Tcline
+    end
 
     z_r = set_depth(Vtransform, Vstretching,
                     theta_s, theta_b, hc, nlevels,
