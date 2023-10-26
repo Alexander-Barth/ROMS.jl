@@ -143,7 +143,7 @@ metadata = Dict(
         Tname = "swf_time",
         ncattrib = (
             long_name = "surface net freshwater flux (E-P)",
-            units = "centimeter day-1",
+            units = "m s-1",
             positive_value = "net evaporation",
             negative_value = "net precipitation",
         ),

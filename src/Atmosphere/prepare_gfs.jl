@@ -454,6 +454,11 @@ function prepare_gfs(
 
                 # check sign
                 field = -(field - evaporation_rate)
+
+                density_fresh_water = 998 #  kg m⁻³
+
+                # kg m⁻² s⁻¹ / (kg m⁻³) = m s⁻¹
+                field = field / density_fresh_water
             elseif Vname == "swrad"
                 field = swrad_down - field
             else
