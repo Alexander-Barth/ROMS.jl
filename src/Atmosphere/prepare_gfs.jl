@@ -62,7 +62,7 @@ function download_gfs(
     xr,yr,tr,cachedir;
     modelname = "gfs",
     resolution = 0.25,
-    baseurl = "https://rda.ucar.edu/thredds/dodsC/files/g/ds084.1/",
+    baseurl = "https://thredds.rda.ucar.edu/thredds/dodsC/files/g/ds084.1/",
     verbose = true,
     padding = 1,
 )
@@ -85,6 +85,8 @@ function download_gfs(
         baseurl = baseurl,
     )
 
+    # example
+    # https://thredds.rda.ucar.edu/thredds/dodsC/files/g/ds084.1/2018/20181231/gfs.0p25.2018123118.f003.grib2
     ds = NCDataset(fname);
 
     lon = ds["lon"][:]
@@ -131,6 +133,7 @@ function download_gfs(
             "nc"),'.'))
 
         filenames[n] = fname
+        @debug "checking cache" fname
 
         if !isfile(fname)
             if verbose
