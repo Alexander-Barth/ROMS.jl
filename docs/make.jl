@@ -14,7 +14,6 @@ makedocs(
         "Reference" => "reference.md",
         "Plots" => "plots.md",
     ],
-
 )
 
 if CI
