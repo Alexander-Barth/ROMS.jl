@@ -47,7 +47,7 @@ cd My\ Directory\ Name
 
 Please register at:
 * [ROMS (Regional Ocean Modeling System)](https://www.myroms.org/index.php?page=RomsCode).
-* [CMEMS (Copernicus Marine Environment Monitoring Service)](http://marine.copernicus.eu/services-portfolio/register-now/)
+* [CMEMS (Copernicus Marine Environment Monitoring Service)](https://marine.copernicus.eu/services-portfolio/register-now/)
 
 To generate new forcing fields, register at (optional):
 * [ECMWF (European Centre for Medium-Range Weather Forecasts)](https://apps.ecmwf.int/registration/). To access the operational forecast on the MARS service you will need a special permissions granted by your national weather service (in Europe). The default permission will let you access e.g. ERA5 dataset.
@@ -64,7 +64,7 @@ The tutorial can be run either:
 
 #### Preconfigured virtual machine
 
-A preconfigured virtual machine is available [here](http://data-assimilation.net/upload/OCEA0036/Ubuntu-20.04-MATE-Julia-ROMS.ova).
+A preconfigured virtual machine is available [here](https://data-assimilation.net/upload/OCEA0036/Ubuntu-20.04-MATE-Julia-ROMS.ova).
 
 * Virtual Box requires the [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-170) which should be installed before (as of Virtual Box version 7.0.4).
 * Virtual Box can be installed from [here](https://www.virtualbox.org/wiki/Downloads).
@@ -148,7 +148,7 @@ On Windows, various ways exist to install gfortran, GNU make and other dependenc
      * [Installation guide](https://msdn.microsoft.com/en-us/commandline/wsl/install_guide)
      * [FAQ (in particular exchanging files)](https://docs.microsoft.com/en-us/windows/wsl/faq)
 * [Cygwin](https://www.cygwin.com/)
-* [MINGW](http://www.mingw.org/)
+* [MSYS2](https://www.msys2.org/)
 * Linux virtual machine using e.g. VirtualBox
 * ...
 
@@ -262,7 +262,7 @@ Choose an area:
 * What interesting processes are present in your studied area? (note: now we all use the Ligurian Sea)
 * Are there in situ measurements available for your area? Look for temperature and salinity within your areas (for any time frame)
      * Check with [World Ocean Database](https://www.nodc.noaa.gov/OC5/SELECT/dbsearch/dbsearch.html)
-     * [CMEMS in situ Thematic Assemble Centre (TAC)](http://marine.copernicus.eu/)
+     * [CMEMS in situ Thematic Assemble Centre (TAC)](https://marine.copernicus.eu/)
 * Visualize a couple of downloaded profiles:
      * Hints: in Julia you can use the package [`NCDatasets`](https://github.com/Alexander-Barth/NCDatasets.jl)
      * How would you distribute the vertical resolution in your model represent this profile?
@@ -604,7 +604,7 @@ p2.set_clim(p1.get_clim())
 ### Validation
 
 Check out satellite data (e.g. sea surface temperature, sea surface height) at:
-* [CMEMS](http://marine.copernicus.eu/)
+* [CMEMS](https://marine.copernicus.eu/)
 * [PODAAC NASA](https://podaac.jpl.nasa.gov/)
 
 Make some comparison with satellite and the downloaded in situ observation
