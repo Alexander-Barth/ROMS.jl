@@ -461,8 +461,7 @@ cp  ~/src/roms/User/External/roms.in .
 
  * adapt `MyAppCPP` and change it to `LIGURIANSEA`
 
- * adapt file names `VARNAME`, `GRDNAME`, `ININAME`, `BRYNAME`, `CLMNAME`, `FRCNAME` and `NFFILES`
-
+ * adapt file names `VARNAME`, `GRDNAME`, `ININAME`, `BRYNAME`, `CLMNAME`, `FRCNAME` and `NFFILES` (`varinfo.dat`, `LS2v.nc`, `ic2019.nc`, `bc2019.nc`, `clim2019.nc`, `liguriansea2019_*.nc`, `*` means the different variables). `NFFILES` is the number of forcing files.
  * also make sure that these variables are set (number of files with boundary conditions and climatology). If they do not exist, they need to be added (near `BRYNAME` for example).
 
 ```
