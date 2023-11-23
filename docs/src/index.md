@@ -330,9 +330,9 @@ include("yourdomain_config.jl")
 
 ### ROMS compilation
 
-* Create a directory (avoid directory names with spaces) for your model configuration
+* Create a directory (avoid directory names with spaces) for your model configuration. Here we use the directory name `ROMS-implementation-test` in your home folder. 
 * Compile ROMS:
-    * configure ROMS by creating a file `yourdomain.h` (e.g. `liguriansea.h` for the Ligurian Sea):
+    * configure ROMS by creating a file `yourdomain.h` (e.g. `liguriansea.h` for the Ligurian Sea) in `ROMS-implementation-test`:
 
 ```C
 #define UV_ADV                    /* turn ON advection terms */
