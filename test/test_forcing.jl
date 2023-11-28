@@ -15,7 +15,7 @@ using Downloads: download
 # generate reference data:
 # * apply patch d_ecmwf2roms.m.patch
 # * run matlab d_ecmwf2roms.m script to generate gom_*_era.nc files
-
+# * be aware that units have changed for swflux
 
 datadir = joinpath(dirname(@__FILE__),"..","data")
 
@@ -27,6 +27,17 @@ if !isdir(datadir)
         run(`unzip $testdatazip`)
     end
     datadir = joinpath(temporarydir,"ROMS-test-data")
+end
+
+# change units in swflux issue #10
+# https://www.myroms.org/projects/src/ticket/870
+NCDataset(joinpath(datadir,"gom_swflux_era.nc"),"a") do ds
+    @assert ds["swflux"].attrib["units"] in ("centimeter day-1","m s-1")
+
+    if ds["swflux"].attrib["units"] == "centimeter day-1"
+        ds["swflux"][:,:,:] = ds["swflux"][:,:,:] * 0.01 / (24*60*60)
+        ds["swflux"].attrib["units"] = "m s-1" # was centimeter day-1
+    end
 end
 
 @show datadir

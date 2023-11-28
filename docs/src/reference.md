@@ -5,6 +5,7 @@
 ```@docs
 ROMS.create_grid
 ROMS.smoothgrid
+ROMS.stiffness_ratios
 ROMS.reduce_res
 ROMS.stretching
 ROMS.Grid

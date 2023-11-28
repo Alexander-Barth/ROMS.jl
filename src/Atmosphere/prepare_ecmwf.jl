@@ -81,7 +81,7 @@ function prepare_ecmwf(
             ECMWFname = "",
             accumulation = true,
             output = "swflux",
-            scale  = 100.0/Δt_seconds*(24*3600.0),
+            scale  = 1.0/Δt_seconds,
         ),
         (
             Vname  = "swrad",

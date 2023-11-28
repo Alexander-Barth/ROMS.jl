@@ -2,11 +2,8 @@
     rx0,rx1 = ROMS.stiffness_ratios(mask_u,mask_v,z_w)
     rx0,rx1 = ROMS.stiffness_ratios(domain)
 
-Compute maximum grid stiffness ratios following Beckmann and Haidvogel [1]
-(rx0) and Haney [2] (rx1).
-
-[1] https://doi.org/10.1175/1520-0485(1993)023<1736:NSOFAA>2.0.CO;2
-[2] https://doi.org/10.1175/1520-0485(1991)021<0610:OTPGFO>2.0.CO;2
+Compute maximum grid stiffness ratios following [Beckmann and Haidvogel](https://doi.org/10.1175/1520-0485(1993)023<1736:NSOFAA>2.0.CO;2)
+(`rx0`) and [Haney](https://doi.org/10.1175/1520-0485(1991)021<0610:OTPGFO>2.0.CO;2) (`rx1`).
 """
 function stiffness_ratios(mask_u,mask_v,z_w::AbstractArray{T,3}) where T
     # u -> julia j = 2: Fortran Jstr=1

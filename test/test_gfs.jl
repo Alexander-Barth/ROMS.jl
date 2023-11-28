@@ -1,12 +1,12 @@
 
 # We assume that the OPENDAP server
 
-# https://rda.ucar.edu/thredds/catalog/files/g/ds084.1/catalog.html
-# https://rda.ucar.edu/thredds/catalog/files/g/ds084.1/2015/20150115/catalog.html
-# https://rda.ucar.edu/thredds/dodsC/files/g/ds084.1/2015/20150115/gfs.0p25.2015011500.f003.grib2.html
+# https://thredds.rda.ucar.edu/thredds/catalog/files/g/ds084.1/catalog.html
+# https://thredds.rda.ucar.edu/thredds/catalog/files/g/ds084.1/2015/20150115/catalog.html
+# https://thredds.rda.ucar.edu/thredds/dodsC/files/g/ds084.1/2015/20150115/gfs.0p25.2015011500.f003.grib2.html
 
-# https://rda.ucar.edu/thredds/dodsC/files/g/ds084.1/2015/20150115/gfs.0p25.2015011500.f003.grib2.das
-# https://rda.ucar.edu/thredds/dodsC/files/g/ds084.1/2015/20150115/gfs.0p25.2015011500.f003.grib2.dds
+# https://thredds.rda.ucar.edu/thredds/dodsC/files/g/ds084.1/2015/20150115/gfs.0p25.2015011500.f003.grib2.das
+# https://thredds.rda.ucar.edu/thredds/dodsC/files/g/ds084.1/2015/20150115/gfs.0p25.2015011500.f003.grib2.dds
 
 # produce the same output as:
 
@@ -44,7 +44,7 @@ cachedir = expanduser("~/tmp/GFS")
 
 # pre-fill cache (becase server unreliable)
 # source
-# https://rda.ucar.edu/thredds/catalog/files/g/ds084.1/2019/20190101/catalog.html
+# https://thredds.rda.ucar.edu/thredds/catalog/files/g/ds084.1/2019/20190101/catalog.html
 if !isdir(cachedir)
     gfs_data_zip = download("https://dox.ulg.ac.be/index.php/s/O5MH4WLKJqV8iXm/download")
     mkpath(cachedir)
