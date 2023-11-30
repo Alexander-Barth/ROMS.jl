@@ -443,7 +443,7 @@ diff ~/src/roms/ROMS/Bin/build_roms.sh build_roms.sh
 ./build_roms.sh -j 2
 ```
 
- * copy `varinfo.dat` from `~/src/roms/ROMS/External/varinfo.dat` in your directory for your simulation (e.g. `Simulation1`):
+ * copy `varinfo.dat` from `~/src/roms/ROMS/External/varinfo.dat` in your directory for your simulation (e.g. `ROMS-implementation-test`):
 
 ```bash
 cp ~/src/roms/ROMS/External/varinfo.dat .
@@ -464,7 +464,7 @@ cp  ~/src/roms/User/External/roms.in .
  * adapt `MyAppCPP` and change it to `LIGURIANSEA`
 
  * adapt file names `VARNAME`, `GRDNAME`, `ININAME`, `BRYNAME`, `CLMNAME`, `FRCNAME` and `NFFILES` (`varinfo.dat`, `LS2v.nc`, `ic2019.nc`, `bc2019.nc`, `clim2019.nc`, `liguriansea2019_*.nc`, `*` means the different variables). `NFFILES` is the number of forcing files.
- * also make sure that these variables are set (number of files with boundary conditions and climatology). If they do not exist, they need to be added (near `BRYNAME` for example).
+ * also make sure that these variables are set (number of files with boundary conditions and climatology). If they do not exist, they need to be added (before the line with `BRYNAME`).
 
 ```
  NBCFILES == 1
@@ -487,7 +487,7 @@ DSTART = ...
 TIME_REF =  18581117
 ```
 
-where `DSTART` is here the number of days since 1858-11-17 or November 17, 1858 (see also [modified Julia day](https://en.wikipedia.org/wiki/Julian_day#Variants)). For instance the number of days since 2014-01-01 (year-month-day) can be computed by of following commands in Julia:
+where `DSTART` is here the number of days since 1858-11-17 or November 17, 1858 (see also [modified Julia day](https://en.wikipedia.org/wiki/Julian_day#Variants)) of the start of the model simulation (`t0` in the julia script). For instance the number of days since 2014-01-01 (year-month-day) can be computed by of following commands in Julia:
 
 ```julia
 using Dates
@@ -504,6 +504,7 @@ Date(1858,11,17) + Day(58849)
 You can use `DateTime` if you want to specify hour, minutes or seconds.
 
 * Adapt the length of a time step `DT` (in seconds) and number of time steps `NTIMES`
+* `DT` can be 300 seconds
 * Initially we choose:
     * `NTIMES` -> number of time step corresponding to 2 days (e.g. `2*24*60*60/DT` where `DT` is the time steps in seconds)
     * `NHIS`, `NAVG`-> number of time steps corresponding to 1 hour

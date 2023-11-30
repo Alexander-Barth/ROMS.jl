@@ -53,7 +53,7 @@ The surface surface temperature (or salinity) of the model output or
 climatology file can be visualized as follows.
 The parameter `n` is the time instance to plot.
 Make sure that your current working directory
-contains the file to plot (use e.g. `;cd ~/ROMS-implementation-test/Simulation1` to plot `roms_his.nc`)
+contains the file to plot (use e.g. `;cd ~/ROMS-implementation-test/` to plot `roms_his.nc`)
 
 ```@example example_config
 # instance to plot
