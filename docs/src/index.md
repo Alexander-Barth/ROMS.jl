@@ -530,6 +530,15 @@ OBCFAC == 10.0d0                      ! nondimensional
 
 Set also `NUDNAME` to the file name create by the julia script.
 
+
+* Make sure that `THETA_S`, `THETA_B`, `TCLINE`, `Vtransform` and `Vstretching` match the values in your julia script.
+
+* Review your changes with:
+
+```bash
+diff  ~/src/roms/User/External/roms.in roms.in
+```
+
 ### Run ROMS
 
 #### Run ROMS without MPI
