@@ -20,6 +20,14 @@ Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 URIs = "5c2747f8-b7ea-4ff2-ba2e-563bfd36b1d4"
 
+[compat]
+NCDatasets = "0.12, 0.13, 0.14"
+DIVAnd = "2.7"
+Interpolations = "0.12, 0.13, 0.14, 0.15"
+DataStructures = "0.17, 0.18"
+PyPlot = "2"
+Statistics = "1"
+
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
