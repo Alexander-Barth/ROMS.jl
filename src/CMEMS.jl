@@ -181,7 +181,7 @@ function CMEMS_opendap(username,password,mapping,cachedir;
         urls[k] = string(URI(baseURI,path=joinpath(baseURI.path,v[end])))
     end
 
-    return OPENDAP(
+    return OPENDAP{NCDataset}(
         urls,cachedir,
         Dict{Symbol,String}(),
         chunks)

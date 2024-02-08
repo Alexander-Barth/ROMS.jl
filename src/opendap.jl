@@ -1,48 +1,48 @@
-struct OPENDAP <: ROMS.AbstractDataset
+struct OPENDAP{TDS} <: ROMS.AbstractDataset
     url::DefaultDict{Symbol,String,String}
     cachedir::String
     mapping::Dict{Symbol,String}
     chunks::Int
 end
 
-function getvar(h::OPENDAP,ds,name)
-    if haskey(h.mapping,name)
-        ncvar = ds[h.mapping[name]]
+function getvar(h::OPENDAP,ds,variablename)
+    if haskey(h.mapping,variablename)
+        ncvar = ds[h.mapping[variablename]]
     else
-        ncvars = varbyattrib(ds,standard_name = String(name));
+        ncvars = varbyattrib(ds,standard_name = String(variablename));
 
         if length(ncvars) != 1
-            error("$(length(ncvars)) variables with the standard name attribute equal to '$name' found.")
+            error("$(length(ncvars)) variables with the standard name attribute equal to '$variablename' found.")
         end
 
         ncvar = ncvars[1];
     end
 
-    @debug "NetCDF variable $(NCDatasets.name(ncvar)) with the size of $(size(ncvar)) is used for $name"
+    @debug "NetCDF variable $(name(ncvar)) with the size of $(size(ncvar)) is used for $variablename"
     return ncvar
 end
 
 rg(i) = i[1]:i[end]
 
-function download(dsopendap::OPENDAP,name::Symbol;
-                  longitude=nothing,latitude=nothing,time=nothing)
+function download(dsopendap::OPENDAP{TDS},variablename::Symbol;
+                  longitude=nothing,latitude=nothing,time=nothing) where TDS
 
     mkpath(dsopendap.cachedir)
-    uri = URI(dsopendap.url[name])
-    _ds = NCDataset(dsopendap.url[name])
-    ncvar = getvar(dsopendap,_ds,name)
+    uri = URI(dsopendap.url[variablename])
+    _ds = TDS(dsopendap.url[variablename])
+    ncvar = getvar(dsopendap,_ds,variablename)
 
     nclon = coord(ncvar,"longitude")
     nclat = coord(ncvar,"latitude")
     nctime = coord(ncvar,"time")
 
-    indices = (; ((Symbol(NCDatasets.name(ncv)), rg(findall(first(b) .<= ncv[:] .<= last(b))) )
+    indices = (; ((Symbol(name(ncv)), rg(findall(first(b) .<= ncv[:] .<= last(b))) )
                   for (ncv,b) in [ (nclon,longitude),(nclat,latitude),(nctime,time)]) ...)
 
     time_indices = indices[3]
-    time_dim = Symbol(NCDatasets.name(nctime))
-    varname = NCDatasets.name(ncvar)
-    include_var = NCDatasets.name.([ncvar,nclon,nclat,nctime])
+    time_dim = Symbol(name(nctime))
+    varname = name(ncvar)
+    include_var = name.([ncvar,nclon,nclat,nctime])
 
     if ndims(ncvar) == 4
         push!(include_var,"depth")
@@ -60,7 +60,7 @@ function download(dsopendap::OPENDAP,name::Symbol;
         fname_subset = joinpath(dsopendap.cachedir,join([
             uri.host,
             replace(uri.path,'/' => '-'),
-            "$name",
+            "$variablename",
             "lon",join(string.(longitude),'-'),
             "lat",join(string.(latitude),'-'),
             "time",join(string.(time_range0),'-')],'-') * ".nc")
@@ -71,7 +71,7 @@ function download(dsopendap::OPENDAP,name::Symbol;
             # download to a temporary file in case
             # the download fails
             tmp = fname_subset * ".partial-" * randstring(12)
-            ds_subset = NCDatasets.SubDataset(_ds, indices0)
+            ds_subset = view(_ds; pairs(indices0)...)
 
             @info "download $name in $fname_subset"
             NCDataset(tmp,"c") do ds
@@ -93,8 +93,8 @@ function download(dsopendap::OPENDAP,name::Symbol;
     return fnames_subset,varname
 end
 
-function load(dsopendap::OPENDAP,name::Symbol; kwargs...)
-    filenames,varname = download(dsopendap,name; kwargs...)
+function load(dsopendap::OPENDAP,variablename::Symbol; kwargs...)
+    filenames,varname = download(dsopendap,variablename; kwargs...)
     ds = NCDataset(filenames,"r", aggdim = "time")
 
     ncvar = ds[varname]
@@ -104,7 +104,7 @@ function load(dsopendap::OPENDAP,name::Symbol; kwargs...)
 
     if ndims(ncvar) == 3
         @debug "time: $t"
-        @debug "size $name: $(size(ncvar))"
+        @debug "size $variablename: $(size(ncvar))"
         return (ncvar,(x,y,t))
     else
         ncdepth = ds["depth"]
@@ -115,7 +115,7 @@ function load(dsopendap::OPENDAP,name::Symbol; kwargs...)
         end
         @debug "depth: $z"
         @debug "time: $t"
-        @debug "size $name: $(size(ncvar))"
+        @debug "size $variablename: $(size(ncvar))"
 
         return (ncvar,(x,y,z,t))
     end
