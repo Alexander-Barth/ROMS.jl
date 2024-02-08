@@ -178,7 +178,13 @@ function CMEMS_opendap(username,password,mapping,cachedir;
 
     urls = DefaultDict{Symbol,String,String}("unknown")
     for (k,v) in mapping
-        urls[k] = string(URI(baseURI,path=joinpath(baseURI.path,v[end])))
+        dataset_id =
+            if length(v) > 1
+                v[end]
+            else
+                v
+            end
+        urls[k] = string(URI(baseURI,path=joinpath(baseURI.path,dataset_id)))
     end
 
     return OPENDAP{NCDataset}(
