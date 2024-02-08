@@ -45,7 +45,9 @@ function download(dsopendap::OPENDAP{TDS},variablename::Symbol;
     include_var = name.([ncvar,nclon,nclat,nctime])
 
     if ndims(ncvar) == 4
-        push!(include_var,"depth")
+        # depth is sometimes called elevation
+        # with always has the standard_name depth
+        push!(include_var,name(_ds[CF"depth"]))
     end
 
     fnames_subset = String[]
@@ -107,7 +109,7 @@ function load(dsopendap::OPENDAP,variablename::Symbol; kwargs...)
         @debug "size $variablename: $(size(ncvar))"
         return (ncvar,(x,y,t))
     else
-        ncdepth = ds["depth"]
+        ncdepth = ds[CF"depth"]
         z = nomissing(ncdepth[:])
         if get(ncdepth.attrib,"positive","up") == "down"
             # change vertical axis to positive up
