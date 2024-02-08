@@ -131,7 +131,8 @@ cd roms
 git checkout roms-4.0
 ```
 
-For the git command, you will cneed to provide your ROMS username and password.
+For the git command, you will need to provide your ROMS username and password.
+The output of the last command will tell you that `You are in 'detached HEAD' state.` (this is not an error).
 
 
 Other required software typically available from a package manager:
@@ -332,7 +333,7 @@ include("yourdomain_config.jl")
 
 ### ROMS compilation
 
-* Create a directory (avoid directory names with spaces) for your model configuration. Here we use the directory name `ROMS-implementation-test` in your home folder. 
+* Create a directory (avoid directory names with spaces) for your model configuration. Here we use the directory name `ROMS-implementation-test` in your home folder.
 * Compile ROMS:
     * configure ROMS by creating a file `yourdomain.h` (e.g. `liguriansea.h` for the Ligurian Sea) in `ROMS-implementation-test`:
 
