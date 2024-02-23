@@ -111,7 +111,9 @@ function load(dsopendap::OPENDAP,variablename::Symbol; kwargs...)
     else
         ncdepth = ds[CF"depth"]
         z = nomissing(ncdepth[:])
-        if get(ncdepth.attrib,"positive","up") == "down"
+        # CMEMS Zarr file have the wrong attributes
+        #if get(ncdepth.attrib,"positive","up") == "down"
+        if mean(z) > 0
             # change vertical axis to positive up
             z = -z
         end
