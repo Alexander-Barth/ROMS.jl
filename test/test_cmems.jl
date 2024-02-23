@@ -22,7 +22,7 @@ if haskey(ENV,"CMEMS_USERNAME")
     cmems_password = ENV["CMEMS_PASSWORD"]
 
     mapping = Dict(
-        # var  product_id
+        # var  dataset_id
         :sea_surface_height_above_geoid => ("zos","med-cmcc-ssh-rean-d"),
         :sea_water_potential_temperature => ("thetao", "med-cmcc-tem-rean-d"),
         :sea_water_salinity => ("so","med-cmcc-sal-rean-d"),
