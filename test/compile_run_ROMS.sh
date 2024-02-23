@@ -9,7 +9,10 @@ BUILD_DIR="$HOME/ROMS-implementation-test"
 mkdir -p ~/src/
 cd ~/src/
 
+if [ ! -d roms ]; then
+
 git config --global credential.helper '!f() { sleep 1; echo "username=${ROMS_USERNAME}"; echo "password=${ROMS_PASSWORD}"; }; f'
+
 
 git clone https://www.myroms.org/git/src roms
 cd roms
@@ -31,6 +34,7 @@ index a878a381..27ac9004 100644
          FREEFLAGS := -ffree-form -ffree-line-length-none
                CPP := /usr/bin/cpp
 EOF
+fi
 fi
 
 mkdir -p "$BUILD_DIR"
