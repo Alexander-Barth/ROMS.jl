@@ -54,6 +54,11 @@ jobs:
           motuclient --version
           git config --global user.name Tester
           git config --global user.email te@st.er
+      - name: Install ZarrDatasets
+        run: |
+           import Pkg
+           Pkg.add("https://github.com/JuliaGeo/ZarrDatasets.jl")
+        shell: julia --color=yes --project=@. {0}
       - uses: julia-actions/julia-runtest@latest
         continue-on-error: ${{ matrix.version == 'nightly' }}
         env:

@@ -3,6 +3,22 @@ struct OPENDAP{TDS} <: ROMS.AbstractDataset
     cachedir::String
     mapping::Dict{Symbol,String}
     chunks::Int
+    options::Dict{Symbol,Any}
+end
+
+
+function OPENDAP(TDS,urls;
+                 mapping = Dict{Symbol,String}(),
+                 cachedir = tempdir(),
+                 chunks = 60,
+                 options = Dict{Symbol,Any}())
+
+    return OPENDAP{TDS}(
+        urls,
+        cachedir,
+        mapping,
+        chunks,
+        options)
 end
 
 function getvar(h::OPENDAP,ds,variablename)
@@ -29,7 +45,7 @@ function download(dsopendap::OPENDAP{TDS},variablename::Symbol;
 
     mkpath(dsopendap.cachedir)
     uri = URI(dsopendap.url[variablename])
-    _ds = TDS(dsopendap.url[variablename])
+    _ds = TDS(dsopendap.url[variablename]; dsopendap.options...)
     ncvar = getvar(dsopendap,_ds,variablename)
 
     nclon = coord(ncvar,"longitude")

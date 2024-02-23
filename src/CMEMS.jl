@@ -187,8 +187,52 @@ function CMEMS_opendap(username,password,mapping,cachedir;
         urls[k] = string(URI(baseURI,path=joinpath(baseURI.path,dataset_id)))
     end
 
-    return OPENDAP{NCDataset}(
-        urls,cachedir,
-        Dict{Symbol,String}(),
-        chunks)
+    return OPENDAP(
+        NCDataset,
+        urls,
+        cachedir = cachedir,
+        chunks = chunks)
+end
+
+
+
+function copernicus_marine_resolve(
+    product_id,dataset_id;
+    asset_name = "timeChunked",
+    catalog_url = "https://stac.marine.copernicus.eu/metadata/catalog.stac.json")
+
+    cat = STAC.Catalog(catalog_url);
+    item_canditates = sort(filter(startswith(dataset_id),keys(cat[product_id].items)))
+    # use last version per default
+    dataset_version_id = item_canditates[end]
+    item = cat[product_id].items[dataset_version_id]
+    return href(item.assets[asset_name])
+end
+
+
+function CMEMS_zarr(product_id,mapping,cachedir;
+                    chunks = 60,
+                    kwargs...
+                    )
+
+    urls = DefaultDict{Symbol,String,String}("unknown")
+    for (k,v) in mapping
+        dataset_id =
+            if length(v) > 1
+                v[end]
+            else
+                v
+            end
+        urls[k] = copernicus_marine_resolve(product_id,dataset_id; kwargs...)
+    end
+
+
+    dataset = OPENDAP(
+        ZarrDataset,
+        urls,
+        cachedir = cachedir,
+        options = Dict(:_omitcode => [404,403]),
+        chunks = chunks)
+
+    return dataset
 end

@@ -13,6 +13,8 @@ using Statistics
 using URIs
 import Base: getindex, download
 using Base.Threads
+using STAC
+using ZarrDatasets
 
 include("constants.jl")
 include("types.jl")
