@@ -31,8 +31,9 @@ if haskey(ENV,"CMEMS_USERNAME")
     )
 
 
-    dataset_cmems = ROMS.CMEMS_opendap(cmems_username,cmems_password,mapping,outdir)
-    push!(datasets,dataset_cmems)
+    # CMEMS opendap is retired
+    #dataset_cmems = ROMS.CMEMS_opendap(cmems_username,cmems_password,mapping,outdir)
+    #push!(datasets,dataset_cmems)
 end
 
 
