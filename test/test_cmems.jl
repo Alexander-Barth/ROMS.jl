@@ -34,8 +34,10 @@ if haskey(ENV,"CMEMS_USERNAME")
         :northward_sea_water_velocity => ("vo", "med-cmcc-cur-rean-d"),
     )
 
-    dataset_cmems_opendap = ROMS.CMEMS_opendap(cmems_username,cmems_password,mapping,outdir)
-    push!(datasets,dataset_cmems_opendap)
+
+    # CMEMS opendap is retired
+    #dataset_cmems_opendap = ROMS.CMEMS_opendap(cmems_username,cmems_password,mapping,outdir)
+    #push!(datasets,dataset_cmems_opendap)
 end
 
 # CMEMS Zarr ARCO
