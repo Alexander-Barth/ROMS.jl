@@ -72,8 +72,8 @@ for dataset in datasets
 end
 
 
-vo,(xo,yo,zo,to) = ROMS.load(dataset_cmems_opendap,:sea_water_potential_temperature,
-                             longitude = xr, latitude = yr, time = tr);
+#vo,(xo,yo,zo,to) = ROMS.load(dataset_cmems_opendap,:sea_water_potential_temperature,
+#                             longitude = xr, latitude = yr, time = tr);
 
 vz,(xz,yz,zz,tz) = ROMS.load(dataset_cmems_zarr,:sea_water_potential_temperature,
                              longitude = xr, latitude = yr, time = tr);

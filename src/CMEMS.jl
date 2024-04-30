@@ -212,7 +212,7 @@ end
 
 function CMEMS_zarr(product_id,mapping,cachedir;
                     chunks = 60,
-                    time_shift = 0,
+                    time_shift = 0, # time shift in seconds as Int
                     kwargs...
                     )
 
