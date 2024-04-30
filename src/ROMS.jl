@@ -1,7 +1,10 @@
 module ROMS
 
+import Base: getindex
+import Downloads: download
+import STAC
+using Base.Threads
 using DIVAnd
-using DataStructures
 using DataStructures
 using Dates
 using Interpolations
@@ -9,11 +12,9 @@ using NCDatasets
 using Printf
 using PyPlot
 using Random
+using SHA
 using Statistics
 using URIs
-import Base: getindex, download
-using Base.Threads
-using STAC
 using ZarrDatasets
 
 include("constants.jl")

@@ -109,6 +109,7 @@ mkpath(outdir)
 
 service_id = "MEDSEA_MULTIYEAR_PHY_006_004-TDS"
 motu_server = "https://my.cmems-du.eu/motu-web/Motu"
+product_id = "MEDSEA_MULTIYEAR_PHY_006_004"
 
 mapping = Dict(
     # var  product_id
@@ -119,7 +120,8 @@ mapping = Dict(
     :northward_sea_water_velocity => ("vo", "med-cmcc-cur-rean-d"),
 )
 
-dataset = ROMS.CMEMS_opendap(cmems_username,cmems_password,mapping,outdir)
+#dataset = ROMS.CMEMS_opendap(cmems_username,cmems_password,mapping,outdir)
+dataset = ROMS.CMEMS_zarr(product_id,mapping,outdir)
 
 # take one extra day
 tr = [t0-Dates.Day(1), t1+Dates.Day(1)]

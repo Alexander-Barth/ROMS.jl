@@ -206,12 +206,13 @@ function copernicus_marine_resolve(
     # use last version per default
     dataset_version_id = item_canditates[end]
     item = cat[product_id].items[dataset_version_id]
-    return href(item.assets[asset_name])
+    return STAC.href(item.assets[asset_name])
 end
 
 
 function CMEMS_zarr(product_id,mapping,cachedir;
                     chunks = 60,
+                    time_shift = 0,
                     kwargs...
                     )
 
@@ -232,6 +233,7 @@ function CMEMS_zarr(product_id,mapping,cachedir;
         urls,
         cachedir = cachedir,
         options = Dict(:_omitcode => [404,403]),
+        time_shift = time_shift,
         chunks = chunks)
 
     return dataset

@@ -1,3 +1,5 @@
+# https://help.marine.copernicus.eu/en/articles/8656000-differences-between-netcdf-and-arco-formats
+
 using DataStructures
 using Dates
 using ROMS
@@ -32,8 +34,8 @@ if haskey(ENV,"CMEMS_USERNAME")
         :northward_sea_water_velocity => ("vo", "med-cmcc-cur-rean-d"),
     )
 
-    dataset_cmems = ROMS.CMEMS_opendap(cmems_username,cmems_password,mapping,outdir)
-    push!(datasets,dataset_cmems)
+    dataset_cmems_opendap = ROMS.CMEMS_opendap(cmems_username,cmems_password,mapping,outdir)
+    push!(datasets,dataset_cmems_opendap)
 end
 
 # CMEMS Zarr ARCO
@@ -49,7 +51,8 @@ mapping = Dict(
     :northward_sea_water_velocity => ("vo", "med-cmcc-cur-rean-d"),
 )
 
-dataset_cmems_zarr = CMEMS_zarr(product_id,mapping,outdir)
+dataset_cmems_zarr = CMEMS_zarr(product_id,mapping,outdir,
+                                time_shift = 12*60*60)
 push!(datasets,dataset_cmems_zarr)
 
 #url = "https://tds.hycom.org/thredds/dodsC/GLBy0.08/expt_93.0"
@@ -65,3 +68,10 @@ for dataset in datasets
     @test all(z .<= 0)
     @test all(tr[1] .<= t .<= tr[end])
 end
+
+
+vo,(xo,yo,zo,to) = ROMS.load(dataset_cmems_opendap,:sea_water_potential_temperature,
+                             longitude = xr, latitude = yr, time = tr);
+
+vz,(xz,yz,zz,tz) = ROMS.load(dataset_cmems_zarr,:sea_water_potential_temperature,
+                             longitude = xr, latitude = yr, time = tr);

@@ -4,6 +4,7 @@ struct OPENDAP{TDS} <: ROMS.AbstractDataset
     mapping::Dict{Symbol,String}
     chunks::Int
     options::Dict{Symbol,Any}
+    time_shift::Int
 end
 
 
@@ -11,14 +12,18 @@ function OPENDAP(TDS,urls;
                  mapping = Dict{Symbol,String}(),
                  cachedir = tempdir(),
                  chunks = 60,
-                 options = Dict{Symbol,Any}())
+                 options = Dict{Symbol,Any}(),
+                 time_shift = 0,
+                 )
 
     return OPENDAP{TDS}(
         urls,
         cachedir,
         mapping,
         chunks,
-        options)
+        options,
+        time_shift,
+    )
 end
 
 function getvar(h::OPENDAP,ds,variablename)
@@ -52,6 +57,10 @@ function download(dsopendap::OPENDAP{TDS},variablename::Symbol;
     nclat = coord(ncvar,"latitude")
     nctime = coord(ncvar,"time")
 
+    if !isnothing(time)
+        time = time - Dates.Second(dsopendap.time_shift)
+    end
+
     indices = (; ((Symbol(name(ncv)), rg(findall(first(b) .<= ncv[:] .<= last(b))) )
                   for (ncv,b) in [ (nclon,longitude),(nclat,latitude),(nctime,time)]) ...)
 
@@ -75,13 +84,16 @@ function download(dsopendap::OPENDAP{TDS},variablename::Symbol;
 
         time_range0 = nctime[n0[[1,end]]]
 
-        fname_subset = joinpath(dsopendap.cachedir,join([
+        fbasename = join([
             uri.host,
             replace(uri.path,'/' => '-'),
             "$variablename",
             "lon",join(string.(longitude),'-'),
             "lat",join(string.(latitude),'-'),
-            "time",join(string.(time_range0),'-')],'-') * ".nc")
+            "time",join(string.(time_range0),'-')],'-')
+
+        fbasename = bytes2hex(sha256(fbasename))
+        fname_subset = joinpath(dsopendap.cachedir,fbasename * ".nc")
 
         if isfile(fname_subset)
             @info "$fname_subset is in cache"
@@ -119,6 +131,10 @@ function load(dsopendap::OPENDAP,variablename::Symbol; kwargs...)
     x = coord(ncvar,"longitude")[:]
     y = coord(ncvar,"latitude")[:]
     t = coord(ncvar,"time")[:]
+
+    # https://help.marine.copernicus.eu/en/articles/8656000-differences-between-netcdf-and-arco-formats
+    # Start-of-interval time samples vs centred-of-interval
+    t = t + Dates.Second(dsopendap.time_shift)
 
     if ndims(ncvar) == 3
         @debug "time: $t"
