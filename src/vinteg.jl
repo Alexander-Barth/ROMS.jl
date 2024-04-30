@@ -13,10 +13,14 @@ function vinteg(a,z)
     dz = zeros(imax,jmax,kmax);
 
     # z must be negative in water and decreases with k
+    # z[:,:,1] near surface
+    # z[:,:,end] near bottom
     if any(any(z[:,:,2] .> 0)) || any(any(z[:,:,2] .> z[:,:,1]))
         @debug any(any(z[:,:,2] .> 0))
         @debug any(any(z[:,:,2] .> z[:,:,1]))
-        error("vinteg: not implemented/tested");
+
+        return vinteg(reverse(a,dims=3),reverse(z,dims=3))
+        #error("vinteg: not implemented/tested");
     end
 
     if false
