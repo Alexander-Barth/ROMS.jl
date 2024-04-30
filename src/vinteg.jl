@@ -14,6 +14,8 @@ function vinteg(a,z)
 
     # z must be negative in water and decreases with k
     if any(any(z[:,:,2] .> 0)) || any(any(z[:,:,2] .> z[:,:,1]))
+        @debug any(any(z[:,:,2] .> 0))
+        @debug any(any(z[:,:,2] .> z[:,:,1]))
         error("vinteg: not implemented/tested");
     end
 
