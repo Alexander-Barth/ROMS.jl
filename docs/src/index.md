@@ -96,13 +96,13 @@ If you do not use this virtual machine the following software need to be install
 
 ```bash
 cd /opt/
-sudo wget https://julialang-s3.julialang.org/bin/linux/x64/1.8/julia-1.8.2-linux-x86_64.tar.gz
-sudo tar -xvf julia-1.8.2-linux-x86_64.tar.gz
-sudo rm julia-1.8.2-linux-x86_64.tar.gz
-sudo ln -s /opt/julia-1.8.2/bin/julia /usr/local/bin/julia
+sudo wget https://julialang-s3.julialang.org/bin/linux/x64/1.10/julia-1.10.3-linux-x86_64.tar.gz
+sudo tar -xvf julia-1.10.3-linux-x86_64.tar.gz
+sudo rm julia-1.10.3-linux-x86_64.tar.gz
+sudo ln -s /opt/julia-1.10.3/bin/julia /usr/local/bin/julia
 ```
 
-where `1.8.2` should be replaced by the version number of the current stable release.
+where `1.10.3` should be replaced by the version number of the current stable release.
 More information is available [here](https://julialang.org/downloads/platform/).
 
 Under Linux, you need to install also `python3-matplotlib` for PyPlot. On Debian/Ubuntu, this packages can be installed by this command:
