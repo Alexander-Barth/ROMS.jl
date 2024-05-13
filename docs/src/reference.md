@@ -23,7 +23,7 @@ ROMS.gebco_load
 ## Boundary conditions and initial conditions
 
 ```@docs
-ROMS.CMEMS
+ROMS.CMEMS_zarr
 ROMS.load
 ROMS.interp_clim
 ROMS.extract_ic

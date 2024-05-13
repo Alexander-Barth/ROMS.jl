@@ -157,6 +157,7 @@ function load(dsopendap::CDMDataset,variablename::Symbol; kwargs...)
     end
 end
 
+export load
 
 #=
 

@@ -71,13 +71,6 @@ if !isfile(ecmwf_fname)
     download("https://dox.ulg.ac.be/index.php/s/8NJsCfk53fDFtbz/download",ecmwf_fname)
 end
 
-
-# CMEMS credentials
-# Replace ENV["CMEMS_USERNAME"] by "your_username" and likewise ENV["CMEMS_PASSWORD"]
-
-cmems_username = ENV["CMEMS_USERNAME"]
-cmems_password = ENV["CMEMS_PASSWORD"]
-
 # change time range
 # t0 start time
 # t1 end time
