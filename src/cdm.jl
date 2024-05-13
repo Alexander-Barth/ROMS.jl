@@ -123,6 +123,12 @@ function download(dsopendap::CDMDataset{TDS},variablename::Symbol;
     return fnames_subset,varname
 end
 
+"""
+    v,(x,y,z,t) = ROMS.load(ds,name::Symbol; kwargs...)
+
+Loads a variable from a remote resource `ds`.
+`name` is the NetCDF CF standard name.
+"""
 function load(dsopendap::CDMDataset,variablename::Symbol; kwargs...)
     filenames,varname = download(dsopendap,variablename; kwargs...)
     ds = NCDataset(filenames,"r", aggdim = "time")
