@@ -165,31 +165,6 @@ On Debian/Ubuntu, these packages can be installed by this command:
 sudo apt install gfortran make perl netcdf-bin libnetcdff-dev libopenmpi-dev openmpi-bin git python3-pip python3-setuptools unzip
 ```
 
-* For CMEMS data, you need the python package `motuclient` ([installation instructions](https://github.com/clstoulouse/motu-client-python#Installation)).
-For example:
-
-```bash
-# to install a specific version use
-python3 -m pip install --user motuclient==1.8.6
-# or to install the latest version use:
-# python3 -m pip install --user motuclient
-```
-
-I advice you to use version 1.8.6 of motuclient because of [this issue](https://github.com/clstoulouse/motu-client-python/issues/27).
-Normally you will see the warning `WARNING: The script motuclient is installed in '.../.local/bin' which is not on PATH. Consider adding this directory to PATH`.
-You need to add the following line to the file `.bashrc` located in your home directory (at the end of this file on a separate line):
-
-```
-export PATH="$HOME/.local/bin:$PATH"
-```
-
-In a terminal execute the following so that this change takes effect:
-
-```bash
-source ~/.bashrc
-```
-
-
 * For ECMWF data, you need the package `ecmwf-api-client` (optional). Follow the [installation instructions](https://confluence.ecmwf.int/display/WEBAPI/Access+ECMWF+Public+Datasets) (including the ECMWF key). For questions related to ECMWF data access please also consult [this document](https://www.ecmwf.int/en/forecasts/access-forecasts/ecmwf-web-api).
 * Note that the ECMWF key is different from your ECMWF password.
 
@@ -229,12 +204,6 @@ If you have `nc-config` (with Fortran support) but not `nf-config`, you can run 
 ln -s /usr/bin/nc-config $HOME/bin/nf-config
 ```
 Or set later the environemt variable `NF_CONFIG` to `nc-config`.
-
-* Check the `motuclient` (it may return `vUnknown`, but it should not return `No module named motuclient`)
-
-```bash
-motuclient --version
-```
 
 These commands should return a basic usage info or the version number if they are correctly installed.
 
