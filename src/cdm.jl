@@ -79,7 +79,6 @@ function download(dsopendap::CDMDataset{TDS},variablename::Symbol;
 
     for n in first(time_indices):dsopendap.chunks:last(time_indices)
         n0 = n:min(n+dsopendap.chunks-1,last(time_indices))
-        @show n0
         indices0 = (;indices..., (time_dim => n0,)...)
 
         time_range0 = nctime[n0[[1,end]]]
@@ -119,7 +118,6 @@ function download(dsopendap::CDMDataset{TDS},variablename::Symbol;
     close(_ds)
 
 
-    @show fnames_subset,varname
     return fnames_subset,varname
 end
 
