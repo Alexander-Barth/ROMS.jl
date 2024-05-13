@@ -35,11 +35,6 @@ jobs:
             ${{ runner.os }}-test-${{ env.cache-name }}-
             ${{ runner.os }}-test-
             ${{ runner.os }}-
-      - name: Install ZarrDatasets
-        run: |
-           import Pkg
-           Pkg.add(url="https://github.com/JuliaGeo/ZarrDatasets.jl")
-        shell: julia --color=yes --project=@. {0}
       - uses: julia-actions/julia-buildpkg@latest
       - name: Install dependencies (Linux)
         if: runner.os == 'Linux'
