@@ -1,4 +1,4 @@
-struct CDMDataset{TDS} <: ROMS.AbstractDataset
+struct CDMDataset{TDS} <: AbstractDataset
     url::DefaultDict{Symbol,String,String}
     cachedir::String
     mapping::Dict{Symbol,String}

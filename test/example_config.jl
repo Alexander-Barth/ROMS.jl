@@ -103,21 +103,17 @@ mkpath(outdir)
 # Locate the dataset at https://marine.copernicus.eu/
 
 # Example:
-# https://resources.marine.copernicus.eu/product-detail/MEDSEA_MULTIYEAR_PHY_006_004/INFORMATION
-# Then go to:
-# Data access -> select data set -> Download options -> Subsetter -> View Script
+# https://doi.org/10.25423/CMCC/MEDSEA_MULTIYEAR_PHY_006_004_E3R1
 
-service_id = "MEDSEA_MULTIYEAR_PHY_006_004-TDS"
-motu_server = "https://my.cmems-du.eu/motu-web/Motu"
 product_id = "MEDSEA_MULTIYEAR_PHY_006_004"
 
 mapping = Dict(
-    # var  product_id
-    :sea_surface_height_above_geoid => ("zos","med-cmcc-ssh-rean-d"),
-    :sea_water_potential_temperature => ("thetao", "med-cmcc-tem-rean-d"),
-    :sea_water_salinity => ("so","med-cmcc-sal-rean-d"),
-    :eastward_sea_water_velocity => ("uo", "med-cmcc-cur-rean-d"),
-    :northward_sea_water_velocity => ("vo", "med-cmcc-cur-rean-d"),
+    # var  dataset_id
+    :sea_surface_height_above_geoid => "med-cmcc-ssh-rean-d",
+    :sea_water_potential_temperature => "med-cmcc-tem-rean-d",
+    :sea_water_salinity => "med-cmcc-sal-rean-d",
+    :eastward_sea_water_velocity => "med-cmcc-cur-rean-d",
+    :northward_sea_water_velocity => "med-cmcc-cur-rean-d",
 )
 
 dataset = ROMS.CMEMS_zarr(product_id,mapping,outdir, time_shift = 12*60*60)

@@ -42,11 +42,22 @@ struct Grid{T,TAB}
     z_w::Array{T,3}
 end
 
+
+abstract type AbstractDataset end
+
+struct DatasetVariable{DS<:AbstractDataset}
+    ds::DS
+    name::Symbol
+end
+
+
+
+
 """
     grid = ROMS.Grid(grid_fname,opt)
 
 Loads the ROMS grid from a NetCDF file `grid_fname`. The `grid` structure contains the
-longitude, latitude, depth (`z`), angle and mask at rho, u, v and w points for 
+longitude, latitude, depth (`z`), angle and mask at rho, u, v and w points for
 a C-grid.
 
 !!! note
