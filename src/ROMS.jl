@@ -53,8 +53,8 @@ include("def_bc.jl")
 include("def_nudgecoef.jl")
 
 # Data sources
+include("cdm.jl")
 include("CMEMS.jl")
-include("opendap.jl")
 include("HYCOM.jl")
 include("Atmosphere/thermodynamics.jl")
 include("Atmosphere/prepare_ecmwf.jl")

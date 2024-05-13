@@ -1,4 +1,4 @@
-struct OPENDAP{TDS} <: ROMS.AbstractDataset
+struct CDMDataset{TDS} <: ROMS.AbstractDataset
     url::DefaultDict{Symbol,String,String}
     cachedir::String
     mapping::Dict{Symbol,String}
@@ -8,7 +8,7 @@ struct OPENDAP{TDS} <: ROMS.AbstractDataset
 end
 
 
-function OPENDAP(TDS,urls;
+function CDMDataset(TDS,urls;
                  mapping = Dict{Symbol,String}(),
                  cachedir = tempdir(),
                  chunks = 60,
@@ -16,7 +16,7 @@ function OPENDAP(TDS,urls;
                  time_shift = 0,
                  )
 
-    return OPENDAP{TDS}(
+    return CDMDataset{TDS}(
         urls,
         cachedir,
         mapping,
@@ -26,7 +26,7 @@ function OPENDAP(TDS,urls;
     )
 end
 
-function getvar(h::OPENDAP,ds,variablename)
+function getvar(h::CDMDataset,ds,variablename)
     if haskey(h.mapping,variablename)
         ncvar = ds[h.mapping[variablename]]
     else
@@ -45,7 +45,7 @@ end
 
 rg(i) = i[1]:i[end]
 
-function download(dsopendap::OPENDAP{TDS},variablename::Symbol;
+function download(dsopendap::CDMDataset{TDS},variablename::Symbol;
                   longitude=nothing,latitude=nothing,time=nothing) where TDS
 
     mkpath(dsopendap.cachedir)
@@ -123,7 +123,7 @@ function download(dsopendap::OPENDAP{TDS},variablename::Symbol;
     return fnames_subset,varname
 end
 
-function load(dsopendap::OPENDAP,variablename::Symbol; kwargs...)
+function load(dsopendap::CDMDataset,variablename::Symbol; kwargs...)
     filenames,varname = download(dsopendap,variablename; kwargs...)
     ds = NCDataset(filenames,"r", aggdim = "time")
 
@@ -167,7 +167,7 @@ latitude = -7:-5,
 )
 
 url = "http://tds.hycom.org/thredds/dodsC/GLBu0.08/expt_91.0"
-h = OPENDAP(url,mapping)
+h = CDMDataset(url,mapping)
 
 
 

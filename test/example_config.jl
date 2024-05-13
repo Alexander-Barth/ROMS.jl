@@ -120,9 +120,6 @@ mapping = Dict(
     :northward_sea_water_velocity => ("vo", "med-cmcc-cur-rean-d"),
 )
 
-#=
-dataset = ROMS.CMEMS_opendap(cmems_username,cmems_password,mapping,outdir)
-=#
 dataset = ROMS.CMEMS_zarr(product_id,mapping,outdir, time_shift = 12*60*60)
 
 # take one extra day

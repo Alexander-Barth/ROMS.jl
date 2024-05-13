@@ -187,7 +187,7 @@ function CMEMS_opendap(username,password,mapping,cachedir;
         urls[k] = string(URI(baseURI,path=joinpath(baseURI.path,dataset_id)))
     end
 
-    return OPENDAP(
+    return CDMDataset(
         NCDataset,
         urls,
         cachedir = cachedir,
@@ -228,7 +228,7 @@ function CMEMS_zarr(product_id,mapping,cachedir;
     end
 
 
-    dataset = OPENDAP(
+    dataset = CDMDataset(
         ZarrDataset,
         urls,
         cachedir = cachedir,
