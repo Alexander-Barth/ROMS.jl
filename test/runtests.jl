@@ -31,7 +31,13 @@ end
 
 @testset "Forcing" begin
     include("test_forcing.jl")
-    include("test_gfs.jl")
+
+    if !Sys.iswindows()
+        include("test_gfs.jl")
+    else
+        # https://github.com/Alexander-Barth/ROMS.jl/issues/14
+        @test_broken false
+    end
     include("test_cmems.jl")
 end
 
