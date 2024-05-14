@@ -95,14 +95,14 @@ function download(dsopendap::CDMDataset{TDS},variablename::Symbol;
         fname_subset = joinpath(dsopendap.cachedir,fbasename * ".nc")
 
         if isfile(fname_subset)
-            @info "$fname_subset is in cache"
+            @info "$fname_subset is in cache ($n0)"
         else
             # download to a temporary file in case
             # the download fails
             tmp = fname_subset * ".partial-" * randstring(12)
             ds_subset = view(_ds; pairs(indices0)...)
 
-            @info "download $name in $fname_subset"
+            @info "download $variablename in $fname_subset ($n0)"
             NCDataset(tmp,"c") do ds
                 NCDatasets.write(
                     ds,ds_subset,
