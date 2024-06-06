@@ -21,9 +21,11 @@ function generate_config(grid_fname,x,y,h,mask,pm,pn,dndx,dmde,opt)
     angle = zeros(size(h));
 
     # Earth rotation
-    omega = 2*pi/(24*60*60);
+    # https://web.archive.org/web/20160706153021/https://www.teos-10.org/pubs/gsw/pdf/f.pdf
+    omega = 7.2921150e-5
+
     # Coriolis parameter
-    f = 2*omega * cos.(pi*y/180);
+    f = 2*omega * sind.(y);
 
     @debug "create_grid"
     create_grid(grid_fname,h,f,x,y,mask,angle,pm,pn,dndx,dmde);
