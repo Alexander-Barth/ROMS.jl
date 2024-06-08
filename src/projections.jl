@@ -20,16 +20,16 @@ function map_to_grid(lon,lat,xshift,yshift)
     x = similar(lon)
     y = 0
     x = 0
-
-    for j ∈ 2:size(lon,2)
-        y[:,j] = dlat_m.*(lat[:,j]-lat[:,j-1])+ y[:,j-1]
-    end
-    y = y + yshift.*(y[:,2]-y[:,1])
-
-    for i ∈ 2:size(lon,1)
-        x[i,:] = dlon_m[i,:].*(lon[i,:]-lon[i-1,:])+ x[i-1,:];
-    end
-    x = x + xshift.*(x[2,:]-x[1,:]);
+    # 
+    # for j ∈ 2:size(lon,2)
+    #     y[:,j] = dlat_m.*(lat[:,j]-lat[:,j-1])+ y[:,j-1]
+    # end
+    # y = y + yshift.*(y[:,2]-y[:,1])
+    #
+    # for i ∈ 2:size(lon,1)
+    #     x[i,:] = dlon_m[i,:].*(lon[i,:]-lon[i-1,:])+ x[i-1,:];
+    # end
+    # x = x + xshift.*(x[2,:]-x[1,:]);
 
     return x,y
 end
