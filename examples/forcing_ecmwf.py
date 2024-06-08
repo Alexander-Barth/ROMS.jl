@@ -5,6 +5,9 @@
 # https://www.ecmwf.int/en/forecasts/access-forecasts/ecmwf-web-api
 # https://confluence.ecmwf.int/display/WEBAPI/Access+ECMWF+Public+Datasets
 
+# Once logged-in at https://www.ecmwf.int/
+# retrieve your key
+# https://api.ecmwf.int/v1/key/
 
 # Parameter database
 # https://apps.ecmwf.int/codes/grib/param-db
