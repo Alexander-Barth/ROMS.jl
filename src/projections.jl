@@ -15,7 +15,7 @@ end
 function map_to_grid(lon,lat,xshift,yshift)
 
     dlat_m = 110.574e3
-    dlon_m = 111.320e3*cosd(lat)
+    dlon_m = 111.320e3.*cosd(lat)
     y = similar(lat)
     x = similar(lon)
     y = 0
