@@ -23,8 +23,6 @@ function create_grid(fname,h,f,lon_r,lat_r,mask_r,angle,pm,pn,dndx,dmde)
     lon_u,lon_v,lon_psi = stagger(lon_r)
     lat_u,lat_v,lat_psi = stagger(lat_r)
 
-    m = π/180 * earthradius
-
     x_rho,y_rho = sg_mercator(lon_r,lat_r)
     x_psi,y_psi = sg_mercator(lon_psi,lat_psi)
     x_u,y_u = sg_mercator(lon_u,lat_u)
@@ -61,17 +59,17 @@ function create_grid(fname,h,f,lon_r,lat_r,mask_r,angle,pm,pn,dndx,dmde)
     ds["mask_v"][:] = mask_v
     ds["mask_psi"][:] = mask_psi
 
-    ds["x_rho"][:] = x_rho * m
-    ds["y_rho"][:] = y_rho * m
+    ds["x_rho"][:] = x_rho * earthradius
+    ds["y_rho"][:] = y_rho * earthradius
 
-    ds["x_psi"][:] = x_psi * m
-    ds["y_psi"][:] = y_psi * m
+    ds["x_psi"][:] = x_psi * earthradius
+    ds["y_psi"][:] = y_psi * earthradius
 
-    ds["x_u"][:] = x_u * m
-    ds["y_u"][:] = y_u * m
+    ds["x_u"][:] = x_u * earthradius
+    ds["y_u"][:] = y_u * earthradius
 
-    ds["x_v"][:] = x_v * m
-    ds["y_v"][:] = y_v * m
+    ds["x_v"][:] = x_v * earthradius
+    ds["y_v"][:] = y_v * earthradius
 
     @debug "closing"
     close(ds)
