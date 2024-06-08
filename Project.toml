@@ -27,9 +27,10 @@ ZarrDatasets = "519a4cdf-1362-424a-9ea1-b1d782dbb24b"
 DIVAnd = "2.7"
 DataStructures = "0.17, 0.18"
 Interpolations = "0.12, 0.13, 0.14, 0.15"
-NCDatasets = "0.12, 0.13, 0.14"
+NCDatasets = "0.14"
 PyPlot = "2"
 Statistics = "1"
+STAC = "0.1.2"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
