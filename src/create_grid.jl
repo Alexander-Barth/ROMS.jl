@@ -23,7 +23,7 @@ function create_grid(fname,h,f,lon_r,lat_r,mask_r,angle,pm,pn,dndx,dmde)
     lon_u,lon_v,lon_psi = stagger(lon_r)
     lat_u,lat_v,lat_psi = stagger(lat_r)
 
-    x_rho,y_rho = map_to_grid(lon_rho,lat_rho,0,0)
+    x_rho,y_rho = map_to_grid(lon_r,lat_r,0,0)
     x_u,y_u = map_to_grid(lon_u,lat_u,0.5,0)
     x_v,y_v = map_to_grid(lon_v,lat_v,0,0.5)
     x_psi,y_psi = map_to_grid(lon_psi,lat_psi,0.5,0.5)
