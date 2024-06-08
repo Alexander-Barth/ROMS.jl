@@ -17,13 +17,13 @@ function map_to_grid(lon, lat, xshift, yshift)
 
     y = zeros(size(lon))
     for j = 2:size(lon, 2)
-        y[:, j] = dlat_m * (lat[:, j] .- lat[:, j-1]) + y[:, j-1]
+        y[:, j] = dlat_m * (lat[:, j] .- lat[:, j-1]) .+ y[:, j-1]
     end
     y .+= yshift .* (y[:, 2] .- y[:, 1])
 
     x = zeros(size(lon))
     for i = 2:size(lon, 1)
-        x[i, :] = dlon_m[i, :] .* (lon[i, :] .- lon[i-1, :]) + x[i-1, :]
+        x[i, :] = dlon_m[i, :] .* (lon[i, :] .- lon[i-1, :]) .+ x[i-1, :]
     end
     x .+= xshift .* (x[2, :] .- x[1, :])
 
