@@ -24,7 +24,7 @@ function map_to_grid(lon, lat, xshift, yshift)
         y[:, j] .= dlat_m .* (lat[:, j] .- lat[:, j-1]) .+ y[:, j-1]
     end
     for i = 2:size(lon, 1)
-        y[i,:] .+= yshift .* (y[i, 2] .- y[i, 1])
+        y[i,:] .+= yshift * (y[i, 2] - y[i, 1])
     end
 
     # Initialize x with zeros and preallocate memory
