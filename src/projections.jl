@@ -39,5 +39,10 @@ function map_to_grid(lon, lat, xshift, yshift)
         x[:,j] .+= xshift * (x[2, j] - x[1, j])
     end
 
+    # center the x-grid
+    for j = 1:size(lon,2)
+        x[:, j] .+=  - dlon_m[:, j].* (lon[end, j] - lon[1, j])/2
+    end
+
     return x, y
 end
