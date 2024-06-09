@@ -23,10 +23,10 @@ function create_grid(fname,h,f,lon_r,lat_r,mask_r,angle,pm,pn,dndx,dmde)
     lon_u,lon_v,lon_psi = stagger(lon_r)
     lat_u,lat_v,lat_psi = stagger(lat_r)
 
-    x_rho,y_rho = map_to_grid(lon_r,lat_r,0,0)
-    x_u,y_u = map_to_grid(lon_u,lat_u,0.5,0)
-    x_v,y_v = map_to_grid(lon_v,lat_v,0,0.5)
-    x_psi,y_psi = map_to_grid(lon_psi,lat_psi,0.5,0.5)
+    x_rho,y_rho = sg_mercator(lon_r,lat_r)
+    x_psi,y_psi = sg_mercator(lon_psi,lat_psi)
+    x_u,y_u = sg_mercator(lon_u,lat_u)
+    x_v,y_v = sg_mercator(lon_v,lat_v)
 
     ds["spherical"][:] = 'T'
     ds["lat_rho"][:] = lat_r
@@ -59,18 +59,17 @@ function create_grid(fname,h,f,lon_r,lat_r,mask_r,angle,pm,pn,dndx,dmde)
     ds["mask_v"][:] = mask_v
     ds["mask_psi"][:] = mask_psi
 
-    ds["x_rho"][:] = x_rho
-    ds["y_rho"][:] = y_rho
+    ds["x_rho"][:] = x_rho * earthradius
+    ds["y_rho"][:] = y_rho * earthradius
 
-    ds["x_psi"][:] = x_psi
-    ds["y_psi"][:] = y_psi
+    ds["x_psi"][:] = x_psi * earthradius
+    ds["y_psi"][:] = y_psi * earthradius
 
-    ds["x_u"][:] = x_u
-    ds["y_u"][:] = y_u
+    ds["x_u"][:] = x_u * earthradius
+    ds["y_u"][:] = y_u * earthradius
 
-    ds["x_v"][:] = x_v
-    ds["y_v"][:] = y_v
-
+    ds["x_v"][:] = x_v * earthradius
+    ds["y_v"][:] = y_v * earthradius
 
     @debug "closing"
     close(ds)
