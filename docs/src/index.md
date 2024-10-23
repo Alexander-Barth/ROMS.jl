@@ -168,6 +168,23 @@ sudo apt install gfortran make perl netcdf-bin libnetcdff-dev libopenmpi-dev ope
 * For ECMWF data, you need the package `ecmwf-api-client` (optional). Follow the [installation instructions](https://confluence.ecmwf.int/display/WEBAPI/Access+ECMWF+Public+Datasets) (including the ECMWF key). For questions related to ECMWF data access please also consult [this document](https://www.ecmwf.int/en/forecasts/access-forecasts/ecmwf-web-api).
 * Note that the ECMWF key is different from your ECMWF password.
 
+
+### Install or update the ROMS.jl julia package
+
+Install `ROMS.jl` by using the following command:
+
+```julia
+using Pkg
+Pkg.develop(url="https://github.com/Alexander-Barth/ROMS.jl")
+```
+
+Make sure to use the latest version by using this shell commands:
+
+```bash
+cd .julia/dev/ROMS
+git pull
+```
+
 ### Check your environment
 
 * Check julia version:
@@ -207,20 +224,6 @@ Or set later the environemt variable `NF_CONFIG` to `nc-config`.
 
 These commands should return a basic usage info or the version number if they are correctly installed.
 
-
-Check the presence of `ROMS.jl`, in a julia shell type:
-
-```julia
-using Pkg
-Pkg.status()
-```
-This gives you a list of installed packages which should include the package `ROMS`.
-Install `ROMS.jl` if necessary by:
-
-```julia
-using Pkg
-Pkg.add(url="https://github.com/Alexander-Barth/ROMS.jl")
-```
 
 ### Data
 
