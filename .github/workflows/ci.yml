@@ -50,8 +50,6 @@ jobs:
           python3 -m pip install matplotlib
       - run: |
           python3 -m pip install --upgrade pip
-          python3 -m pip install motuclient==1.8.6
-          motuclient --version
           git config --global user.name Tester
           git config --global user.email te@st.er
       - uses: julia-actions/julia-runtest@latest
