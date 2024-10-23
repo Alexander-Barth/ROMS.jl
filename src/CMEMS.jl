@@ -10,7 +10,8 @@ function copernicus_marine_resolve(
     catalog_url = "https://stac.marine.copernicus.eu/metadata/catalog.stac.json")
 
     cat = STAC.Catalog(catalog_url);
-    item_canditates = sort(filter(startswith(dataset_id),keys(cat[product_id].items)))
+    list_item = collect(keys(cat[product_id].items))
+    item_canditates = sort(filter(startswith(dataset_id),list_item))
     # use last version per default
     dataset_version_id = item_canditates[end]
     item = cat[product_id].items[dataset_version_id]
