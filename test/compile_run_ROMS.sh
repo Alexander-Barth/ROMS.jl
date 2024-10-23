@@ -14,7 +14,7 @@ if [ ! -d roms ]; then
 git config --global credential.helper '!f() { sleep 1; echo "username=${ROMS_USERNAME}"; echo "password=${ROMS_PASSWORD}"; }; f'
 
 
-git clone https://www.myroms.org/git/src roms
+git clone https://github.com/myroms/roms
 cd roms
 git checkout roms-4.0
 

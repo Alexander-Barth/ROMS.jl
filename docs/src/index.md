@@ -126,12 +126,11 @@ Pkg.develop(url="https://github.com/Alexander-Barth/ROMS.jl")
 ```bash
 mkdir ~/src/
 cd ~/src/
-git clone "https://www.myroms.org/git/src" roms
+git clone https://github.com/myroms/roms
 cd roms
 git checkout roms-4.0
 ```
 
-For the git command, you will need to provide your ROMS username and password.
 The output of the last command will tell you that `You are in 'detached HEAD' state.` (this is not an error).
 
 
