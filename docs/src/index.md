@@ -290,7 +290,7 @@ List of variables (*: quantities accumulated over the integration period ("step"
     * ...
 
 * For CMEMS boundary conditions:
-    * You may need to adapt `service_id`, `motu_server` and `mapping` (if the model domain is outside of the Mediterranean Sea)
+    * You may need to adapt the CMEMS `product_id` and `mapping` (if the model domain is outside of the Mediterranean Sea)
     * Data will be downloaded and saved in NetCDF by "chunks" of 60 days in the folder `OGCM` under the content of the variable `basedir`
     * You need to remove the files in this directory if you rerun the script with a different time range.
 
