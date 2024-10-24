@@ -24,7 +24,7 @@ In this example, the bathymetry defined in the grid file is visualized. Make sur
 contains the file `LS2v.nc` (use e.g. `;cd ~/ROMS-implementation-test`)
 
 ```@example example_config
-using ROMS, PyPlot, NCDatasets, GeoDatasets, Statistics
+using ROMS, PythonPlot, NCDatasets, GeoDatasets, Statistics
 
 ds_grid = NCDataset("LS2v.nc");
 lon = ds_grid["lon_rho"][:,:];
