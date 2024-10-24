@@ -10,7 +10,7 @@ using Dates
 using Interpolations
 using NCDatasets
 using Printf
-using PyPlot
+using PythonPlot
 using Random
 using SHA
 using Statistics
