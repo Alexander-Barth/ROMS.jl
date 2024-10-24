@@ -29,7 +29,7 @@ using ROMS, PythonPlot, NCDatasets, GeoDatasets, Statistics
 ds_grid = NCDataset("LS2v.nc");
 lon = ds_grid["lon_rho"][:,:];
 lat = ds_grid["lat_rho"][:,:];
-h = ds_grid["h"][:,:];
+h = nomissing(ds_grid["h"][:,:],NaN);
 mask_rho = ds_grid["mask_rho"][:,:];
 
 clf();
