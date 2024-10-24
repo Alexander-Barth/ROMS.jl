@@ -18,7 +18,7 @@ If you are familiar with Linux and the command line you can skip to section.
     * `rm file`: remove a file (permanently)
     * `find directory_name -name "*foo*"`: find all files under `directory_name` (including sub-directories) whose name contains `foo`.
     * `diff file1 file2`: compare two text files
-    * `gedit filename &`, `pluma filename &` or `editor filename &`: open a text editor to edit a file.
+    * `gnome-text-editor filename &`, `pluma filename &` or `editor filename &`: open a text editor to edit a file.
 
 * Shell keyboard short cuts (also applicable to a julia session):
     * `up-arrow`: show previous command (similarly `down-arrow` show next command)
