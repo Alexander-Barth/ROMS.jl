@@ -105,18 +105,18 @@ sudo ln -s /opt/julia-1.10.3/bin/julia /usr/local/bin/julia
 where `1.10.3` should be replaced by the version number of the current stable release.
 More information is available [here](https://julialang.org/downloads/platform/).
 
-Under Linux, you need to install also `python3-matplotlib` for PyPlot. On Debian/Ubuntu, this packages can be installed by this command:
+Under Linux, you need to install also `python3-matplotlib` for PythonPlot. On Debian/Ubuntu, this packages can be installed by this command:
 
 
 ```bash
 sudo apt install python3-matplotlib
 ```
 
-* Julia package, `PyPlot`, `NCDatasets`, `ROMS` which can be installed by:
+* Julia package, `PythonPlot`, `NCDatasets`, `ROMS` which can be installed by:
 
 ```julia
 using Pkg
-Pkg.add("PyPlot")
+Pkg.add("PythonPlot")
 Pkg.add("NCDatasets")
 Pkg.develop(url="https://github.com/Alexander-Barth/ROMS.jl")
 ```
