@@ -31,7 +31,6 @@ opt = (
 
 """
 function generate_grid(grid_fname,bath_name,xr,yr,red,opt,hmin,rmax;
-                       do_plot = false,
                        postprocess_mask = (x,y,mask) -> mask)
 
     xo,yo,bo = ROMS.gebco_load(bath_name,xr,yr);
@@ -63,9 +62,6 @@ function generate_grid(grid_fname,bath_name,xr,yr,red,opt,hmin,rmax;
     dmde[2:end-1, :] = 0.5*(1 ./ pm[3:end, :] - 1 ./ pm[1:end-2, :]);
     dndx[:, 2:end-1] = 0.5*(1 ./ pn[:, 3:end] - 1 ./ pn[:, 1:end-2]);
 
-    # aspect ratio for plotting
-    ar = [1  cos(mean(y[:]) * pi/180) 1];
-
     # mask
     mask = b .< 0;
 
@@ -81,26 +77,9 @@ function generate_grid(grid_fname,bath_name,xr,yr,red,opt,hmin,rmax;
     b[b .> 0] .= 0;
     b = -b;
 
-    if do_plot
-        field = copy(b)
-        field[.!mask] .= NaN;
-        figure(),pcolor(x,y,field),
-        colorbar()
-        title("Bathymetry")
-        #set(gca,'DataAspectRatio',ar, 'Layer', 'top')
-    end
-
     # smooth bathymetry
 
     h = ROMS.smoothgrid(b,hmin,rmax);
-
-    if do_plot
-        field = copy(b)
-        field[.!mask] .= NaN
-        figure(),pcolor(x,y,field)
-        title("Bathymetry (smooth)")
-        #set(gca,'DataAspectRatio',ar, 'Layer', 'top')
-    end
 
     # generate bathymetry file
 
