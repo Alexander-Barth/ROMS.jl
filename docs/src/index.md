@@ -48,7 +48,6 @@ cd My\ Directory\ Name
 ### Registration
 
 Please register at:
-* [ROMS (Regional Ocean Modeling System)](https://www.myroms.org/index.php?page=RomsCode).
 * [CMEMS (Copernicus Marine Environment Monitoring Service)](https://marine.copernicus.eu/services-portfolio/register-now/)
 
 To generate new forcing fields, register at (optional):
@@ -66,7 +65,7 @@ The tutorial can be run either:
 
 #### Preconfigured virtual machine
 
-A preconfigured virtual machine is available [here](https://data-assimilation.net/upload/OCEA0036/Ubuntu-20.04-MATE-Julia-ROMS.ova). You also need:
+A preconfigured virtual machine is available [here](https://data-assimilation.net/upload/OCEA0036/Ubuntu-24.04-MATE-Julia-ROMS.ova). You also need:
 
 * Virtual Box requires the [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-170) which should be installed before (as of Virtual Box version 7.0.4).
 * Virtual Box can be installed from [here](https://www.virtualbox.org/wiki/Downloads).
@@ -208,18 +207,6 @@ mpirun --help
 ```bash
 nf-config --all
 ```
-*or* the old name `nc-config`:
-
-```bash
-nc-config --all
-```
-
-If you have `nc-config` (with Fortran support) but not `nf-config`, you can run the following:
-
-``` bash
-ln -s /usr/bin/nc-config $HOME/bin/nf-config
-```
-Or set later the environemt variable `NF_CONFIG` to `nc-config`.
 
 These commands should return a basic usage info or the version number if they are correctly installed.
 
