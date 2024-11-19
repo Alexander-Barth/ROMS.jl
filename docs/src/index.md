@@ -17,7 +17,7 @@ If you are familiar with Linux and the command line you can skip to section.
     * `mv source destination`: move a file
     * `rm file`: remove a file (permanently)
     * `find directory_name -name "*foo*"`: find all files under `directory_name` (including sub-directories) whose name contains `foo`.
-    * `diff file1 file2`: compare two text files
+    * `diff -u --color file1 file2`: compare two text files
     * `gnome-text-editor filename &`, `pluma filename &` or `editor filename &`: open a text editor to edit a file.
 
 * Shell keyboard short cuts (also applicable to a julia session):
@@ -291,7 +291,7 @@ include("yourdomain_config.jl")
 
 ### ROMS compilation
 
-* Create a directory (avoid directory names with spaces) for your model configuration. Here we use the directory name `ROMS-implementation-test` in your home folder.
+
 * Compile ROMS:
     * configure ROMS by creating a file `yourdomain.h` (e.g. `liguriansea.h` for the Ligurian Sea) in `ROMS-implementation-test`:
 
@@ -385,15 +385,13 @@ The lines in red have been replaced by the lines in green. The plus and minus si
 
 ```
 
-If you do not have the tool `nf-config`, you need to add this line `export NF_CONFIG=nc-config`.
-
 For ROMS 4.0 and gfortran 11.2, you need to add `-fallow-argument-mismatch` to `FFLAGS` in `Compilers/Linux-gfortran.mk` from the
 ROMS source files. This is expected to be fixed in upcoming version of ROMS.
 
 * Review your changes with:
 
 ```bash
-diff ~/src/roms/ROMS/Bin/build_roms.sh build_roms.sh
+diff -u --color ~/src/roms/ROMS/Bin/build_roms.sh build_roms.sh
 ```
 
 *  compile ROMS by running:
@@ -495,7 +493,7 @@ Set also `NUDNAME` to the file name create by the julia script.
 * Review your changes with:
 
 ```bash
-diff  ~/src/roms/User/External/roms.in roms.in
+diff -u --color ~/src/roms/User/External/roms.in roms.in
 ```
 
 ### Run ROMS
