@@ -186,8 +186,8 @@ halo = 2;
 Niter = 50
 max_tscale = 5e5
 
-nudge_filename = joinpath(basedir,"roms_nud_$(tscale)_$(Niter).nc")
-tracer_NudgeCoef = ROMS.nudgecoef(domain,nudge_filename,alpha,Niter,
+nud_name = joinpath(basedir,"roms_nud_$(tscale)_$(Niter).nc")
+tracer_NudgeCoef = ROMS.nudgecoef(domain,nud_name,alpha,Niter,
                                   halo,tscale; max_tscale = max_tscale)
 
 mkpath(basedir);
@@ -195,20 +195,20 @@ mkpath(modeldir);
 
 for ogcm in [CMEMS_motu,CMEMS_opendap,HYCOM]
     # GCM interpolated on model grid
-    clim_filename =  joinpath(basedir,"clim_$(ogcm)_2019.nc")
+    clm_name =  joinpath(basedir,"clim_$(ogcm)_2019.nc")
 
     # initial conditions
-    ic_filename =  joinpath(basedir,"ic_$(ogcm)_2019.nc")
+    ini_name =  joinpath(basedir,"ic_$(ogcm)_2019.nc")
 
     # boundary conditions
-    bc_filename =  joinpath(basedir,"bc_$(ogcm)_2019.nc")
+    bry_name =  joinpath(basedir,"bc_$(ogcm)_2019.nc")
 
     @info "domain size $(size(domain.mask))"
 
     dataset = ogcm(basedir)
-    ROMS.interp_clim(domain,clim_filename,dataset,tr)
-    ROMS.extract_ic(domain,clim_filename,ic_filename, t0);
-    ROMS.extract_bc(domain,clim_filename,bc_filename)
+    ROMS.interp_clim(domain,clm_name,dataset,tr)
+    ROMS.extract_ic(domain,clm_name,ini_name, t0);
+    ROMS.extract_bc(domain,clm_name,bry_name)
 end
 
 forcing_filenames = Dict()
@@ -223,22 +223,22 @@ for ogcm in [CMEMS_motu,CMEMS_opendap,HYCOM]
     for agcm in [ECMWF_oper,ECMWF_ERA5,GFS]
 
         # GCM interpolated on model grid
-        clim_filename =  joinpath(basedir,"clim_$(ogcm)_2019.nc")
-        ic_filename =  joinpath(basedir,"ic_$(ogcm)_2019.nc")
-        bc_filename =  joinpath(basedir,"bc_$(ogcm)_2019.nc")
+        clm_name =  joinpath(basedir,"clim_$(ogcm)_2019.nc")
+        ini_name =  joinpath(basedir,"ic_$(ogcm)_2019.nc")
+        bry_name =  joinpath(basedir,"bc_$(ogcm)_2019.nc")
 
 
         romsdir = expanduser("~/src/roms")
         simulationdir = joinpath(basedir,"Simulation-$(ogcm)-$(agcm)")
 
         intemplate = joinpath(romsdir,"User","External","roms.in")
-        varname_template = joinpath(romsdir,"ROMS","External","varinfo.dat")
+        var_name_template = joinpath(romsdir,"ROMS","External","varinfo.dat")
 
         mkpath(simulationdir)
         infile = joinpath(simulationdir,"roms.in")
-        varname = joinpath(simulationdir,"varinfo.dat")
+        var_name = joinpath(simulationdir,"varinfo.dat")
 
-        cp(varname_template,varname; force=true)
+        cp(var_name_template,var_name; force=true)
 
         forc_filenames = unique(getindex.(forcing_filenames[agcm],2))
 
@@ -265,11 +265,11 @@ for ogcm in [CMEMS_motu,CMEMS_opendap,HYCOM]
             "TIME_REF" =>  "18581117",
             "NtileI" => NtileI,
             "NtileJ" => NtileJ,
-            "VARNAME" => varname,
+            "VARNAME" => var_name,
             "GRDNAME" => grid_fname,
-            "ININAME" => ic_filename,
-            "BRYNAME" => bc_filename,
-            "CLMNAME" => clim_filename,
+            "ININAME" => ini_name,
+            "BRYNAME" => bry_name,
+            "CLMNAME" => clm_name,
             "NFFILES" => length(forc_filenames),
             "FRCNAME" => join(forc_filenames,"  \\\n       "),
             "Vtransform" => opt.Vtransform,
@@ -292,7 +292,7 @@ for ogcm in [CMEMS_motu,CMEMS_opendap,HYCOM]
             "NAVG" => NAVG,
             "NRST" => NRST,
             "NTIMES" => NTIMES,
-            "NUDNAME" => nudge_filename,
+            "NUDNAME" => nud_name,
             "TNUDG" => "10.0d0 10.0d0",
             "LtracerCLM" => "T T",
             "LnudgeTCLM" => "T T",

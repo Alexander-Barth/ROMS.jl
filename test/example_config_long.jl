@@ -39,13 +39,13 @@ grid_fname = joinpath(modeldir,domain_name * ".nc")
 basedir = modeldir
 
 # GCM interpolated on model grid
-clim_filename =  joinpath(basedir,"clim2019.nc")
+clm_name =  joinpath(basedir,"clim2019.nc")
 
 # initial conditions
-ic_filename =  joinpath(basedir,"ic2019.nc")
+ini_name =  joinpath(basedir,"ic2019.nc")
 
 # boundary conditions
-bc_filename =  joinpath(basedir,"bc2019.nc")
+bry_name =  joinpath(basedir,"bc2019.nc")
 
 # model specific parameters
 opt = (
@@ -118,10 +118,10 @@ dataset = ROMS.CMEMS(cmems_username,cmems_password,service_id,mapping,outdir,
 # take one extra day
 tr = [t0-Dates.Day(1), t1+Dates.Day(1)]
 
-ROMS.interp_clim(domain,clim_filename,dataset,tr)
+ROMS.interp_clim(domain,clm_name,dataset,tr)
 
-ROMS.extract_ic(domain,clim_filename,ic_filename, t0);
-ROMS.extract_bc(domain,clim_filename,bc_filename)
+ROMS.extract_ic(domain,clm_name,ini_name, t0);
+ROMS.extract_bc(domain,clm_name,bry_name)
 
 # Prepare atmospheric forcings
 
@@ -140,8 +140,8 @@ halo = 2;
 Niter = 50
 max_tscale = 5e5
 
-nudge_filename = joinpath(basedir,"roms_nud_$(tscale)_$(Niter).nc")
-tracer_NudgeCoef = ROMS.nudgecoef(domain,nudge_filename,alpha,Niter,
+nud_name = joinpath(basedir,"roms_nud_$(tscale)_$(Niter).nc")
+tracer_NudgeCoef = ROMS.nudgecoef(domain,nud_name,alpha,Niter,
           halo,tscale; max_tscale = max_tscale)
 
 

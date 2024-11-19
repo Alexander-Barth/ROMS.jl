@@ -8,13 +8,13 @@ romsdir = expanduser("~/src/roms")
 simulationdir = joinpath(basedir,"Simulation1")
 
 intemplate = joinpath(romsdir,"User","External","roms.in")
-varname_template = joinpath(romsdir,"ROMS","External","varinfo.dat")
+var_name_template = joinpath(romsdir,"ROMS","External","varinfo.dat")
 
 mkpath(simulationdir)
 infile = joinpath(simulationdir,"roms.in")
-varname = joinpath(simulationdir,"varinfo.dat")
+var_name = joinpath(simulationdir,"varinfo.dat")
 
-cp(varname_template,varname; force=true)
+cp(var_name_template,var_name; force=true)
 
 forc_filenames  = unique(getindex.(forcing_filenames,2))
 
@@ -36,11 +36,11 @@ NTIMES = floor(Int,Dates.value(t1-t0) / (DT * 1000))
 substitutions = Dict(
     "TITLE" => "My test",
     "TIME_REF" =>  "18581117",
-    "VARNAME" => varname,
+    "VARNAME" => var_name,
     "GRDNAME" => grid_fname,
-    "ININAME" => ic_filename,
-    "BRYNAME" => bc_filename,
-    "CLMNAME" => clim_filename,
+    "ININAME" => ini_name,
+    "BRYNAME" => bry_name,
+    "CLMNAME" => clm_name,
     "NFFILES" => length(forc_filenames),
     "FRCNAME" => join(forc_filenames,"  \\\n       "),
     "Vtransform" => opt.Vtransform,
@@ -63,7 +63,7 @@ substitutions = Dict(
     "NAVG" => NAVG,
     "NRST" => NRST,
     "NTIMES" => NTIMES,
-    "NUDNAME" => nudge_filename,
+    "NUDNAME" => nud_name,
     "TNUDG" => "10.0d0 10.0d0",
     "LtracerCLM" => "T T",
     "LnudgeTCLM" => "T T",
