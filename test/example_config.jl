@@ -36,18 +36,18 @@ hmin = 2; # m
 modeldir = expanduser("~/ROMS-implementation-test")
 
 # This file corresponds to GRDNAME in roms.in
-grid_fname = joinpath(modeldir,domain_name * ".nc")
+grd_name = joinpath(modeldir,domain_name * ".nc")
 
 basedir = expanduser("~/ROMS-implementation-test")
 
 # GCM interpolated on model grid (CLMNAME)
-clim_filename =  joinpath(basedir,"clim2019.nc")
+clm_name =  joinpath(basedir,"clim2019.nc")
 
 # initial conditions (ININAME in roms.in)
-ic_filename =  joinpath(basedir,"ic2019.nc")
+ini_name =  joinpath(basedir,"ic2019.nc")
 
 # boundary conditions (BRYNAME in roms.in)
-bc_filename =  joinpath(basedir,"bc2019.nc")
+bry_name =  joinpath(basedir,"bc2019.nc")
 
 # model specific parameters
 opt = (
@@ -83,10 +83,10 @@ t1 = DateTime(2019,1,4);
 mkpath(basedir);
 mkpath(modeldir);
 
-ROMS.generate_grid(grid_fname,bath_name,xr,yr,red,opt,hmin,rmax);
+ROMS.generate_grid(grd_name,bath_name,xr,yr,red,opt,hmin,rmax);
 
 mkpath(basedir);
-domain = ROMS.Grid(grid_fname,opt);
+domain = ROMS.Grid(grd_name,opt);
 
 @info "domain size $(size(domain.mask))"
 
@@ -114,23 +114,23 @@ dataset = ROMS.CMEMS_zarr(product_id,mapping,outdir, time_shift = 12*60*60)
 # take one extra day
 tr = [t0-Dates.Day(1), t1+Dates.Day(1)]
 
-ROMS.interp_clim(domain,clim_filename,dataset,tr)
+ROMS.interp_clim(domain,clm_name,dataset,tr)
 
-ROMS.extract_ic(domain,clim_filename,ic_filename, t0);
-ROMS.extract_bc(domain,clim_filename,bc_filename)
+ROMS.extract_ic(domain,clm_name,ini_name, t0);
+ROMS.extract_bc(domain,clm_name,bry_name)
 
-# Prepare atmospheric forcings
+# Prepare atmospheric forcings (FRCNAME)
 
-filename_prefix = joinpath(basedir,"liguriansea2019_")
+frc_name_prefix = joinpath(basedir,"liguriansea2019_")
 domain_name = "Ligurian Sea Region"
 Vnames = ["sustr","svstr","shflux","swflux","swrad","Uwind","Vwind",
     "lwrad","lwrad_down","latent","sensible","cloud","rain","Pair","Tair","Qair"]
 
 # forcing_filenames corresponds to FRCNAME in roms.in
-forcing_filenames = ROMS.prepare_ecmwf(ecmwf_fname,Vnames,filename_prefix,domain_name)
+forcing_filenames = ROMS.prepare_ecmwf(ecmwf_fname,Vnames,frc_name_prefix,domain_name)
 
 
-# nudging coefficient
+# nudging coefficient (NUDNAME)
 
 tscale = 7; # days
 alpha = 0.3;
@@ -138,9 +138,48 @@ halo = 2;
 Niter = 50
 max_tscale = 5e5
 
-nudge_filename = joinpath(basedir,"roms_nud_$(tscale)_$(Niter).nc")
-tracer_NudgeCoef = ROMS.nudgecoef(domain,nudge_filename,alpha,Niter,
+nud_name = joinpath(basedir,"roms_nud_$(tscale)_$(Niter).nc")
+tracer_NudgeCoef = ROMS.nudgecoef(domain,nud_name,alpha,Niter,
           halo,tscale; max_tscale = max_tscale)
 
-println("Created netCDF files are in $basedir");
+fn(name) = basename(name)
+# fn(name) = name
 
+println()
+println("The created netCDF files are in $basedir.");
+println("The following information has to be added to roms.in. A template of this file is")
+println("provided in the directory User/External of your ROMS source code")
+println("You can also use relative or absolute file names.")
+println()
+println("! grid file ")
+println("     GRDNAME == $(fn(grd_name))")
+println()
+println("! initial conditions")
+println("     ININAME == $(fn(ini_name))")
+println()
+println("! boundary conditions")
+println("     NBCFILES == 1")
+println("     BRYNAME == $(fn(bry_name))")
+println()
+println("! climatology or large-scale circulatio model")
+println("     NCLMFILES == 1")
+println("     CLMNAME == $(fn(clm_name))")
+println()
+println("! nudging coefficients file (optional)")
+println("     NUDNAME == $(fn(nud_name))")
+println()
+println("! forcing files")
+println("     NFFILES == $(length(Vnames))")
+
+for i in 1:length(Vnames)
+    if i == 1
+        print("     FRCNAME == ")
+    else
+        print("                ")
+    end
+    print("$(fn(frc_name_prefix))$(Vnames[i]).nc")
+    if i < length(Vnames)
+        print(" \\")
+    end
+    println()
+end
