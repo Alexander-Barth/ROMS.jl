@@ -41,7 +41,7 @@ gca().set_aspect(1/cosd(mean(lat)))
 title("smoothed bathymetry [m]");
 savefig("smoothed_bathymetry.png");
 
-# ![](smoothed_bathymetry.png)
+#md # ![](smoothed_bathymetry.png)
 
 # ## Surface temperature
 
@@ -74,7 +74,7 @@ colorbar();
 title("sea surface temperature [°C]")
 savefig("SST.png");
 
-# ![](SST.png)
+#md # ![](SST.png)
 
 # Exercise:
 # * Plot salinity
@@ -115,7 +115,7 @@ title("surface currents [m/s] and elevation [m]");
 gca().set_aspect(1/cosd(mean(lat)))
 savefig("surface_zeta_uv.png");
 
-# ![](surface_zeta_uv.png)
+#md # ![](surface_zeta_uv.png)
 
 # Exercise:
 # * The surface currents seems to follow lines of constant surface elevation. Explain why this is to be expected.
@@ -160,14 +160,15 @@ ylabel("depth [m]")
 title("temperature at $(round(lon[i,1],sigdigits=4)) °E")
 colorbar();
 
-ax2 = gcf().add_axes([0.1,0.18,0.4,0.3]) # inset plot
+## inset plot
+ax2 = gcf().add_axes([0.1,0.18,0.4,0.3])
 ax2.pcolormesh(lon,lat,temp[:,:,end])
 ax2.set_aspect(1/cosd(mean(lat)))
 ax2.plot(lon[i,[1,end]],lat[i,[1,end]],"m")
 
 savefig("temp_section1.png");
 
-# ![temp_section1](temp_section1.png)
+#md # ![temp_section1](temp_section1.png)
 
 # Exercise:
 # * Plot a section at different longitude and latitude
@@ -189,7 +190,7 @@ gca().set_aspect(1/cosd(mean(lat)))
 title("temperature at 200 m [°C]")
 savefig("temp_hsection_200.png");
 
-# ![](temp_hsection_200.png)
+#md # ![](temp_hsection_200.png)
 
 # ## Arbitrary vertical section
 
@@ -220,6 +221,7 @@ xlabel("longitude")
 ylabel("depth")
 title("temperature section [°C]");
 
+## inset plot
 ax2 = gcf().add_axes([0.4,0.2,0.4,0.3])
 ax2.pcolormesh(lon,lat,temp[:,:,end])
 axis("on")
@@ -228,4 +230,4 @@ ax2.plot(section_lon,section_lat,"m")
 
 savefig("temp_vsection.png");
 
-# ![](temp_vsection.png)
+#md # ![](temp_vsection.png)
