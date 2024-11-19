@@ -141,3 +141,6 @@ max_tscale = 5e5
 nudge_filename = joinpath(basedir,"roms_nud_$(tscale)_$(Niter).nc")
 tracer_NudgeCoef = ROMS.nudgecoef(domain,nudge_filename,alpha,Niter,
           halo,tscale; max_tscale = max_tscale)
+
+println("Created netCDF files are in $basedir");
+
