@@ -67,7 +67,7 @@ else
     time = ds["ocean_time"][:]
 end
 
-clf();
+figure(figsize=(7,4))
 pcolormesh(lon,lat,temp)
 gca().set_aspect(1/cosd(mean(lat)))
 colorbar();
@@ -102,7 +102,7 @@ v_r = cat(v[:,1:1], (v[:,2:end] .+ v[:,1:end-1])/2, v[:,end:end], dims=2);
 ## all sizes should be the same
 size(u_r), size(v_r), size(mask_rho)
 
-clf();
+figure(figsize=(7,4))
 pcolormesh(lon,lat,zeta)
 colorbar();
 ## plot only a single arrow for r x r grid cells
@@ -180,7 +180,7 @@ savefig("temp_section1.png");
 tempi = ROMS.model_interp3(lon,lat,z_r,temp,lon,lat,[-200])
 mlon,mlat,mdata = GeoDatasets.landseamask(resolution='f', grid=1.25)
 
-clf();
+figure(figsize=(7,4))
 pcolormesh(lon,lat,tempi[:,:,1])
 colorbar();
 ax = axis()
