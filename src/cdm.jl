@@ -45,6 +45,17 @@ end
 
 rg(i) = i[1]:i[end]
 
+function _get_depth(ds)
+    try
+        # old CMEMS
+        ds[CF"depth"]
+    catch
+        # new CMEMS (2024-12-05)
+        @info "using elevation"
+        ds[CF"elevation"]
+    end
+end
+
 function download(dsopendap::CDMDataset{TDS},variablename::Symbol;
                   longitude=nothing,latitude=nothing,time=nothing) where TDS
 
@@ -72,7 +83,7 @@ function download(dsopendap::CDMDataset{TDS},variablename::Symbol;
     if ndims(ncvar) == 4
         # depth is sometimes called elevation
         # with always has the standard_name depth
-        push!(include_var,name(_ds[CF"depth"]))
+        push!(include_var,name(_get_depth(_ds)))
     end
 
     fnames_subset = String[]
@@ -145,7 +156,7 @@ function load(dsopendap::CDMDataset,variablename::Symbol; kwargs...)
         @debug "size $variablename: $(size(ncvar))"
         return (ncvar,(x,y,t))
     else
-        ncdepth = ds[CF"depth"]
+        ncdepth = _get_depth(ds)
         z = nomissing(ncdepth[:])
         # CMEMS Zarr file have the wrong attributes
         #if get(ncdepth.attrib,"positive","up") == "down"
