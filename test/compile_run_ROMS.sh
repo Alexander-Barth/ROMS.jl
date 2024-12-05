@@ -16,7 +16,7 @@ git config --global credential.helper '!f() { sleep 1; echo "username=${ROMS_USE
 
 git clone https://github.com/myroms/roms
 cd roms
-git checkout roms-4.0
+git checkout roms-4.1
 
 if [[ $(gcc -dumpversion) -ge 11 ]]; then
 patch Compilers/Linux-gfortran.mk <<EOF
@@ -76,4 +76,3 @@ fi
 
 # Compile ROMS
 ./build_roms.sh -j 2 -noclean
-
