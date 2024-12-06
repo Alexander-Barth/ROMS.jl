@@ -87,21 +87,17 @@ Pkg.update()
 
 Note, it is not necessary for this tutorial to update the whole operating system.
 
-#### Installation on Ubuntu/Linux (or UNIX-like operating systems)
+#### Installation on Debian/Ubuntu/Linux (or UNIX-like operating systems)
 
 If you do not use this virtual machine the following software need to be installed:
 
 * [Julia](https://julialang.org/downloads/). Under Linux, you can install Julia with the following shell commands:
 
 ```bash
-cd /opt/
-sudo wget https://julialang-s3.julialang.org/bin/linux/x64/1.10/julia-1.10.3-linux-x86_64.tar.gz
-sudo tar -xvf julia-1.10.3-linux-x86_64.tar.gz
-sudo rm julia-1.10.3-linux-x86_64.tar.gz
-sudo ln -s /opt/julia-1.10.3/bin/julia /usr/local/bin/julia
+curl -fsSL https://install.julialang.org | sh
 ```
 
-where `1.10.3` should be replaced by the version number of the current stable release.
+During installation, you can confirm all default choices.
 More information is available [here](https://julialang.org/downloads/platform/).
 
 Under Linux, you need to install also `python3-matplotlib` for PythonPlot. On Debian/Ubuntu, this packages can be installed by this command:
