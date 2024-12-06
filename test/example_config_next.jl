@@ -8,11 +8,11 @@ romsdir = expanduser("~/src/roms")
 simulationdir = joinpath(basedir,"Simulation1")
 
 intemplate = joinpath(romsdir,"User","External","roms.in")
-var_name_template = joinpath(romsdir,"ROMS","External","varinfo.dat")
+var_name_template = joinpath(romsdir,"ROMS","External","varinfo.yaml")
 
 mkpath(simulationdir)
 infile = joinpath(simulationdir,"roms.in")
-var_name = joinpath(simulationdir,"varinfo.dat")
+var_name = joinpath(simulationdir,"varinfo.yaml")
 
 cp(var_name_template,var_name; force=true)
 
@@ -71,14 +71,6 @@ substitutions = Dict(
 )
 
 ROMS.infilereplace(intemplate,infile,substitutions)
-
-
-# NBCFILES and NCLMFILES missing in roms.in but required
-
-text = String(read(infile));
-index = findfirst("BRYNAME",text)[1]
-text = text[1:index-1] * "NBCFILES == 1\n     NCLMFILES == 1\n     " * text[index:end]
-write(infile,text);
 
 
 nothing

@@ -232,11 +232,11 @@ for ogcm in [CMEMS_motu,CMEMS_opendap,HYCOM]
         simulationdir = joinpath(basedir,"Simulation-$(ogcm)-$(agcm)")
 
         intemplate = joinpath(romsdir,"User","External","roms.in")
-        var_name_template = joinpath(romsdir,"ROMS","External","varinfo.dat")
+        var_name_template = joinpath(romsdir,"ROMS","External","varinfo.yaml")
 
         mkpath(simulationdir)
         infile = joinpath(simulationdir,"roms.in")
-        var_name = joinpath(simulationdir,"varinfo.dat")
+        var_name = joinpath(simulationdir,"varinfo.yaml")
 
         cp(var_name_template,var_name; force=true)
 

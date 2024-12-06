@@ -400,10 +400,10 @@ diff -u --color ~/src/roms/ROMS/Bin/build_roms.sh build_roms.sh
 ./build_roms.sh -j 2
 ```
 
- * copy `varinfo.dat` from `~/src/roms/ROMS/External/varinfo.dat` in your directory for your simulation (e.g. `ROMS-implementation-test`):
+ * copy `varinfo.yaml` from `~/src/roms/ROMS/External/varinfo.yaml` in your directory for your simulation (e.g. `ROMS-implementation-test`):
 
 ```bash
-cp ~/src/roms/ROMS/External/varinfo.dat .
+cp ~/src/roms/ROMS/External/varinfo.yaml .
 ```
 
 
@@ -420,13 +420,7 @@ cp  ~/src/roms/User/External/roms.in .
 
  * adapt `MyAppCPP` and change it to `LIGURIANSEA`
 
- * adapt file names `VARNAME`, `GRDNAME`, `ININAME`, `BRYNAME`, `CLMNAME`, `FRCNAME` and `NFFILES` (`varinfo.dat`, `LS2v.nc`, `ic2019.nc`, `bc2019.nc`, `clim2019.nc`, `liguriansea2019_*.nc`, `*` means the different variables). `NFFILES` is the number of forcing files.
- * also make sure that these variables are set (number of files with boundary conditions and climatology). If they do not exist, they need to be added (before the line with `BRYNAME`).
-
-```
- NBCFILES == 1
-NCLMFILES == 1
-```
+ * adapt file names `VARNAME`, `GRDNAME`, `ININAME`, `BRYNAME`, `CLMNAME`, `FRCNAME` and `NFFILES` (`varinfo.yaml`, `LS2v.nc`, `ic2019.nc`, `bc2019.nc`, `clim2019.nc`, `liguriansea2019_*.nc`, `*` means the different variables). `NFFILES` is the number of forcing files.
 
  * change `Lm`, `Mm` and `N` based on the dimensions of your grid (make sure to read the glossary for these variable in `roms.in`)
 
