@@ -28,6 +28,7 @@ ROMS.load
 ROMS.interp_clim
 ROMS.extract_ic
 ROMS.extract_bc
+ROMS.whenopen
 ```
 
 ## Atmospheric forcings

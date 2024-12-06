@@ -240,7 +240,7 @@ for ogcm in [CMEMS_motu,CMEMS_opendap,HYCOM]
 
         cp(var_name_template,var_name; force=true)
 
-        forc_filenames = unique(getindex.(forcing_filenames[agcm],2))
+        frc_name = unique(getindex.(forcing_filenames[agcm],2))
 
         openbc = ROMS.openboundaries(domain.mask)
 
@@ -270,8 +270,8 @@ for ogcm in [CMEMS_motu,CMEMS_opendap,HYCOM]
             "ININAME" => ini_name,
             "BRYNAME" => bry_name,
             "CLMNAME" => clm_name,
-            "NFFILES" => length(forc_filenames),
-            "FRCNAME" => join(forc_filenames,"  \\\n       "),
+            "NFFILES" => length(frc_name),
+            "FRCNAME" => join(frc_name,"  \\\n       "),
             "Vtransform" => opt.Vtransform,
             "Vstretching" => opt.Vstretching,
             "THETA_S" => opt.theta_s,
