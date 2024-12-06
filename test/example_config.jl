@@ -38,7 +38,7 @@ modeldir = expanduser("~/ROMS-implementation-test")
 # This file corresponds to GRDNAME in roms.in
 grd_name = joinpath(modeldir,domain_name * ".nc")
 
-basedir = expanduser("~/ROMS-implementation-test")
+basedir = modeldir
 
 # GCM interpolated on model grid (CLMNAME)
 clm_name =  joinpath(basedir,"clim2019.nc")
