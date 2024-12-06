@@ -116,7 +116,7 @@ Pkg.add("NCDatasets")
 Pkg.develop(url="https://github.com/Alexander-Barth/ROMS.jl")
 ```
 
-* ROMS source. This example uses the version 4.0 of ROMS. We assume that the ROMS source is copied in `~/src/roms`:
+* ROMS source. This example uses the version 4.1 of ROMS. We assume that the ROMS source is copied in `~/src/roms`:
 
 ```bash
 mkdir ~/src/
