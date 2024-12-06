@@ -339,9 +339,8 @@ cp ~/src/roms/ROMS/Bin/build_roms.sh build_roms.sh
 The lines in red have been replaced by the lines in green. The plus and minus signes indicates also what has been added or removed and the `@@` indicate line numbers. These markers do not have to be added manually to the file `build_roms.sh`.
 
 ```diff
- diff -u /home/abarth/src/roms/ROMS/Bin/build_roms.sh build_roms.sh
---- /home/abarth/src/roms/ROMS/Bin/build_roms.sh	2020-10-11 21:19:08.000000000 +0200
-+++ build_roms.sh	2020-11-06 11:16:15.484841910 +0100
+--- /home/abarth/src/roms/ROMS/Bin/build_roms.sh	2024-12-05 15:28:10.084159495 +0100
++++ build_roms.sh	2024-12-06 08:48:07.849576281 +0100
 @@ -102,12 +102,12 @@
  # determine the name of the ".h" header file with the application
  # CPP definitions.
@@ -357,32 +356,26 @@ The lines in red have been replaced by the lines in green. The plus and minus si
  export     MY_PROJECT_DIR=${PWD}
 
  # The path to the user's local current ROMS source code.
-@@ -120,7 +120,7 @@
- # machine. This script is designed to more easily allow for differing paths
+@@ -121,7 +121,7 @@
  # to the code and inputs on differing machines.
 
-- export       MY_ROMS_SRC=${MY_ROOT_DIR}/trunk
+ #export       MY_ROMS_SRC=${MY_ROOT_DIR}/git/trunk
+- export       MY_ROMS_SRC=${MY_ROOT_DIR}/svn/trunk
 + export       MY_ROMS_SRC=${MY_ROOT_DIR}/src/roms
 
  # Set path of the directory containing makefile configuration (*.mk) files.
  # The user has the option to specify a customized version of these files
-@@ -168,13 +168,13 @@
+@@ -170,8 +170,8 @@
 
  #export        USE_OpenMP=on            # shared-memory parallelism
 
 - export              FORT=ifort
 -#export              FORT=gfortran
-+# export              FORT=ifort
++#export              FORT=ifort
 +export              FORT=gfortran
  #export              FORT=pgi
 
  #export         USE_DEBUG=on            # use Fortran debugging flags
-  export         USE_LARGE=on            # activate 64-bit compilation
--#export       USE_NETCDF4=on            # compile with NetCDF-4 library
-+export       USE_NETCDF4=on            # compile with NetCDF-4 library
- #export   USE_PARALLEL_IO=on            # Parallel I/O with NetCDF-4/HDF5
-
-
 ```
 
 * Review your changes with:
