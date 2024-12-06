@@ -1,5 +1,6 @@
 using Dates
 using ROMS
+using ROMS: whenopen
 
 
 # create directories and configuration files
@@ -17,13 +18,6 @@ var_name = joinpath(simulationdir,"varinfo.yaml")
 cp(var_name_template,var_name; force=true)
 
 forc_filenames  = unique(getindex.(forcing_filenames,2))
-
-openbc = ROMS.openboundaries(domain.mask)
-
-@show openbc
-directions = ["west","south","east","north"]
-
-whenopen(BC) = join(map(d -> (d in openbc ? BC : "Clo"),directions)," ")
 
 # time step (seconds)
 DT = 300.
@@ -43,21 +37,21 @@ substitutions = Dict(
     "CLMNAME" => clm_name,
     "NFFILES" => length(forc_filenames),
     "FRCNAME" => join(forc_filenames,"  \\\n       "),
-    "Vtransform" => opt.Vtransform,
-    "Vstretching" => opt.Vstretching,
-    "THETA_S" => opt.theta_s,
-    "THETA_B" => opt.theta_b,
-    "TCLINE" => opt.Tcline,
+    "Vtransform" => domain.Vtransform,
+    "Vstretching" => domain.Vstretching,
+    "THETA_S" => domain.theta_s,
+    "THETA_B" => domain.theta_b,
+    "TCLINE" => domain.Tcline,
     "Lm" => size(domain.h,1)-2,
     "Mm" => size(domain.h,2)-2,
-    "N" => opt.nlevels,
-    "LBC(isFsur)" => whenopen("Cha"),
-    "LBC(isUbar)" => whenopen("Fla"),
-    "LBC(isVbar)" => whenopen("Fla"),
-    "LBC(isUvel)" => whenopen("RadNud"),
-    "LBC(isVvel)" => whenopen("RadNud"),
-    "LBC(isMtke)" => whenopen("Rad"),
-    "LBC(isTvar)" => whenopen("RadNud") * " \\\n" * whenopen("RadNud"),
+    "N" => domain.nlevels,
+    "LBC(isFsur)" => whenopen(domain,"Cha"),
+    "LBC(isUbar)" => whenopen(domain,"Fla"),
+    "LBC(isVbar)" => whenopen(domain,"Fla"),
+    "LBC(isUvel)" => whenopen(domain,"RadNud"),
+    "LBC(isVvel)" => whenopen(domain,"RadNud"),
+    "LBC(isMtke)" => whenopen(domain,"Rad"),
+    "LBC(isTvar)" => whenopen(domain,"RadNud") * " \\\n" * whenopen(domain,"RadNud"),
     "DT" => DT,
     "NHIS" => NHIS,
     "NAVG" => NAVG,

@@ -13,6 +13,22 @@ end
 
 openboundaries(domain::Grid) = openboundaries(domain.mask)
 
+
+"""
+    LBC = ROMS.whenopen(domain::Grid,BC::AbstractString)
+
+`ROMS.whenopen` returns a list of the four lateral boundary condition
+(corresponding to "west","south","east" and "north").
+The corresponding elements of LBC will be "Clo" for closed boundaries
+for the provided `BC` for open boundary conditions (e.g. Cha, Fla, Rad, RadNud,
+as defined in the roms.in glossary).
+"""
+function whenopen(domain::Grid,BC::AbstractString)
+    openbc = openboundaries(domain.mask)
+    directions = ["west","south","east","north"]
+    return join(map(d -> (d in openbc ? BC : "Clo"),directions)," ")
+end
+
 function def_bc(bc_filename,domain,missing_value;
                      time_origin = DateTime(1858,11,17))
 
