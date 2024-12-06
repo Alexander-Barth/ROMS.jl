@@ -28,29 +28,26 @@ wget -O liguriansea.h 'https://dox.ulg.ac.be/index.php/s/9yqxI4tp5hNr2Sg/downloa
 # get compile script
 cp ~/src/roms/ROMS/Bin/build_roms.sh build_roms.sh
 
-patch build_roms.sh <<EOF
+# "EOF" prevent subsituting variables like $HOME
+patch build_roms.sh <<"EOF"
 105c105
 < export   ROMS_APPLICATION=UPWELLING
 ---
 > export   ROMS_APPLICATION=LigurianSea
 110c110
-< export        MY_ROOT_DIR=\${HOME}/ocean/repository
+< export        MY_ROOT_DIR=${HOME}/ocean/repository
 ---
-> export        MY_ROOT_DIR=\${HOME}
-123c123
-<  export       MY_ROMS_SRC=\${MY_ROOT_DIR}/trunk
+> export        MY_ROOT_DIR=${HOME}
+124c124
+<  export       MY_ROMS_SRC=${MY_ROOT_DIR}/svn/trunk
 ---
->  export       MY_ROMS_SRC=\${MY_ROOT_DIR}/src/roms
-171,172c171,172
+>  export       MY_ROMS_SRC=${MY_ROOT_DIR}/src/roms
+173,174c173,174
 <  export              FORT=ifort
 < #export              FORT=gfortran
 ---
 > #export              FORT=ifort
 > export              FORT=gfortran
-177c177
-< #export       USE_NETCDF4=on            # compile with NetCDF-4 library
----
->  export       USE_NETCDF4=on            # compile with NetCDF-4 library
 EOF
 
 if [ -e build_roms.sh.rej ]; then
