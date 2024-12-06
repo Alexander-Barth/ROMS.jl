@@ -188,7 +188,7 @@ max_tscale = 5e5
 
 nud_name = joinpath(basedir,"roms_nud_$(tscale)_$(Niter).nc")
 tracer_NudgeCoef = ROMS.nudgecoef(domain,nud_name,alpha,Niter,
-                                  halo,tscale; max_tscale = max_tscale)
+                                  halo,tscale; max_tscale = max_tscale);
 
 mkpath(basedir);
 mkpath(modeldir);

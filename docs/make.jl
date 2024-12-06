@@ -14,11 +14,25 @@ Literate.markdown(
     credit = false,
 )
 
-Literate.notebook(
+
+files = [
+    joinpath(@__DIR__, "..", "examples", "build_roms.jl"),
+    joinpath(@__DIR__, "..", "test", "example_config.jl"),
+    joinpath(@__DIR__, "..", "examples", "run_roms.jl"),
     joinpath(@__DIR__, "..", "examples", "plots.jl"),
-    joinpath(@__DIR__, "src"),
-    execute = false,
-)
+]
+
+all_notebooks = joinpath(mktempdir(),"all.jl")
+write(all_notebooks, join(read.(files,String),"\n"))
+push!(files,all_notebooks)
+
+for file in files
+    Literate.notebook(
+        file,
+        joinpath(@__DIR__, "src"),
+        execute = false,
+    )
+end
 
 
 makedocs(

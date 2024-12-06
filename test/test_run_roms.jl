@@ -1,49 +1,11 @@
 using ROMS
 using Test
 using NCDatasets
-using Downloads: download
 
-modeldir = expanduser("~/ROMS-implementation-test")
-mkpath(modeldir)
-
-romsdir = expanduser("~/src/roms")
-if !isdir(romsdir)
-    mkpath(dirname(romsdir))
-    cd(dirname(romsdir)) do
-        run(`git clone https://github.com/myroms/roms`)
-        cd("roms") do
-            run(`git checkout roms-4.1`)
-        end
-    end
-end
-
-download("https://dox.ulg.ac.be/index.php/s/9yqxI4tp5hNr2Sg/download",
-         joinpath(modeldir,"liguriansea.h"))
-
-use_mpi = true;
-#use_mpi = false;
-#use_openmp = true;
-use_openmp = false;
-
-roms_application = "LigurianSea"
-fortran_compiler = "gfortran"
-jobs = 8
-
-ROMS.build(romsdir,roms_application,modeldir;
-           jobs,
-           fortran_compiler,
-           use_openmp,
-           use_mpi)
-
+include("../examples/build_roms.jl")
 include("example_config.jl")
-include("example_config_next.jl")
+include("../examples/run_roms.jl")
 
-cd(expanduser("~/ROMS-implementation-test/Simulation1")) do
-    withenv("OPAL_PREFIX" => nothing) do
-        ROMS.run_model(modeldir,"roms.in"; use_mpi, use_openmp)
-    end
-    @test isfile("roms_his.nc")
-end
 
 ds = NCDataset(grd_name);
 lon_rho = ds["lon_rho"][:,:]

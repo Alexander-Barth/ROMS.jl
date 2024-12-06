@@ -2,9 +2,6 @@ using Dates
 using ROMS
 using Downloads: download
 
-# name of the domain
-domain_name = "LS2v";
-
 #bath_name = expanduser("~/Data/Bathymetry/combined_emodnet_bathymetry.nc")
 #bath_name = expanduser("~/Data/Bathymetry/gebco_30sec_1.nc")
 # longitude from 5°E to 15°E and latitude from 40°N to 45°N
@@ -36,18 +33,18 @@ hmin = 2; # m
 modeldir = expanduser("~/tmp/ROMS-implementation-2-month")
 
 # This file corresponds to GRDNAME in roms.in
-grd_name = joinpath(modeldir,domain_name * ".nc")
+grd_name = joinpath(modeldir,"roms_grd_liguriansea.nc")
 
 basedir = modeldir
 
 # GCM interpolated on model grid (CLMNAME)
-clm_name =  joinpath(basedir,"clim2019.nc")
+clm_name =  joinpath(basedir,"roms_clm_2023.nc")
 
 # initial conditions (ININAME in roms.in)
-ini_name =  joinpath(basedir,"ic2019.nc")
+ini_name =  joinpath(basedir,"roms_ini_2023.nc")
 
 # boundary conditions (BRYNAME in roms.in)
-bry_name =  joinpath(basedir,"bc2019.nc")
+bry_name =  joinpath(basedir,"roms_bry_2023.nc")
 
 # model specific parameters
 opt = (
@@ -136,21 +133,21 @@ max_tscale = 5e5
 
 nud_name = joinpath(basedir,"roms_nud_$(tscale)_$(Niter).nc")
 tracer_NudgeCoef = ROMS.nudgecoef(domain,nud_name,alpha,Niter,
-          halo,tscale; max_tscale = max_tscale)
+          halo,tscale; max_tscale = max_tscale);
 
 
 include("example_config_next.jl")
-romsbin = expanduser("~/ROMS-implementation-test/romsM")
+# romsbin = expanduser("~/ROMS-implementation-test/romsM")
 
-cd(simulationdir) do
-    NtileI = 2
-    NtileJ = 2
-    ROMS.infilereplace("roms.in","roms.in",Dict(
-        "NtileI" => NtileI,
-        "NtileJ" => NtileJ,
-    ))
+# cd(simulationdir) do
+#     NtileI = 2
+#     NtileJ = 2
+#     ROMS.infilereplace("roms.in","roms.in",Dict(
+#         "NtileI" => NtileI,
+#         "NtileJ" => NtileJ,
+#     ))
 
-    np = NtileI * NtileJ
-    run(`mpirun -np $np $romsbin roms.in`)
-    @test isfile("roms_his.nc")
-end
+#     np = NtileI * NtileJ
+#     run(`mpirun -np $np $romsbin roms.in`)
+#     @test isfile("roms_his.nc")
+# end
