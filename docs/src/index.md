@@ -385,9 +385,6 @@ The lines in red have been replaced by the lines in green. The plus and minus si
 
 ```
 
-For ROMS 4.0 and gfortran 11.2, you need to add `-fallow-argument-mismatch` to `FFLAGS` in `Compilers/Linux-gfortran.mk` from the
-ROMS source files. This is expected to be fixed in upcoming version of ROMS.
-
 * Review your changes with:
 
 ```bash
