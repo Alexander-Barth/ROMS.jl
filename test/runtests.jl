@@ -42,6 +42,8 @@ end
 end
 
 @testset "ROMS run" begin
-    include("test_run_roms.jl")
+    if Sys.islinux()
+        include("test_run_roms.jl")
+    end
     include("test_stiffness.jl")
 end

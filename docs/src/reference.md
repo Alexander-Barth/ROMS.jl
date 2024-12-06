@@ -48,3 +48,9 @@ ROMS.vapor_pressure_Buck
 ROMS.relative_humidity
 ROMS.latent_heat_of_vaporization
 ```
+
+
+```@docs
+ROMS.build
+ROMS.run_model
+```
