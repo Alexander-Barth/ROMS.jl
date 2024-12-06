@@ -38,8 +38,8 @@ NRST = NAVG = NHIS
 ## number of time steps
 NTIMES = floor(Int,Dates.value(t1-t0) / (DT * 1000))
 
-NtileI = 2
-NtileJ = 2
+NtileI = 1
+NtileJ = 1
 
 substitutions = Dict(
     "TITLE" => "My test",
