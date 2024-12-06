@@ -28,7 +28,8 @@ function generate_config(grid_fname,x,y,h,mask,pm,pn,dndx,dmde,opt)
     f = 2*omega * sind.(y);
 
     @debug "create_grid"
-    create_grid(grid_fname,h,f,x,y,mask,angle,pm,pn,dndx,dmde);
+    create_grid(grid_fname,h,f,x,y,mask,angle,pm,pn,dndx,dmde;
+                opt = opt)
 
     return z_r,z_w
 end

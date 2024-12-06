@@ -8,7 +8,10 @@ Create a NetCDF grid file `fname` using the bathymetry `h`, Coriolis parameter
     This function currently only works for non-rotated grids (angle = 0) and
     the spherical grids.
 """
-function create_grid(fname,h,f,lon_r,lat_r,mask_r,angle,pm,pn,dndx,dmde)
+function create_grid(fname,h,f,lon_r,lat_r,mask_r,angle,pm,pn,dndx,dmde;
+                     opt = nothing,
+                     attribs = Dict(),
+                     )
     @assert all(angle .== 0)
 
     xi_rho,eta_rho = size(h)
@@ -71,6 +74,19 @@ function create_grid(fname,h,f,lon_r,lat_r,mask_r,angle,pm,pn,dndx,dmde)
     ds["x_v"][:] = x_v * earthradius
     ds["y_v"][:] = y_v * earthradius
 
+    if !isnothing(opt)
+        defVar(ds,"Tcline",Float64(opt.Tcline))
+        defVar(ds,"theta_s", Float64(opt.theta_s))
+        defVar(ds,"theta_b", Float64(opt.theta_b))
+        defDim(ds,"s_rho", opt.nlevels)
+        defVar(ds,"Vtransform", Int32(opt.Vtransform))
+        defVar(ds,"Vstretching", Int32(opt.Vstretching))
+    end
+
+    # global attributes
+    for (k,v) in attribs
+        ds.attrib[k] = v
+    end
     @debug "closing"
     close(ds)
 end
