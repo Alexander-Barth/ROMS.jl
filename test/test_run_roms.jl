@@ -8,6 +8,7 @@ mkpath(modeldir)
 
 romsdir = expanduser("~/src/roms")
 if !isdir(romsdir)
+    mkpath(dirname(romsdir))
     cd(dirname(romsdir)) do
         run(`git clone https://github.com/myroms/roms`)
         cd("roms") do
