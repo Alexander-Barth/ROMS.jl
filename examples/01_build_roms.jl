@@ -1,12 +1,13 @@
 
-# # Regional Ocean Modeling System (ROMS)
+# # Compilation of ROMS
 #
+#md # *The code here is also available as a notebook [01\_build\_roms.ipynb](01_build_roms.ipynb).*
 #
 # The Regional Ocean Modeling System (ROMS) is a free-surface, terrain-following,
 # primitive equations ocean model widely used by the scientific community for
 # a diverse range of applications.
 #
-# ## Compilation
+# ## Getting the source code
 #
 # The source code of ROMS is distributed via [GitHub](https://github.com/myroms/roms).
 # We use version 4.1 of the ROMS code.
@@ -25,21 +26,40 @@ if !isdir(romsdir)
     end
 end
 
+# The previous julia commands, are essentially the same as the following shell commands:
+# ```bash
+# mkdir ~/src/
+# cd ~/src/
+# git clone https://github.com/myroms/roms
+# cd roms
+# git checkout roms-4.1
+# ```
+
+# The output of the last command will tell you that `You are in 'detached HEAD' state.` (this is not an error).
+
+
+
+
 # All files that are specific to a given implementation of ROMS will be
 # saved in a different directory `modeldir`:
 
 modeldir = expanduser("~/ROMS-implementation-test")
 mkpath(modeldir)
 
+# ## The header file
+
 # Before we can compile ROMS we need to
 # * activate diffent terms of the momentum equations
 # * specify the schemes uses for advection, horizontal mixing,
 #   type equation of state, ...
 #
-# The header files controls the compilation of the ROMS model by telling the
+# The header file controls the compilation of the ROMS model by telling the
 # compiler which part of the code needs to be compiled. If you modify this file,
 # ROMS need to be recompiled.
-
+#
+# This header file should be named `yourdomain.h` (e.g. `liguriansea.h` for the Ligurian Sea)
+# and created in the directory `ROMS-implementation-test`.
+#
 # Do not change the two first lines and the last line of the following cell.
 # When you execute the cell, the header file with the specified content is
 # created.
@@ -80,6 +100,8 @@ write(header_file,"""
 
 # The [ROMS wiki](https://www.myroms.org/wiki/Documentation_Portal) give more information about the [compiler different options](https://www.myroms.org/wiki/Options).
 
+# ## Compiling the model code
+
 # ROMS can use the MPI ([Message Passing Interface](https://en.wikipedia.org/wiki/Message_Passing_Interface)) or OpenMP ([Open Multi-Processing](https://en.wikipedia.org/wiki/OpenMP)) for parallelization (but not both at the same time):
 
 use_mpi = false;
@@ -87,16 +109,27 @@ use_openmp = true;
 ## or
 ##use_mpi = true;
 ##use_openmp = false;
-
+#
+# ROMS can either be build (i.e. compiled) the shell script `build_roms.sh` or
+# with the julia script `ROMS.build`.
+#
 # `roms_application` is a descriptive name of the domain or the particular application
 # that the use can choose. We compile ROMS with the [GNU Fortran](https://en.wikipedia.org/wiki/GNU_Fortran) compiler using 8 jobs for compilation.
 
 roms_application = "LigurianSea"
 fortran_compiler = "gfortran"
 jobs = 8
+logfile = "roms_build.log"
 
 ROMS.build(romsdir,roms_application,modeldir;
+           stdout = logfile,
            jobs,
            fortran_compiler,
            use_openmp,
            use_mpi)
+
+# The first and last 5 lines of this log file:
+
+println.(collect(eachline(logfile))[1:5]);
+println("...")
+println.(collect(eachline(logfile))[end-5:end]);

@@ -1,92 +1,24 @@
 # # Run ROMS
 #
+#md # *The code here is also available as a notebook [03\_run\_roms.ipynb](03_run_roms.ipynb).*
+#
 # Run ROMS with 4 CPUs splitting the domain in 2 by 2 tiles
 
 using Dates
 using ROMS
-using ROMS: whenopen
 
+# Now we are ready to run the model:
 
-## create directories and configuration files
-
-romsdir = expanduser("~/src/roms")
 modeldir = expanduser("~/ROMS-implementation-test")
 simulationdir = joinpath(modeldir,"Simulation1")
-mkpath(simulationdir)
 
-
-grd_name = joinpath(modeldir,"roms_grd_liguriansea.nc")
-ini_name = joinpath(modeldir,"roms_ini_2023.nc")
-bry_name = joinpath(modeldir,"roms_bry_2023.nc")
-frc_name = joinpath.(modeldir,sort(filter(startswith("roms_frc"),readdir(modeldir))))
-
-intemplate = joinpath(romsdir,"User","External","roms.in")
-var_name_template = joinpath(romsdir,"ROMS","External","varinfo.yaml")
-
-infile = joinpath(simulationdir,"roms.in")
-var_name = joinpath(simulationdir,"varinfo.yaml")
-
-cp(var_name_template,var_name; force=true)
-
-domain = ROMS.Grid(grd_name,opt);
-
-## time step (seconds)
-DT = 300.
-## output frequency of ROMS in time steps
-NHIS = round(Int,24*60*60 / DT)
-NRST = NAVG = NHIS
-## number of time steps
-NTIMES = floor(Int,Dates.value(t1-t0) / (DT * 1000))
+# ## Run ROMS from julia
+#
+# `NtileI` and `NtileJ` must match the values in the
+# roms.in file.
 
 NtileI = 1
 NtileJ = 1
-
-substitutions = Dict(
-    "TITLE" => "My test",
-    "NtileI" => NtileI,
-    "NtileJ" => NtileJ,
-    "TIME_REF" => "18581117",
-    "VARNAME" => var_name,
-    "GRDNAME" => grd_name,
-    "ININAME" => ini_name,
-    "BRYNAME" => bry_name,
-    "CLMNAME" => clm_name,
-    "NFFILES" => length(frc_name),
-    "FRCNAME" => join(frc_name,"  \\\n       "),
-    "Vtransform" => domain.Vtransform,
-    "Vstretching" => domain.Vstretching,
-    "THETA_S" => domain.theta_s,
-    "THETA_B" => domain.theta_b,
-    "TCLINE" => domain.Tcline,
-    "Lm" => size(domain.h,1)-2,
-    "Mm" => size(domain.h,2)-2,
-    "N" => domain.nlevels,
-    "LBC(isFsur)" => whenopen(domain,"Cha"),
-    "LBC(isUbar)" => whenopen(domain,"Fla"),
-    "LBC(isVbar)" => whenopen(domain,"Fla"),
-    "LBC(isUvel)" => whenopen(domain,"RadNud"),
-    "LBC(isVvel)" => whenopen(domain,"RadNud"),
-    "LBC(isMtke)" => whenopen(domain,"Rad"),
-    "LBC(isTvar)" => whenopen(domain,"RadNud") * " \\\n" * whenopen(domain,"RadNud"),
-    "DT" => DT,
-    "NHIS" => NHIS,
-    "NAVG" => NAVG,
-    "NRST" => NRST,
-    "NTIMES" => NTIMES,
-    "NUDNAME" => nud_name,
-    "TNUDG" => "10.0d0 10.0d0",
-    "LtracerCLM" => "T T",
-    "LnudgeTCLM" => "T T",
-    "OBCFAC" => 10.0,
-)
-
-ROMS.infilereplace(intemplate,infile,substitutions)
-
-
-
-modeldir = expanduser("~/ROMS-implementation-test")
-simulationdir = joinpath(modeldir,"Simulation1")
-
 np = NtileI*NtileJ
 
 use_openmp = true
@@ -96,3 +28,81 @@ cd(simulationdir) do
         ROMS.run_model(modeldir,"roms.in"; use_openmp, np)
     end
 end
+
+# If you run into a problem, please first read the error message
+# carefully to get some indicaton what is wrong.
+#
+# The ROMS outputs are the files `roms_his.nc` and `roms_avg.nc`.
+
+# Note that the usual method to run ROMS is from the command line.
+#
+# ## Run ROMS in serial
+#
+# For example the serial binary `romsS` (without MPI and OpenMP) can be run as:
+#
+# ```bash
+# ./romsS < roms.in | tee roms.out
+# ```
+#
+#
+# ## Run ROMS in parallel
+#
+# Make sure to activate MPI or OpenMP and recompile ROMS if necessary
+# With MPI:
+#
+# ```bash
+# mpirun -np 4 ./romsM  roms.in | tee roms.out
+# ```
+#
+# where 4 is the number of cores to use. To use 4 CPUs, you need to set `NtileI` to 2 and `NtileJ` to 2.
+#
+# With OpenMP:
+#
+# OMP_NUM_THREADS=4 ./romsO < roms.out | tee roms.out
+#
+# With the command `tee` the normal screen output will be place in the file `roms.out` but still be printed on the screen.
+
+# ## Interpreting ROMS output
+
+# * Check minimum and maximum value of the different parameters
+# ```
+#  NLM: GET_STATE - Read state initial conditions,             t = 57235 00:00:00
+#                    (Grid 02, File: roms_nest_his.nc, Rec=0182, Index=1)
+#                 - free-surface
+#                    (Min = -4.63564634E-01 Max = -3.63838434E-01)
+# ```
+
+# * The barotropic, baroclinic and Coriolis Courant number should be smaller than 1
+
+# ```
+#  Minimum barotropic Courant Number =  2.09670689E-02
+#  Maximum barotropic Courant Number =  5.56799674E-01
+#  Maximum Coriolis   Courant Number =  1.71574766E-03
+# ```
+
+# * Information
+#     * energy (kinetic, potential, total) and volume
+#     * maximum Courant number
+
+# ```
+#    STEP   Day HH:MM:SS  KINETIC_ENRG   POTEN_ENRG    TOTAL_ENRG    NET_VOLUME  Grid
+#           C => (i,j,k)       Cu            Cv            Cw         Max Speed
+
+#  346200 57235 00:00:00  2.691184E-03  1.043099E+04  1.043099E+04  6.221264E+13  01
+#           (079,055,30)  9.266512E-02  4.949213E-02  0.000000E+00  1.081862E+00
+# ```
+
+
+# Plot some variables like sea surface height and sea surface temperature at the beginning and the end of the simulation.
+# In Julia, force figure 1 and to 2 to have the same color-bar.
+#
+# ```julia
+# figure(); p1 = pcolor(randn(3,3)); colorbar()
+# figure(); p2 = pcolor(randn(3,3)); colorbar()
+# p2.set_clim(p1.get_clim())
+# ```
+#
+# * If everything runs fine,
+#     * is the model still stable with a longer time steps (`DT`) ?
+#     * increase the number of time steps (`NTIMES`)
+#     * possibly adapt the frequency at which you save the model results (`NHIS`, `NAVG`,`NRST`)

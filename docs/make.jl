@@ -5,19 +5,19 @@ using Documenter
 using ROMS
 import Literate
 
-Literate.markdown(
-    joinpath(@__DIR__, "..", "examples", "04_plots.jl"),
-    joinpath(@__DIR__, "src"),
-    execute = true,
-    documenter = true,
-    # We add the credit to Literate.jl the footer
-    credit = false,
-)
+# Literate.markdown(
+#     joinpath(@__DIR__, "..", "examples", "04_plots.jl"),
+#     joinpath(@__DIR__, "src"),
+#     execute = true,
+#     documenter = true,
+#     # We add the credit to Literate.jl the footer
+#     credit = false,
+# )
 
 
 files = [
     joinpath(@__DIR__, "..", "examples", "01_build_roms.jl"),
-    joinpath(@__DIR__, "..", "examples", "02_prep_roms"),
+    joinpath(@__DIR__, "..", "examples", "02_prep_roms.jl"),
     joinpath(@__DIR__, "..", "examples", "03_run_roms.jl"),
     joinpath(@__DIR__, "..", "examples", "04_plots.jl"),
 ]
@@ -32,6 +32,18 @@ for file in files
         joinpath(@__DIR__, "src"),
         execute = false,
     )
+
+    if !endswith(file,"all.jl")
+        Literate.markdown(
+            file,
+            joinpath(@__DIR__, "src"),
+            #execute = true,
+            execute = false,
+            documenter = true,
+            # We add the credit to Literate.jl the footer
+            credit = false,
+        )
+    end
 end
 
 
@@ -40,13 +52,18 @@ makedocs(
     sitename = "ROMS.jl",
     format = Documenter.HTML(
         prettyurls = CI,
-        footer = "Powered by [Documenter.jl](https://github.com/JuliaDocs/Documenter.jl), [Literate.jl](https://github.com/fredrikekre/Literate.jl) and the [Julia Programming Language](https://julialang.org/)"
+        footer = "Powered by [Documenter.jl](https://github.com/JuliaDocs/Documenter.jl), [Literate.jl](https://github.com/fredrikekre/Literate.jl) and the [Julia Programming Language](https://julialang.org/)",
+        #size_threshold = 400_000,
 
     ),
     pages = [
         "Tutorial" => "index.md",
+        "Compilation" => "01_build_roms.md",
+        "Preparation" =>  "02_prep_roms.md",
+        "Running ROMS"=> "03_run_roms.md",
+        "Plots" => "04_plots.md",
+        "Additional information" => "additional_info.md",
         "Reference" => "reference.md",
-        "Plots" => "plots.md",
     ],
 )
 
