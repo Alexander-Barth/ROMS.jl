@@ -59,7 +59,9 @@ end;
 #
 # With OpenMP:
 #
+# ```bash
 # OMP_NUM_THREADS=4 ./romsO < roms.out | tee roms.out
+# ```
 #
 # With the command `tee` the normal screen output will be place in the file `roms.out` but still be printed on the screen.
 
