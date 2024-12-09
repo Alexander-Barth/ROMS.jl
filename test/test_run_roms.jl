@@ -2,9 +2,9 @@ using ROMS
 using Test
 using NCDatasets
 
-include("../examples/build_roms.jl")
-include("example_config.jl")
-include("../examples/run_roms.jl")
+include("../examples/01_build_roms.jl")
+include("../examples/02_prep_roms.jl")
+include("../examples/03_run_roms.jl")
 
 
 ds = NCDataset(grd_name);

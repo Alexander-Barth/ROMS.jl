@@ -6,7 +6,7 @@ using ROMS
 import Literate
 
 Literate.markdown(
-    joinpath(@__DIR__, "..", "examples", "plots.jl"),
+    joinpath(@__DIR__, "..", "examples", "04_plots.jl"),
     joinpath(@__DIR__, "src"),
     execute = true,
     documenter = true,
@@ -16,10 +16,10 @@ Literate.markdown(
 
 
 files = [
-    joinpath(@__DIR__, "..", "examples", "build_roms.jl"),
-    joinpath(@__DIR__, "..", "test", "example_config.jl"),
-    joinpath(@__DIR__, "..", "examples", "run_roms.jl"),
-    joinpath(@__DIR__, "..", "examples", "plots.jl"),
+    joinpath(@__DIR__, "..", "examples", "01_build_roms.jl"),
+    joinpath(@__DIR__, "..", "examples", "02_prep_roms"),
+    joinpath(@__DIR__, "..", "examples", "03_run_roms.jl"),
+    joinpath(@__DIR__, "..", "examples", "04_plots.jl"),
 ]
 
 all_notebooks = joinpath(mktempdir(),"all.jl")
