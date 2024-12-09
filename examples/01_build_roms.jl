@@ -118,7 +118,7 @@ use_openmp = true;
 
 roms_application = "LigurianSea"
 fortran_compiler = "gfortran"
-jobs = 8
+jobs = 2
 logfile = "roms_build.log"
 
 ROMS.build(romsdir,roms_application,modeldir;
