@@ -10,7 +10,7 @@ using ROMS
 # Now we are ready to run the model:
 
 modeldir = expanduser("~/ROMS-implementation-test")
-simulationdir = joinpath(modeldir,"Simulation1")
+simulationdir = joinpath(modeldir,"Simulation1");
 
 # ## Run ROMS from julia
 #
@@ -27,7 +27,7 @@ cd(simulationdir) do
     withenv("OPAL_PREFIX" => nothing) do
         ROMS.run_model(modeldir,"roms.in"; use_openmp, np)
     end
-end
+end;
 
 # If you run into a problem, please first read the error message
 # carefully to get some indicaton what is wrong.

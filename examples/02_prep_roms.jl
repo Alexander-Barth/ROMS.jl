@@ -35,7 +35,7 @@ bath_name = expanduser("~/Data/Bathymetry/gebco_30sec_1_ligurian_sea.nc")
 if !isfile(bath_name)
     mkpath(dirname(bath_name))
     download("https://dox.ulg.ac.be/index.php/s/piwSaFP3nhM8jSD/download",bath_name)
-end
+end;
 
 # The time range for the simulation:
 # * `t0` start time
@@ -65,9 +65,9 @@ hmin = 2; # m
 modeldir = expanduser("~/ROMS-implementation-test")
 
 ## The model grid (`GRDNAME` in roms.in)
-grd_name = joinpath(modeldir,"roms_grd_liguriansea.nc")
+grd_name = joinpath(modeldir,"roms_grd_liguriansea.nc");
 
-# model specific parameters
+# Some parameters specific to the vertical coordinate system
 opt = (
     Tcline = 50,   # m
     theta_s = 5,   # surface refinement
@@ -77,7 +77,7 @@ opt = (
     Vstretching = 4,
 )
 
-# setup dir
+# Create the model directory and generate the model grid
 
 mkpath(modeldir);
 
@@ -100,13 +100,13 @@ bry_name =  joinpath(modeldir,"roms_bry_2023.nc")
 outdir = joinpath(modeldir,"OGCM")
 mkpath(outdir)
 
-# * For CMEMS boundary conditions (https://marine.copernicus.eu/):
+# * For CMEMS boundary conditions [https://marine.copernicus.eu/](https://marine.copernicus.eu/):
 #    * You may need to adapt the CMEMS `product_id` and `mapping` (if the model domain is outside of the Mediterranean Sea)
 #    * Data will be downloaded and saved in NetCDF by "chunks" of 60 days in the folder `OGCM` under the content of the variable `basedir`
 #    * You need to remove the files in this directory if you rerun the script with a different time range.
 #
 # Here we use the following dataset:
-# https://doi.org/10.25423/CMCC/MEDSEA_MULTIYEAR_PHY_006_004_E3R1
+# [https://doi.org/10.25423/CMCC/MEDSEA_MULTIYEAR_PHY_006_004_E3R1](https://doi.org/10.25423/CMCC/MEDSEA_MULTIYEAR_PHY_006_004_E3R1)
 
 product_id = "MEDSEA_MULTIYEAR_PHY_006_004"
 
@@ -130,7 +130,7 @@ ROMS.extract_ic(domain,clm_name,ini_name, t0);
 ROMS.extract_bc(domain,clm_name,bry_name)
 
 
-# nudging coefficient (`NUDNAME`)
+# Nudging coefficients (`NUDNAME`)
 
 tscale = 7; # days
 alpha = 0.3;
@@ -162,6 +162,7 @@ Vnames = ["sustr","svstr","shflux","swflux","swrad","Uwind","Vwind",
 ## forcing_filenames corresponds to `FRCNAME` in roms.in
 forcing_filenames = ROMS.prepare_ecmwf(ecmwf_fname,Vnames,frc_name_prefix,domain_name)
 
+# We print a list of all generated files.
 
 fn(name) = basename(name) # use relative file path
 ## fn(name) = name         # use absolute file path
@@ -206,7 +207,7 @@ for i in 1:length(Vnames)
 end
 
 # Check the resulting files such as bathymetry, initial conditions,
-# boundary conditions, interpolated model (`clim` file) and visualizing them.
+# boundary conditions, interpolated model (`clm_name` file) and visualizing them.
 
 # ## Configuration files
 #
@@ -218,7 +219,7 @@ modeldir = expanduser("~/ROMS-implementation-test")
 simulationdir = joinpath(modeldir,"Simulation1")
 mkpath(simulationdir)
 
-frc_name = joinpath.(modeldir,sort(filter(startswith("roms_frc"),readdir(modeldir))))
+frc_name = joinpath.(modeldir,sort(filter(startswith("roms_frc"),readdir(modeldir))));
 
 # Copy `varinfo.yaml` from `~/src/roms/ROMS/External/varinfo.yaml` in your
 # directory for your simulation (e.g. `ROMS-implementation-test`).
@@ -226,7 +227,7 @@ frc_name = joinpath.(modeldir,sort(filter(startswith("roms_frc"),readdir(modeldi
 
 var_name_template = joinpath(romsdir,"ROMS","External","varinfo.yaml")
 var_name = joinpath(simulationdir,"varinfo.yaml")
-cp(var_name_template,var_name; force=true)
+cp(var_name_template,var_name; force=true);
 
 # Load the ROMS grid
 
@@ -235,7 +236,7 @@ domain = ROMS.Grid(grd_name);
 # We use `roms.in` from `~/src/roms/User/External/roms.in` as a template
 
 intemplate = joinpath(romsdir,"User","External","roms.in")
-infile = joinpath(simulationdir,"roms.in")
+infile = joinpath(simulationdir,"roms.in");
 
 # This file is typicall edited with a text editor (when editing this file, do not use "tabs".).
 # Check the glossary at the end of this file for the meaning of the keys that we will change.
