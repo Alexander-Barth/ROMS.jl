@@ -120,7 +120,6 @@ roms_application = "LigurianSea"
 fortran_compiler = "gfortran"
 jobs = 2
 logfile = "roms_build.log"
-logfile = stdout
 
 ROMS.build(romsdir,roms_application,modeldir;
            stdout = logfile,
