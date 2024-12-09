@@ -22,10 +22,11 @@ NtileJ = 1
 np = NtileI*NtileJ
 
 use_openmp = true
+logfile = "roms.out"
 
 cd(simulationdir) do
     withenv("OPAL_PREFIX" => nothing) do
-        ROMS.run_model(modeldir,"roms.in"; use_openmp, np)
+        ROMS.run_model(modeldir,"roms.in"; use_openmp, np, stdout = logfile)
     end
 end;
 
