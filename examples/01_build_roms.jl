@@ -44,7 +44,7 @@ end
 # saved in a different directory `modeldir`:
 
 modeldir = expanduser("~/ROMS-implementation-test")
-mkpath(modeldir)
+mkpath(modeldir);
 
 # ## The header file
 

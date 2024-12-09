@@ -211,7 +211,7 @@ Choose an area:
 
 ## ROMS configuration
 
-* [01_build_roms.ipynb](01_build_roms.ipynb): compilation of the source code
-* [02_prep_roms.ipynb](02_prep_roms.ipynb): creating input files
-* [03_run_roms.ipynb](03_run_roms.ipynb): running the ROMS model
-* [04_plots.ipynb](04_plots.ipynb): plotting the results
+* [01\_build\_roms.ipynb](01_build_roms.ipynb): compilation of the source code
+* [02\_prep\_roms.ipynb](02_prep_roms.ipynb): creating input files
+* [03\_run\_roms.ipynb](03_run_roms.ipynb): running the ROMS model
+* [04\_plots.ipynb](04_plots.ipynb): plotting the results

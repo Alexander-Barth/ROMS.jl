@@ -37,8 +37,8 @@ for file in files
         Literate.markdown(
             file,
             joinpath(@__DIR__, "src"),
-            #execute = true,
-            execute = false,
+            execute = true,
+            #execute = false,
             documenter = true,
             # We add the credit to Literate.jl the footer
             credit = false,
