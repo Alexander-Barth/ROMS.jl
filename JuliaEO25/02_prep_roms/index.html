@@ -7,7 +7,7 @@ using Downloads: download</code></pre><h2 id="The-model-bathymetry"><a class="do
 if !isfile(bath_name)
     mkpath(dirname(bath_name))
     download(&quot;https://dox.ulg.ac.be/index.php/s/piwSaFP3nhM8jSD/download&quot;,bath_name)
-end</code></pre><pre><code class="nohighlight hljs">&quot;/home/runner/Data/Bathymetry/gebco_30sec_1_ligurian_sea.nc&quot;</code></pre><p>The time range for the simulation:</p><ul><li><code>t0</code> start time</li><li><code>t1</code> end time</li></ul><pre><code class="language-julia hljs">t0 = DateTime(2023,1,1);
+end;</code></pre><p>The time range for the simulation:</p><ul><li><code>t0</code> start time</li><li><code>t1</code> end time</li></ul><pre><code class="language-julia hljs">t0 = DateTime(2023,1,1);
 t1 = DateTime(2023,1,4);</code></pre><p>Define the bounding box the of the grid</p><pre><code class="language-julia hljs"># range of longitude
 xr = [7.6, 12.2];
 
@@ -27,14 +27,14 @@ hmin = 2; # m
 modeldir = expanduser(&quot;~/ROMS-implementation-test&quot;)
 
 # The model grid (`GRDNAME` in roms.in)
-grd_name = joinpath(modeldir,&quot;roms_grd_liguriansea.nc&quot;)</code></pre><pre><code class="nohighlight hljs">&quot;/home/runner/ROMS-implementation-test/roms_grd_liguriansea.nc&quot;</code></pre><p>model specific parameters</p><pre><code class="language-julia hljs">opt = (
+grd_name = joinpath(modeldir,&quot;roms_grd_liguriansea.nc&quot;);</code></pre><p>Some parameters specific to the vertical coordinate system</p><pre><code class="language-julia hljs">opt = (
     Tcline = 50,   # m
     theta_s = 5,   # surface refinement
     theta_b = 0.4, # bottom refinement
     nlevels = 32,  # number of vertical levels
     Vtransform  = 2,
     Vstretching = 4,
-)</code></pre><pre><code class="nohighlight hljs">(Tcline = 50, theta_s = 5, theta_b = 0.4, nlevels = 32, Vtransform = 2, Vstretching = 4)</code></pre><p>setup dir</p><pre><code class="language-julia hljs">mkpath(modeldir);
+)</code></pre><pre><code class="nohighlight hljs">(Tcline = 50, theta_s = 5, theta_b = 0.4, nlevels = 32, Vtransform = 2, Vstretching = 4)</code></pre><p>Create the model directory and generate the model grid</p><pre><code class="language-julia hljs">mkpath(modeldir);
 
 domain = ROMS.generate_grid(grd_name,bath_name,xr,yr,red,opt,hmin,rmax);
 
@@ -143,7 +143,7 @@ bry_name =  joinpath(modeldir,&quot;roms_bry_2023.nc&quot;)
 
 # temporary directory of the OGCM data
 outdir = joinpath(modeldir,&quot;OGCM&quot;)
-mkpath(outdir)</code></pre><pre><code class="nohighlight hljs">&quot;/home/runner/ROMS-implementation-test/OGCM&quot;</code></pre><ul><li>For CMEMS boundary conditions (https://marine.copernicus.eu/):<ul><li>You may need to adapt the CMEMS <code>product_id</code> and <code>mapping</code> (if the model domain is outside of the Mediterranean Sea)</li><li>Data will be downloaded and saved in NetCDF by &quot;chunks&quot; of 60 days in the folder <code>OGCM</code> under the content of the variable <code>basedir</code></li><li>You need to remove the files in this directory if you rerun the script with a different time range.</li></ul></li></ul><p>Here we use the following dataset: https://doi.org/10.25423/CMCC/MEDSEA<em>MULTIYEAR</em>PHY<em>006</em>004_E3R1</p><pre><code class="language-julia hljs">product_id = &quot;MEDSEA_MULTIYEAR_PHY_006_004&quot;</code></pre><pre><code class="nohighlight hljs">&quot;MEDSEA_MULTIYEAR_PHY_006_004&quot;</code></pre><p>mapping the variable (CF names) with the CMEMS <code>dataset_id</code></p><pre><code class="language-julia hljs">mapping = Dict(
+mkpath(outdir)</code></pre><pre><code class="nohighlight hljs">&quot;/home/runner/ROMS-implementation-test/OGCM&quot;</code></pre><ul><li>For CMEMS boundary conditions <a href="https://marine.copernicus.eu/">https://marine.copernicus.eu/</a>:<ul><li>You may need to adapt the CMEMS <code>product_id</code> and <code>mapping</code> (if the model domain is outside of the Mediterranean Sea)</li><li>Data will be downloaded and saved in NetCDF by &quot;chunks&quot; of 60 days in the folder <code>OGCM</code> under the content of the variable <code>basedir</code></li><li>You need to remove the files in this directory if you rerun the script with a different time range.</li></ul></li></ul><p>Here we use the following dataset: <a href="https://doi.org/10.25423/CMCC/MEDSEA_MULTIYEAR_PHY_006_004_E3R1">https://doi.org/10.25423/CMCC/MEDSEA<em>MULTIYEAR</em>PHY<em>006</em>004_E3R1</a></p><pre><code class="language-julia hljs">product_id = &quot;MEDSEA_MULTIYEAR_PHY_006_004&quot;</code></pre><pre><code class="nohighlight hljs">&quot;MEDSEA_MULTIYEAR_PHY_006_004&quot;</code></pre><p>mapping the variable (CF names) with the CMEMS <code>dataset_id</code></p><pre><code class="language-julia hljs">mapping = Dict(
     :sea_surface_height_above_geoid =&gt; &quot;med-cmcc-ssh-rean-d&quot;,
     :sea_water_potential_temperature =&gt; &quot;med-cmcc-tem-rean-d&quot;,
     :sea_water_salinity =&gt; &quot;med-cmcc-sal-rean-d&quot;,
@@ -179,7 +179,7 @@ copy v
 copy temp
 copy salt
 [ Info: DSTART = 59945.0
-</code></pre><p>nudging coefficient (<code>NUDNAME</code>)</p><pre><code class="language-julia hljs">tscale = 7; # days
+</code></pre><p>Nudging coefficients (<code>NUDNAME</code>)</p><pre><code class="language-julia hljs">tscale = 7; # days
 alpha = 0.3;
 halo = 2;
 Niter = 50
@@ -203,10 +203,23 @@ Vnames = [&quot;sustr&quot;,&quot;svstr&quot;,&quot;shflux&quot;,&quot;swflux&qu
     &quot;lwrad&quot;,&quot;lwrad_down&quot;,&quot;latent&quot;,&quot;sensible&quot;,&quot;cloud&quot;,&quot;rain&quot;,&quot;Pair&quot;,&quot;Tair&quot;,&quot;Qair&quot;]
 
 # forcing_filenames corresponds to `FRCNAME` in roms.in
-forcing_filenames = ROMS.prepare_ecmwf(ecmwf_fname,Vnames,frc_name_prefix,domain_name)
-
-
-fn(name) = basename(name) # use relative file path
+forcing_filenames = ROMS.prepare_ecmwf(ecmwf_fname,Vnames,frc_name_prefix,domain_name)</code></pre><pre><code class="nohighlight hljs">16-element Vector{Tuple{String, String}}:
+ (&quot;sustr&quot;, &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_sms.nc&quot;)
+ (&quot;svstr&quot;, &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_sms.nc&quot;)
+ (&quot;shflux&quot;, &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_shflux.nc&quot;)
+ (&quot;swflux&quot;, &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_swflux.nc&quot;)
+ (&quot;swrad&quot;, &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_swrad.nc&quot;)
+ (&quot;Uwind&quot;, &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_wind.nc&quot;)
+ (&quot;Vwind&quot;, &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_wind.nc&quot;)
+ (&quot;lwrad&quot;, &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_lwrad.nc&quot;)
+ (&quot;lwrad_down&quot;, &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_lwrad.nc&quot;)
+ (&quot;latent&quot;, &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_latent.nc&quot;)
+ (&quot;sensible&quot;, &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_sensible.nc&quot;)
+ (&quot;cloud&quot;, &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_cloud.nc&quot;)
+ (&quot;rain&quot;, &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_rain.nc&quot;)
+ (&quot;Pair&quot;, &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_Pair.nc&quot;)
+ (&quot;Tair&quot;, &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_Tair.nc&quot;)
+ (&quot;Qair&quot;, &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_Qair.nc&quot;)</code></pre><p>We print a list of all generated files.</p><pre><code class="language-julia hljs">fn(name) = basename(name) # use relative file path
 # fn(name) = name         # use absolute file path
 
 println()
@@ -246,39 +259,7 @@ for i in 1:length(Vnames)
         print(&quot; \\&quot;)
     end
     println()
-end</code></pre><pre><code class="nohighlight hljs">[ Info: Processing: sustr for 2022-12-01T03:00:00 - 2024-02-02T00:00:00
-[ Info: Wrote sustr, Min= -10.662030410783377 Max= 22.465806509203986
-[ Info: Processing: svstr for 2022-12-01T03:00:00 - 2024-02-02T00:00:00
-[ Info: Wrote svstr, Min= -11.62295977615409 Max= 10.094387278059234
-[ Info: Processing: shflux for 2022-12-01T03:00:00 - 2024-02-02T00:00:00
-[ Info: Wrote shflux, Min= -1215.7865461617669 Max= 777.8820326615055
-[ Info: Processing: swflux for 2022-12-01T03:00:00 - 2024-02-02T00:00:00
-[ Info: Wrote swflux, Min= -7.022890420820735e-6 Max= 2.6014808736569773e-8
-[ Info: Processing: swrad for 2022-12-01T03:00:00 - 2024-02-02T00:00:00
-[ Info: Wrote swrad, Min= -0.04634932265196312 Max= 868.8875770928033
-[ Info: Processing: Uwind for 2022-12-01T03:00:00 - 2024-02-02T00:00:00
-[ Info: Wrote Uwind, Min= -18.15777587890625 Max= 22.39664077758789
-[ Info: Processing: Vwind for 2022-12-01T03:00:00 - 2024-02-02T00:00:00
-[ Info: Wrote Vwind, Min= -19.139923095703125 Max= 18.085164070129395
-[ Info: Processing: lwrad for 2022-12-01T03:00:00 - 2024-02-02T00:00:00
-[ Info: Wrote lwrad, Min= -211.01331130880624 Max= 20.27023809321966
-[ Info: Processing: lwrad_down for 2022-12-01T03:00:00 - 2024-02-02T00:00:00
-[ Info: Wrote lwrad_down, Min= 154.4821796736844 Max= 455.21170860482505
-[ Info: Processing: latent for 2022-12-01T03:00:00 - 2024-02-02T00:00:00
-[ Info: Wrote latent, Min= -1112.5536384383101 Max= 130.19046782197947
-[ Info: Processing: sensible for 2022-12-01T03:00:00 - 2024-02-02T00:00:00
-[ Info: Wrote sensible, Min= -502.19418172693315 Max= 276.8478391717828
-[ Info: Processing: cloud for 2022-12-01T03:00:00 - 2024-02-02T00:00:00
-[ Info: Wrote cloud, Min= 0.0 Max= 1.0000076293945312
-[ Info: Processing: rain for 2022-12-01T03:00:00 - 2024-02-02T00:00:00
-[ Info: Wrote rain, Min= -1.3876613986987406e-6 Max= 0.007003218710032325
-[ Info: Processing: Pair for 2022-12-01T03:00:00 - 2024-02-02T00:00:00
-[ Info: Wrote Pair, Min= 982.0721875 Max= 1043.41875
-[ Info: Processing: Tair for 2022-12-01T03:00:00 - 2024-02-02T00:00:00
-[ Info: Wrote Tair, Min= -14.677832031249977 Max= 40.70034179687502
-[ Info: Processing: Qair for 2022-12-01T03:00:00 - 2024-02-02T00:00:00
-[ Info: Wrote Qair, Min= 4.511608470593702 Max= 100.01203389415996
-
+end</code></pre><pre><code class="nohighlight hljs">
 The created netCDF files are in /home/runner/ROMS-implementation-test.
 The following information has to be added to roms.in. A template of this file is
 provided in the directory User/External of your ROMS source code
@@ -319,28 +300,15 @@ You can also use relative or absolute file names.
                 roms_frc_2023_Pair.nc \
                 roms_frc_2023_Tair.nc \
                 roms_frc_2023_Qair.nc
-</code></pre><p>Check the resulting files such as bathymetry, initial conditions, boundary conditions, interpolated model (<code>clim</code> file) and visualizing them.</p><h2 id="Configuration-files"><a class="docs-heading-anchor" href="#Configuration-files">Configuration files</a><a id="Configuration-files-1"></a><a class="docs-heading-anchor-permalink" href="#Configuration-files" title="Permalink"></a></h2><p>Beside the created NetCDF files, ROMS needs two configuration files (<code>roms.in</code> and <code>varinfo.yaml</code>)</p><pre><code class="language-julia hljs">romsdir = expanduser(&quot;~/src/roms&quot;)
+</code></pre><p>Check the resulting files such as bathymetry, initial conditions, boundary conditions, interpolated model (<code>clm_name</code> file) and visualizing them.</p><h2 id="Configuration-files"><a class="docs-heading-anchor" href="#Configuration-files">Configuration files</a><a id="Configuration-files-1"></a><a class="docs-heading-anchor-permalink" href="#Configuration-files" title="Permalink"></a></h2><p>Beside the created NetCDF files, ROMS needs two configuration files (<code>roms.in</code> and <code>varinfo.yaml</code>)</p><pre><code class="language-julia hljs">romsdir = expanduser(&quot;~/src/roms&quot;)
 modeldir = expanduser(&quot;~/ROMS-implementation-test&quot;)
 simulationdir = joinpath(modeldir,&quot;Simulation1&quot;)
 mkpath(simulationdir)
 
-frc_name = joinpath.(modeldir,sort(filter(startswith(&quot;roms_frc&quot;),readdir(modeldir))))</code></pre><pre><code class="nohighlight hljs">13-element Vector{String}:
- &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_Pair.nc&quot;
- &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_Qair.nc&quot;
- &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_Tair.nc&quot;
- &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_cloud.nc&quot;
- &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_latent.nc&quot;
- &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_lwrad.nc&quot;
- &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_rain.nc&quot;
- &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_sensible.nc&quot;
- &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_shflux.nc&quot;
- &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_sms.nc&quot;
- &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_swflux.nc&quot;
- &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_swrad.nc&quot;
- &quot;/home/runner/ROMS-implementation-test/roms_frc_2023_wind.nc&quot;</code></pre><p>Copy <code>varinfo.yaml</code> from <code>~/src/roms/ROMS/External/varinfo.yaml</code> in your directory for your simulation (e.g. <code>ROMS-implementation-test</code>). This file does not need to be changed.</p><pre><code class="language-julia hljs">var_name_template = joinpath(romsdir,&quot;ROMS&quot;,&quot;External&quot;,&quot;varinfo.yaml&quot;)
+frc_name = joinpath.(modeldir,sort(filter(startswith(&quot;roms_frc&quot;),readdir(modeldir))));</code></pre><p>Copy <code>varinfo.yaml</code> from <code>~/src/roms/ROMS/External/varinfo.yaml</code> in your directory for your simulation (e.g. <code>ROMS-implementation-test</code>). This file does not need to be changed.</p><pre><code class="language-julia hljs">var_name_template = joinpath(romsdir,&quot;ROMS&quot;,&quot;External&quot;,&quot;varinfo.yaml&quot;)
 var_name = joinpath(simulationdir,&quot;varinfo.yaml&quot;)
-cp(var_name_template,var_name; force=true)</code></pre><pre><code class="nohighlight hljs">&quot;/home/runner/ROMS-implementation-test/Simulation1/varinfo.yaml&quot;</code></pre><p>Load the ROMS grid</p><pre><code class="language-julia hljs">domain = ROMS.Grid(grd_name);</code></pre><p>We use <code>roms.in</code> from <code>~/src/roms/User/External/roms.in</code> as a template</p><pre><code class="language-julia hljs">intemplate = joinpath(romsdir,&quot;User&quot;,&quot;External&quot;,&quot;roms.in&quot;)
-infile = joinpath(simulationdir,&quot;roms.in&quot;)</code></pre><pre><code class="nohighlight hljs">&quot;/home/runner/ROMS-implementation-test/Simulation1/roms.in&quot;</code></pre><p>This file is typicall edited with a text editor (when editing this file, do not use &quot;tabs&quot;.). Check the glossary at the end of this file for the meaning of the keys that we will change.</p><p>Here we edit the file programmatically. These are the changes that are done in the following:</p><ul><li><p>adapt <code>MyAppCPP</code> and change it to <code>LIGURIANSEA</code></p></li><li><p>adapt file names <code>VARNAME</code>, <code>GRDNAME</code>, <code>ININAME</code>, <code>BRYNAME</code>, <code>CLMNAME</code>, <code>FRCNAME</code> and <code>NFFILES</code> (<code>varinfo.yaml</code>, <code>LS2v.nc</code>, <code>ic2019.nc</code>, <code>bc2019.nc</code>, <code>clim2019.nc</code>, <code>liguriansea2019_*.nc</code>, <code>*</code> means the different variables). <code>NFFILES</code> is the number of forcing files.</p></li><li><p>change <code>Lm</code>, <code>Mm</code> and <code>N</code> based on the dimensions of your grid (make sure to read the glossary for these variable in <code>roms.in</code>)</p></li><li><p>read the desciption about &quot;lateral boundary conditions&quot; and adapt boundaries <code>LBC</code>:</p><ul><li>use closed (<code>Clo</code>) for boundaries without sea-point</li><li>for open boundaries:<ul><li>free-surface: Chapman implicit (<code>Cha</code>)</li><li>2D U/V-momentum: Flather (<code>Fla</code>)</li><li>3D U/V-momentum, temperature, salinity: Radiation with nudging (<code>RadNud</code>)</li><li>mixing TKE: Radiation (<code>Rad</code>)</li></ul></li></ul></li><li><p>set the starting time and time reference</p></li></ul><pre><code class="nohighlight hljs">DSTART = ...
+cp(var_name_template,var_name; force=true);</code></pre><p>Load the ROMS grid</p><pre><code class="language-julia hljs">domain = ROMS.Grid(grd_name);</code></pre><p>We use <code>roms.in</code> from <code>~/src/roms/User/External/roms.in</code> as a template</p><pre><code class="language-julia hljs">intemplate = joinpath(romsdir,&quot;User&quot;,&quot;External&quot;,&quot;roms.in&quot;)
+infile = joinpath(simulationdir,&quot;roms.in&quot;);</code></pre><p>This file is typicall edited with a text editor (when editing this file, do not use &quot;tabs&quot;.). Check the glossary at the end of this file for the meaning of the keys that we will change.</p><p>Here we edit the file programmatically. These are the changes that are done in the following:</p><ul><li><p>adapt <code>MyAppCPP</code> and change it to <code>LIGURIANSEA</code></p></li><li><p>adapt file names <code>VARNAME</code>, <code>GRDNAME</code>, <code>ININAME</code>, <code>BRYNAME</code>, <code>CLMNAME</code>, <code>FRCNAME</code> and <code>NFFILES</code> (<code>varinfo.yaml</code>, <code>LS2v.nc</code>, <code>ic2019.nc</code>, <code>bc2019.nc</code>, <code>clim2019.nc</code>, <code>liguriansea2019_*.nc</code>, <code>*</code> means the different variables). <code>NFFILES</code> is the number of forcing files.</p></li><li><p>change <code>Lm</code>, <code>Mm</code> and <code>N</code> based on the dimensions of your grid (make sure to read the glossary for these variable in <code>roms.in</code>)</p></li><li><p>read the desciption about &quot;lateral boundary conditions&quot; and adapt boundaries <code>LBC</code>:</p><ul><li>use closed (<code>Clo</code>) for boundaries without sea-point</li><li>for open boundaries:<ul><li>free-surface: Chapman implicit (<code>Cha</code>)</li><li>2D U/V-momentum: Flather (<code>Fla</code>)</li><li>3D U/V-momentum, temperature, salinity: Radiation with nudging (<code>RadNud</code>)</li><li>mixing TKE: Radiation (<code>Rad</code>)</li></ul></li></ul></li><li><p>set the starting time and time reference</p></li></ul><pre><code class="nohighlight hljs">DSTART = ...
 TIME_REF =  18581117</code></pre><p>where <code>DSTART</code> is here the number of days since 1858-11-17 or November 17, 1858 (see also <a href="https://en.wikipedia.org/wiki/Julian_day#Variants">modified Julia day</a>) of the start of the model simulation (<code>t0</code> in the julia script). For instance the number of days since 2014-01-01 (year-month-day) can be computed by of following commands in Julia:</p><pre><code class="language-julia hljs">using Dates
 Date(2020,1,1) - Date(1858,11,17)</code></pre><p>The inverse operation can be done with:</p><pre><code class="language-julia hljs">using Dates
 Date(1858,11,17) + Day(58849)</code></pre><p>You can use <code>DateTime</code> if you want to specify hour, minutes or seconds.</p><ul><li>Adapt the length of a time step <code>DT</code> (in seconds) and number of time steps <code>NTIMES</code></li><li><code>DT</code> can be 300 seconds</li><li>Initially we choose:<ul><li><code>NTIMES</code> -&gt; number of time step corresponding to 2 days (e.g. <code>2*24*60*60/DT</code> where <code>DT</code> is the time steps in seconds)</li><li><code>NHIS</code>, <code>NAVG</code>-&gt; number of time steps corresponding to 1 hour</li><li><code>NRST</code> -&gt; number of time steps correspond to 1 hour</li></ul></li></ul><pre><code class="language-julia hljs"># time step (seconds)
@@ -558,4 +526,4 @@ ROMS.infilereplace(intemplate,infile,substitutions)</code></pre><pre><code class
 &gt;        /home/runner/ROMS-implementation-test/roms_frc_2023_swflux.nc  \
 &gt;        /home/runner/ROMS-implementation-test/roms_frc_2023_swrad.nc  \
 &gt;        /home/runner/ROMS-implementation-test/roms_frc_2023_wind.nc                ! forcing file 1, grid 1
-</code></pre><p>Always make make sure that <code>THETA_S</code>, <code>THETA_B</code>, <code>TCLINE</code>, <code>Vtransform</code> and <code>Vstretching</code> match the values in your julia script. We can review the changes with the shell command:</p><pre><code class="language-bash hljs">diff -u --color ~/src/roms/User/External/roms.in roms.in</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../01_build_roms/">« Compilation</a><a class="docs-footer-nextpage" href="../03_run_roms/">Running ROMS »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a>, <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a></p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.8.0 on <span class="colophon-date" title="Monday 9 December 2024 14:07">Monday 9 December 2024</span>. Using Julia version 1.11.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+</code></pre><p>Always make make sure that <code>THETA_S</code>, <code>THETA_B</code>, <code>TCLINE</code>, <code>Vtransform</code> and <code>Vstretching</code> match the values in your julia script. We can review the changes with the shell command:</p><pre><code class="language-bash hljs">diff -u --color ~/src/roms/User/External/roms.in roms.in</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../01_build_roms/">« Compilation</a><a class="docs-footer-nextpage" href="../03_run_roms/">Running ROMS »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a>, <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a></p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.8.0 on <span class="colophon-date" title="Monday 9 December 2024 17:39">Monday 9 December 2024</span>. Using Julia version 1.11.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
