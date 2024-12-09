@@ -89,10 +89,10 @@ simulationdir = joinpath(modeldir,"Simulation1")
 
 np = NtileI*NtileJ
 
-use_mpi = true
+use_openmp = true
 
 cd(simulationdir) do
     withenv("OPAL_PREFIX" => nothing) do
-        ROMS.run_model(modeldir,"roms.in"; use_mpi, np)
+        ROMS.run_model(modeldir,"roms.in"; use_openmp, np)
     end
 end

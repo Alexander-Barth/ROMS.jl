@@ -82,10 +82,11 @@ write(header_file,"""
 
 # ROMS can use the MPI ([Message Passing Interface](https://en.wikipedia.org/wiki/Message_Passing_Interface)) or OpenMP ([Open Multi-Processing](https://en.wikipedia.org/wiki/OpenMP)) for parallelization (but not both at the same time):
 
-use_mpi = true;
-#use_mpi = false;
-#use_openmp = true;
-use_openmp = false;
+use_mpi = false;
+use_openmp = true;
+## or
+##use_mpi = true;
+##use_openmp = false;
 
 # `roms_application` is a descriptive name of the domain or the particular application
 # that the use can choose. We compile ROMS with the [GNU Fortran](https://en.wikipedia.org/wiki/GNU_Fortran) compiler using 8 jobs for compilation.
