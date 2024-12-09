@@ -1,5 +1,6 @@
 """
     ROMS.build(roms_application,modeldir;
+               stdout = stdout,
                use_mpi = false,
                use_openmp = false,
                use_mpif90 = use_mpi,
@@ -13,7 +14,7 @@
                extra_env = Dict(),
                )
 
-Compile the ROMS source code with the application name  `roms_application`
+Compile the ROMS source code with the application name `roms_application`
 and the ROMS project directory is the directory `modeldir` which will contain
 the produced binaries.
 
@@ -21,6 +22,7 @@ See [build_roms.sh](https://github.com/myroms/roms/blob/roms-4.1/ROMS/Bin/build_
 
 """
 function build(romsdir,roms_application,modeldir;
+               stdout = stdout,
                use_mpi = false,
                use_openmp = false,
                use_mpif90 = use_mpi,
@@ -35,6 +37,10 @@ function build(romsdir,roms_application,modeldir;
                )
 
     ison(b) = (b ? "on" : "")
+
+    if stdout isa AbstractString
+        stdout = abspath(stdout)
+    end
 
     build_env = Dict(
         "ROMS_APPLICATION" => roms_application,
@@ -53,9 +59,9 @@ function build(romsdir,roms_application,modeldir;
     cd(romsdir) do
         withenv(build_env...) do
             if clean
-                run(`make clean`)
+                run(pipeline(`make clean`; stdout))
             end
-            run(`make -j $jobs`)
+            run(pipeline(`make -j $jobs`; stdout))
         end
     end
     return nothing
