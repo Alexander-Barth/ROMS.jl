@@ -1,5 +1,5 @@
 var DOC_VERSIONS = [
-  "dev",
+  "JuliaEO25",
 ];
-var DOCUMENTER_NEWEST = "dev";
-var DOCUMENTER_STABLE = "dev";
+var DOCUMENTER_NEWEST = "JuliaEO25";
+var DOCUMENTER_STABLE = "JuliaEO25";
