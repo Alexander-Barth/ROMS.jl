@@ -6,9 +6,6 @@
 # The necessary files are already in the directory containing the model simulation and its
 # parent direction (`ROMS-implementation-test`). Downloading the files is only needed if you did not run the simulation.
 
-using Pkg
-Pkg.activate("makie",shared=true)
-
 grd_name = "roms_grd_liguriansea.nc"
 
 if !isfile(grd_name)
