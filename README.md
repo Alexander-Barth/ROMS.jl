@@ -6,6 +6,9 @@
 <!-- [![documentation stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://alexander-barth.github.io/ROMS.jl/stable/) -->
 [![documentation latest](https://img.shields.io/badge/docs-dev-blue.svg)](https://alexander-barth.github.io/ROMS.jl/dev/)
 
+> [!TIP]
+> For the participants to the [JuliaEO Global Workshop on Earth Observation with Julia 2025](https://aircentre.github.io/JuliaEO25/), the [notebooks are available here](https://alexander-barth.github.io/ROMS.jl/JuliaEO25/).
+
 # Installation
 
 Install ROMS.jl in julia 1.9 or later with the folling command executed in julia:
