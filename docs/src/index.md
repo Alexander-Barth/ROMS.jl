@@ -59,7 +59,7 @@ The tutorial can be run either:
 1. on your computer using a preconfigured virtual machine
 2. on the machines of the ULiège computer room
 3. directly on your computer (but all software has to be installed beforehand) if you are using Ubuntu/Debian. Other Linux OS will work too, but the installation instructions must be adapted. Mac OS and Windows (using e.g. Windows Subsystem for Linux) might work also; but if you are not using Linux, it is preferable to the the virtual machine.
-4. on the GHER notebook server (https://notebook-gher.uliege.be/) for ULiège students.
+4. on the GHER notebook server ([https://notebook-gher.uliege.be/](https://notebook-gher.uliege.be/)) for ULiège students.
 
 
 ## Preconfigured virtual machine
