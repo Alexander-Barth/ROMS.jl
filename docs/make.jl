@@ -15,12 +15,13 @@ import Literate
 # )
 
 
-files = [
-    joinpath(@__DIR__, "..", "examples", "01_build_roms.jl"),
-    joinpath(@__DIR__, "..", "examples", "02_prep_roms.jl"),
-    joinpath(@__DIR__, "..", "examples", "03_run_roms.jl"),
-    joinpath(@__DIR__, "..", "examples", "04_plots.jl"),
-]
+files = joinpath.(@__DIR__, "..", "examples", [
+    "01_build_roms.jl",
+    "02_prep_roms.jl",
+    "03_run_roms.jl",
+    "04_plots.jl",
+    "05_plots_makie.jl",
+])
 
 all_notebooks = joinpath(mktempdir(),"all.jl")
 write(all_notebooks, join(read.(files,String),"\n"))
@@ -62,6 +63,7 @@ makedocs(
         "Preparation" =>  "02_prep_roms.md",
         "Running ROMS"=> "03_run_roms.md",
         "Plots" => "04_plots.md",
+        "Plots (Makie)" => "05_plots_makie.md",
         "Additional information" => "additional_info.md",
         "Reference" => "reference.md",
     ],

@@ -6,6 +6,9 @@
 # The necessary files are already in the directory containing the model simulation and its
 # parent direction (`ROMS-implementation-test`). Downloading the files is only needed if you did not run the simulation.
 
+using Pkg
+Pkg.activate("makie",shared=true)
+
 grd_name = "roms_grd_liguriansea.nc"
 
 if !isfile(grd_name)
@@ -23,24 +26,26 @@ end
 # contains the file `roms_grd_liguriansea.nc` (use e.g. `;cd ~/ROMS-implementation-test`)
 
 using ROMS, NCDatasets, GeoDatasets, Statistics
-using PyPlot
+using CairoMakie # GeoMakie, GLMakie
+using CairoMakie: Point2f0
 
 ds_grid = NCDataset("roms_grd_liguriansea.nc");
 lon = ds_grid["lon_rho"][:,:];
 lat = ds_grid["lat_rho"][:,:];
-h = nomissing(ds_grid["h"][:,:],NaN);
+h = ds_grid["h"][:,:]
 mask_rho = ds_grid["mask_rho"][:,:];
 
-figure(figsize=(7,4))
 hmask = copy(h)
-hmask[mask_rho .== 0] .= NaN;
-pcolormesh(lon,lat,hmask);
-colorbar()
-## or colorbar(orientation="horizontal")
-gca().set_aspect(1/cosd(mean(lat)))
+hmask[mask_rho .== 0] .= missing;
 
-title("smoothed bathymetry [m]");
-savefig("smoothed_bathymetry.png");
+fig = Figure();
+ga = Axis(fig[1, 1]; title = "smoothed bathymetry [m]",
+         aspect = AxisAspect(1/cosd(mean(lat))));
+surf = surface!(ga,lon,lat,hmask, shading = NoShading, interpolate = false);
+Colorbar(fig[1,2],surf)
+xlims!(ga,extrema(lon))
+ylims!(ga,extrema(lat))
+save("smoothed_bathymetry.png",fig); nothing # hide
 
 #md # ![](smoothed_bathymetry.png)
 
@@ -57,8 +62,8 @@ savefig("smoothed_bathymetry.png");
 n = 1
 
 ds = NCDataset("roms_his.nc")
-temp = nomissing(ds["temp"][:,:,end,n],NaN);
-temp[mask_rho .== 0] .= NaN;
+temp = ds["temp"][:,:,end,n]
+temp[mask_rho .== 0] .= missing;
 
 if haskey(ds,"time")
     ## for the climatology file
@@ -68,12 +73,13 @@ else
     time = ds["ocean_time"][:]
 end
 
-figure(figsize=(7,4))
-pcolormesh(lon,lat,temp)
-gca().set_aspect(1/cosd(mean(lat)))
-colorbar();
-title("sea surface temperature [°C]")
-savefig("SST.png");
+fig = Figure()
+ga = Axis(fig[1, 1]; title = "sea surface temperature [degree C]")
+surf = surface!(ga,lon,lat,temp, shading = NoShading, interpolate = false);
+Colorbar(fig[1,2],surf);
+xlims!(ga,extrema(lon))
+ylims!(ga,extrema(lat))
+save("SST.png",fig); nothing # hide
 
 #md # ![](SST.png)
 
@@ -103,18 +109,23 @@ v_r = cat(v[:,1:1], (v[:,2:end] .+ v[:,1:end-1])/2, v[:,end:end], dims=2);
 ## all sizes should be the same
 size(u_r), size(v_r), size(mask_rho)
 
-figure(figsize=(7,4))
-pcolormesh(lon,lat,zeta)
-colorbar();
+fig = Figure();
+ga = Axis(fig[1, 1]; title = "surface currents [m/s] and elevation [m]",
+         aspect = AxisAspect(1/cosd(mean(lat))));
+surf = surface!(ga,lon,lat,zeta, shading = NoShading, interpolate = false);
+Colorbar(fig[1,2],surf);
 ## plot only a single arrow for r x r grid cells
 r = 3;
 i = 1:r:size(lon,1);
 j = 1:r:size(lon,2);
-q = quiver(lon[i,j],lat[i,j],u_r[i,j],v_r[i,j])
-quiverkey(q,0.9,0.85,1,"1 m/s",coordinates="axes")
-title("surface currents [m/s] and elevation [m]");
-gca().set_aspect(1/cosd(mean(lat)))
-savefig("surface_zeta_uv.png");
+s = 0.6;
+arrows!(ga,lon[i,j][:],lat[i,j][:],s*u_r[i,j][:],s*v_r[i,j][:]);
+i=j=5;
+arrows!(ga,[11],[44],[s*1],[0]);
+text!(ga,[11],[44],text="1 m/s")
+xlims!(ga,extrema(lon))
+ylims!(ga,extrema(lat))
+save("surface_zeta_uv.png",fig); nothing # hide
 
 #md # ![](surface_zeta_uv.png)
 
@@ -153,21 +164,34 @@ temp[mask3 .== 0] .= NaN;
 
 i = 20;
 
-clf()
-contourf(lat3[i,:,:],z_r[i,:,:],temp[i,:,:],40)
-ylim(-300,0);
-xlabel("latitude")
-ylabel("depth [m]")
-title("temperature at $(round(lon[i,1],sigdigits=4)) °E")
-colorbar();
-
+fig = Figure();
+ga = Axis(fig[1, 1]; title = "temperature at $(round(lon[i,1],sigdigits=4)) °E",
+          xlabel = "latitude",
+          ylabel = "depth [m]",
+          backgroundcolor=:white,
+          );
+surf = surface!(ga,lat3[i,:,:],z_r[i,:,:],temp[i,:,:],shading = NoShading, interpolate = false);
+xlims!(ga,extrema(lat3[i,:,:]))
+ylims!(ga,-300,0);
+Colorbar(fig[1,2],surf);
+ax2 = Axis(
+    fig[1, 1],
+    width = Relative(0.4),
+    height = Relative(0.3),
+    halign = 0.13,
+    valign = 0.18,
+    aspect = AxisAspect(1/cosd(mean(lat))),
+    backgroundcolor=:white);
 ## inset plot
-ax2 = gcf().add_axes([0.1,0.18,0.4,0.3])
-ax2.pcolormesh(lon,lat,temp[:,:,end])
-ax2.set_aspect(1/cosd(mean(lat)))
-ax2.plot(lon[i,[1,end]],lat[i,[1,end]],"m")
+poly!(ax2,Point2f0[(lon[1,1], lat[1,1]), (lon[1,1], lat[1,end]), (lon[end,1], lat[1,end]), (lon[end,1], lat[1,1])], color = [:white, :white, :white, :white])
+surf = surface!(ax2,lon[:,1],lat[1,:],temp[:,:,end], shading = NoShading, interpolate = false);
+#ax2.pcolormesh(lon,lat,temp[:,:,end])
+#ax2.set_aspect(1/cosd(mean(lat)))
+lines!(ax2,lon[i,[1,end]],lat[i,[1,end]],color="magenta")
+xlims!(ax2,extrema(lon))
+ylims!(ax2,extrema(lat))
 
-savefig("temp_section1.png");
+save("temp_section1.png",fig);
 
 #md # ![temp_section1](temp_section1.png)
 
@@ -181,15 +205,26 @@ savefig("temp_section1.png");
 tempi = ROMS.model_interp3(lon,lat,z_r,temp,lon,lat,[-200])
 mlon,mlat,mdata = GeoDatasets.landseamask(resolution='f', grid=1.25)
 
-figure(figsize=(7,4))
-pcolormesh(lon,lat,tempi[:,:,1])
-colorbar();
-ax = axis()
-contourf(mlon,mlat,mdata',[0.5, 3],colors=["gray"])
-axis(ax)
-gca().set_aspect(1/cosd(mean(lat)))
-title("temperature at 200 m [°C]")
-savefig("temp_hsection_200.png");
+ii = findall(minimum(lon) .<=  mlon .<= maximum(lon))
+jj = findall(minimum(lat) .<=  mlat .<= maximum(lat))
+
+mlon = mlon[ii]
+mlat = mlat[jj]
+mdata = mdata[ii,jj]
+
+fig = Figure();
+ga = Axis(fig[1, 1]; title = "temperature at 200 m [°C]",
+          xlabel = "longitude",
+          ylabel = "latitude",
+          );
+surf = surface!(ga,lon,lat,tempi[:,:,1],shading = NoShading, interpolate = false);
+Colorbar(fig[1,2],surf);
+contourf!(ga,mlon,mlat,mdata,levels=[0.5, 3],colormap=[:grey])
+xlims!(ga,extrema(lon))
+ylims!(ga,extrema(lat))
+fig
+
+save("temp_hsection_200.png",fig);
 
 #md # ![](temp_hsection_200.png)
 
@@ -211,24 +246,32 @@ end
 
 section_temp = mapslices(section_interp,temp,dims=(1,2))
 section_z = mapslices(section_interp,z_r,dims=(1,2))
-
 section_x = repeat(section_lon,inner=(1,size(temp,3)))
 
-clf()
-contourf(section_x,section_z[:,1,:],section_temp[:,1,:],50)
-ylim(-500,0)
-colorbar()
-xlabel("longitude")
-ylabel("depth")
-title("temperature section [°C]");
 
+fig = Figure();
+ga = Axis(fig[1, 1]; title = "temperature section [°C]",
+          xlabel = "longitude",
+          ylabel = "depth",
+          );
+surf = surface!(ga,section_x,section_z[:,1,:],section_temp[:,1,:],shading = NoShading, interpolate = false)
+ylims!(ga,-500,0)
+Colorbar(fig[1,2],surf);
 ## inset plot
-ax2 = gcf().add_axes([0.4,0.2,0.4,0.3])
-ax2.pcolormesh(lon,lat,temp[:,:,end])
-axis("on")
-ax2.set_aspect(1/cosd(mean(lat)))
-ax2.plot(section_lon,section_lat,"m")
+ax2 = Axis(
+    fig[1, 1],
+    width = Relative(0.4),
+    height = Relative(0.3),
+    halign = 0.6,
+    valign = 0.18,
+    aspect = AxisAspect(1/cosd(mean(lat))),
+    backgroundcolor=:white);
+poly!(ax2,Point2f0[(lon[1,1], lat[1,1]), (lon[1,1], lat[1,end]), (lon[end,1], lat[1,end]), (lon[end,1], lat[1,1])], color = [:white, :white, :white, :white])
+surf = surface!(ax2,lon[:,1],lat[1,:],temp[:,:,end], shading = NoShading, interpolate = false);
+xlims!(ax2,extrema(lon))
+ylims!(ax2,extrema(lat))
+fig
 
-savefig("temp_vsection.png");
+save("temp_vsection.png",fig);
 
 #md # ![](temp_vsection.png)
