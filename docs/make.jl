@@ -59,7 +59,7 @@ makedocs(
     ),
     pages = [
         "Tutorial" => "index.md",
-        "Compilation" => "01_build_roms.md",
+        "Building ROMS" => "01_build_roms.md",
         "Preparation" =>  "02_prep_roms.md",
         "Running ROMS"=> "03_run_roms.md",
         "Plots" => "04_plots.md",
