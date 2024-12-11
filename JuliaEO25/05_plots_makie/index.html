@@ -28,7 +28,7 @@ surf = surface!(ga,lon,lat,hmask, shading = NoShading, interpolate = false);
 Colorbar(fig[1,2],surf)
 xlims!(ga,extrema(lon))
 ylims!(ga,extrema(lat))
-save(&quot;smoothed_bathymetry.png&quot;,fig); nothing # hide</code></pre><p><img src="../smoothed_bathymetry.png" alt/></p><h2 id="Surface-temperature"><a class="docs-heading-anchor" href="#Surface-temperature">Surface temperature</a><a id="Surface-temperature-1"></a><a class="docs-heading-anchor-permalink" href="#Surface-temperature" title="Permalink"></a></h2><p>The surface surface temperature (or salinity) of the model output or climatology file can be visualized as follows. The parameter <code>n</code> is the time instance to plot. Make sure that your current working directory contains the file to plot (use e.g. <code>;cd ~/ROMS-implementation-test/</code> to plot <code>roms_his.nc</code>)</p><pre><code class="language-julia hljs"># instance to plot
+save(&quot;smoothed_bathymetry_makie.png&quot;,fig); nothing # hide</code></pre><p><img src="../smoothed_bathymetry_makie.png" alt/></p><h2 id="Surface-temperature"><a class="docs-heading-anchor" href="#Surface-temperature">Surface temperature</a><a id="Surface-temperature-1"></a><a class="docs-heading-anchor-permalink" href="#Surface-temperature" title="Permalink"></a></h2><p>The surface surface temperature (or salinity) of the model output or climatology file can be visualized as follows. The parameter <code>n</code> is the time instance to plot. Make sure that your current working directory contains the file to plot (use e.g. <code>;cd ~/ROMS-implementation-test/</code> to plot <code>roms_his.nc</code>)</p><pre><code class="language-julia hljs"># instance to plot
 n = 1
 
 ds = NCDataset(&quot;roms_his.nc&quot;)
@@ -49,7 +49,7 @@ surf = surface!(ga,lon,lat,temp, shading = NoShading, interpolate = false);
 Colorbar(fig[1,2],surf);
 xlims!(ga,extrema(lon))
 ylims!(ga,extrema(lat))
-save(&quot;SST.png&quot;,fig); nothing # hide</code></pre><p><img src="../SST.png" alt/></p><p>Exercise:</p><ul><li>Plot salinity</li><li>Plot different time instance (<code>n</code>)</li><li>Where do we specify that the surface values are to be plotted? Plot different layers.</li></ul><h2 id="Surface-velocity-and-elevation"><a class="docs-heading-anchor" href="#Surface-velocity-and-elevation">Surface velocity and elevation</a><a id="Surface-velocity-and-elevation-1"></a><a class="docs-heading-anchor-permalink" href="#Surface-velocity-and-elevation" title="Permalink"></a></h2><pre><code class="language-julia hljs">zeta = nomissing(ds[&quot;zeta&quot;][:,:,n],NaN)
+save(&quot;SST_makie.png&quot;,fig); nothing # hide</code></pre><p><img src="../SST_makie.png" alt/></p><p>Exercise:</p><ul><li>Plot salinity</li><li>Plot different time instance (<code>n</code>)</li><li>Where do we specify that the surface values are to be plotted? Plot different layers.</li></ul><h2 id="Surface-velocity-and-elevation"><a class="docs-heading-anchor" href="#Surface-velocity-and-elevation">Surface velocity and elevation</a><a id="Surface-velocity-and-elevation-1"></a><a class="docs-heading-anchor-permalink" href="#Surface-velocity-and-elevation" title="Permalink"></a></h2><pre><code class="language-julia hljs">zeta = nomissing(ds[&quot;zeta&quot;][:,:,n],NaN)
 u = nomissing(ds[&quot;u&quot;][:,:,end,n],NaN);
 v = nomissing(ds[&quot;v&quot;][:,:,end,n],NaN);
 
@@ -83,7 +83,7 @@ arrows!(ga,[11],[44],[s*1],[0]);
 text!(ga,[11],[44],text=&quot;1 m/s&quot;)
 xlims!(ga,extrema(lon))
 ylims!(ga,extrema(lat))
-save(&quot;surface_zeta_uv.png&quot;,fig); nothing # hide</code></pre><p><img src="../surface_zeta_uv.png" alt/></p><p>Exercise:</p><ul><li>The surface currents seems to follow lines of constant surface elevation. Explain why this is to be expected.</li></ul><h2 id="Vertical-section"><a class="docs-heading-anchor" href="#Vertical-section">Vertical section</a><a id="Vertical-section-1"></a><a class="docs-heading-anchor-permalink" href="#Vertical-section" title="Permalink"></a></h2><p>In this example we will plot a vertical section by slicing the model output at a given index.</p><p>It is very important that the parameters (<code>opt</code>) defining the vertical layer match the parameters values choosen when ROMS was setup.</p><pre><code class="language-julia hljs">opt = (
+save(&quot;surface_zeta_uv_makie.png&quot;,fig); nothing # hide</code></pre><p><img src="../surface_zeta_uv_makie.png" alt/></p><p>Exercise:</p><ul><li>The surface currents seems to follow lines of constant surface elevation. Explain why this is to be expected.</li></ul><h2 id="Vertical-section"><a class="docs-heading-anchor" href="#Vertical-section">Vertical section</a><a id="Vertical-section-1"></a><a class="docs-heading-anchor-permalink" href="#Vertical-section" title="Permalink"></a></h2><p>In this example we will plot a vertical section by slicing the model output at a given index.</p><p>It is very important that the parameters (<code>opt</code>) defining the vertical layer match the parameters values choosen when ROMS was setup.</p><pre><code class="language-julia hljs">opt = (
     Tcline = 50,   # m
     theta_s = 5,   # surface refinement
     theta_b = 0.4, # bottom refinement
@@ -135,7 +135,7 @@ lines!(ax2,lon[i,[1,end]],lat[i,[1,end]],color=&quot;magenta&quot;)
 xlims!(ax2,extrema(lon))
 ylims!(ax2,extrema(lat))
 
-save(&quot;temp_section1.png&quot;,fig);</code></pre><pre><code class="nohighlight hljs">Vtransform  = 2   ROMS-UCLA
+save(&quot;temp_section1_makie.png&quot;,fig);</code></pre><pre><code class="nohighlight hljs">Vtransform  = 2   ROMS-UCLA
    igrid     = 1 at horizontal RHO-points
 
 Vstretching = 4   Shchepetkin (2010)
@@ -179,7 +179,7 @@ Vstretching = 4   Shchepetkin (2010)
       2    -9.531250000000e-01    -8.202653975901e-01
       1    -9.843750000000e-01    -9.370972868551e-01
 
-</code></pre><p><img src="../temp_section1.png" alt="temp_section1"/></p><p>Exercise:</p><ul><li>Plot a section at different longitude and latitude</li></ul><h2 id="Horizontal-section"><a class="docs-heading-anchor" href="#Horizontal-section">Horizontal section</a><a id="Horizontal-section-1"></a><a class="docs-heading-anchor-permalink" href="#Horizontal-section" title="Permalink"></a></h2><p>A horizontal at the fixed depth of 200 m is extracted and plotted.</p><pre><code class="language-julia hljs">tempi = ROMS.model_interp3(lon,lat,z_r,temp,lon,lat,[-200])
+</code></pre><p><img src="../temp_section1_makie.png" alt="temp_section1"/></p><p>Exercise:</p><ul><li>Plot a section at different longitude and latitude</li></ul><h2 id="Horizontal-section"><a class="docs-heading-anchor" href="#Horizontal-section">Horizontal section</a><a id="Horizontal-section-1"></a><a class="docs-heading-anchor-permalink" href="#Horizontal-section" title="Permalink"></a></h2><p>A horizontal at the fixed depth of 200 m is extracted and plotted.</p><pre><code class="language-julia hljs">tempi = ROMS.model_interp3(lon,lat,z_r,temp,lon,lat,[-200])
 mlon,mlat,mdata = GeoDatasets.landseamask(resolution=&#39;f&#39;, grid=1.25)
 
 ii = findall(minimum(lon) .&lt;=  mlon .&lt;= maximum(lon))
@@ -201,7 +201,7 @@ xlims!(ga,extrema(lon))
 ylims!(ga,extrema(lat))
 fig
 
-save(&quot;temp_hsection_200.png&quot;,fig);</code></pre><p><img src="../temp_hsection_200.png" alt/></p><h2 id="Arbitrary-vertical-section"><a class="docs-heading-anchor" href="#Arbitrary-vertical-section">Arbitrary vertical section</a><a id="Arbitrary-vertical-section-1"></a><a class="docs-heading-anchor-permalink" href="#Arbitrary-vertical-section" title="Permalink"></a></h2><p>The vectors <code>section_lon</code> and <code>section_lat</code> define the coordinates where we want to extract the surface temperature.</p><pre><code class="language-julia hljs">section_lon = LinRange(8.18, 8.7,100);
+save(&quot;temp_hsection_200_makie.png&quot;,fig);</code></pre><p><img src="../temp_hsection_200_makie.png" alt/></p><h2 id="Arbitrary-vertical-section"><a class="docs-heading-anchor" href="#Arbitrary-vertical-section">Arbitrary vertical section</a><a id="Arbitrary-vertical-section-1"></a><a class="docs-heading-anchor-permalink" href="#Arbitrary-vertical-section" title="Permalink"></a></h2><p>The vectors <code>section_lon</code> and <code>section_lat</code> define the coordinates where we want to extract the surface temperature.</p><pre><code class="language-julia hljs">section_lon = LinRange(8.18, 8.7,100);
 section_lat = LinRange(43.95, 43.53,100);
 
 using Interpolations
@@ -239,4 +239,4 @@ xlims!(ax2,extrema(lon))
 ylims!(ax2,extrema(lat))
 fig
 
-save(&quot;temp_vsection.png&quot;,fig);</code></pre><p><img src="../temp_vsection.png" alt/></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../04_plots/">« Plots</a><a class="docs-footer-nextpage" href="../additional_info/">Additional information »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a>, <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a></p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.8.0 on <span class="colophon-date" title="Tuesday 10 December 2024 22:14">Tuesday 10 December 2024</span>. Using Julia version 1.11.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+save(&quot;temp_vsection_makie.png&quot;,fig);</code></pre><p><img src="../temp_vsection_makie.png" alt/></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../04_plots/">« Plots</a><a class="docs-footer-nextpage" href="../additional_info/">Additional information »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a>, <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a></p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.8.0 on <span class="colophon-date" title="Wednesday 11 December 2024 07:53">Wednesday 11 December 2024</span>. Using Julia version 1.11.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
