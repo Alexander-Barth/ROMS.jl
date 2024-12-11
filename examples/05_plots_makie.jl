@@ -42,9 +42,9 @@ surf = surface!(ga,lon,lat,hmask, shading = NoShading, interpolate = false);
 Colorbar(fig[1,2],surf)
 xlims!(ga,extrema(lon))
 ylims!(ga,extrema(lat))
-save("smoothed_bathymetry.png",fig); nothing # hide
+save("smoothed_bathymetry_makie.png",fig); nothing # hide
 
-#md # ![](smoothed_bathymetry.png)
+#md # ![](smoothed_bathymetry_makie.png)
 
 # ## Surface temperature
 
@@ -76,9 +76,9 @@ surf = surface!(ga,lon,lat,temp, shading = NoShading, interpolate = false);
 Colorbar(fig[1,2],surf);
 xlims!(ga,extrema(lon))
 ylims!(ga,extrema(lat))
-save("SST.png",fig); nothing # hide
+save("SST_makie.png",fig); nothing # hide
 
-#md # ![](SST.png)
+#md # ![](SST_makie.png)
 
 # Exercise:
 # * Plot salinity
@@ -122,9 +122,9 @@ arrows!(ga,[11],[44],[s*1],[0]);
 text!(ga,[11],[44],text="1 m/s")
 xlims!(ga,extrema(lon))
 ylims!(ga,extrema(lat))
-save("surface_zeta_uv.png",fig); nothing # hide
+save("surface_zeta_uv_makie.png",fig); nothing # hide
 
-#md # ![](surface_zeta_uv.png)
+#md # ![](surface_zeta_uv_makie.png)
 
 # Exercise:
 # * The surface currents seems to follow lines of constant surface elevation. Explain why this is to be expected.
@@ -188,9 +188,9 @@ lines!(ax2,lon[i,[1,end]],lat[i,[1,end]],color="magenta")
 xlims!(ax2,extrema(lon))
 ylims!(ax2,extrema(lat))
 
-save("temp_section1.png",fig);
+save("temp_section1_makie.png",fig);
 
-#md # ![temp_section1](temp_section1.png)
+#md # ![temp_section1](temp_section1_makie.png)
 
 # Exercise:
 # * Plot a section at different longitude and latitude
@@ -221,9 +221,9 @@ xlims!(ga,extrema(lon))
 ylims!(ga,extrema(lat))
 fig
 
-save("temp_hsection_200.png",fig);
+save("temp_hsection_200_makie.png",fig);
 
-#md # ![](temp_hsection_200.png)
+#md # ![](temp_hsection_200_makie.png)
 
 # ## Arbitrary vertical section
 
@@ -269,6 +269,6 @@ xlims!(ax2,extrema(lon))
 ylims!(ax2,extrema(lat))
 fig
 
-save("temp_vsection.png",fig);
+save("temp_vsection_makie.png",fig);
 
-#md # ![](temp_vsection.png)
+#md # ![](temp_vsection_makie.png)
