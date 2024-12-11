@@ -1,6 +1,6 @@
 # # Plotting ROMS results and input files
 
-#md # *The code here is also available as a notebook [04\_plots.ipynb](04_plots.ipynb).*
+#md # *The code here is also available as a notebook [04\_plots.ipynb](05_plots_makie.ipynb).*
 #
 # The aim here is to visualize the model files with generic plotting and analsis packages rather than to use a model specific visualization tool which hides many details and might lack of flexibility.
 # The necessary files are already in the directory containing the model simulation and its
