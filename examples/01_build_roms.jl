@@ -7,6 +7,10 @@
 # primitive equations ocean model widely used by the scientific community for
 # a diverse range of applications.
 #
+# This notebook should be run on [https://notebook-gher.uliege.be/](https://notebook-gher.uliege.be/)
+# (password are provided to the JuliaEO 2025 participants)
+# or a Linux/UNIX environement after installing the [required software](https://alexander-barth.github.io/ROMS.jl/JuliaEO25/#Required-software).
+#
 # ## Getting the source code
 #
 # The source code of ROMS is distributed via [GitHub](https://github.com/myroms/roms).
