@@ -9,7 +9,7 @@ Generate ROMS forcing fields from the ECMWF data file `atmo_fname`.
 Note that some variables are [accumulated](https://www.myroms.org/forum/viewtopic.php?f=30&t=3003). Per default, the accumulation is reset at 00:00 and 12:00 UTC.
 The accumulation period is determined from the time resolution (usually 3 hours).
 
-For the operational model output, if the following request is made:
+For the operational model output, if the following ECMWF API request is made:
 
 ```
         [...]
@@ -19,11 +19,10 @@ For the operational model output, if the following request is made:
         [...]
 ```
 
-The temporal resolution is 3 hours and several parameters (fluxes, total precipiation) are accumulated since 
+The temporal resolution is 3 hours and several parameters (fluxes of heat, momentum and fresh water, radiation, and total precipiation) are accumulated since 
 the start hour of the simulation (00 h and 12 h). The accumulation need therefore be reset at 0h and 12h.
-
-ECMWFService
-
+The unit of the NetCDF variable indicates where the variable is accumulated (integrated over typically 3 hours) 
+or an instantaneous value.
 
 Note ERA5 reanalysis (hourly data): [Accumulations are performed over the hour](https://confluence.ecmwf.int/display/CKB/ERA5%3A+data+documentation#ERA5:datadocumentation-Meanrates/fluxesandaccumulations).
 
