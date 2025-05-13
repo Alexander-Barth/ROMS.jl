@@ -1,15 +1,15 @@
 # # Plotting ROMS results and input files
 
-#md # The code here is also available as a [notebook](plots.ipynb).
-
+#md # *The code here is also available as a notebook [04\_plots.ipynb](04_plots.ipynb).*
+#
 # The aim here is to visualize the model files with generic plotting and analsis packages rather than to use a model specific visualization tool which hides many details and might lack of flexibility.
 # The necessary files are already in the directory containing the model simulation and its
 # parent direction (`ROMS-implementation-test`). Downloading the files is only needed if you did not run the simulation.
 
-grid_fname = "LS2v.nc"
+grd_name = "roms_grd_liguriansea.nc"
 
-if !isfile(grid_fname)
-    download("https://dox.ulg.ac.be/index.php/s/J9DXhUPXbyLADJa/download",grid_fname)
+if !isfile(grd_name)
+    download("https://dox.ulg.ac.be/index.php/s/J9DXhUPXbyLADJa/download",grd_name)
 end
 
 fname = "roms_his.nc"
@@ -20,11 +20,12 @@ end
 # ## Bathymetry
 
 # In this example, the bathymetry defined in the grid file is visualized. Make sure that your current working directory
-# contains the file `LS2v.nc` (use e.g. `;cd ~/ROMS-implementation-test`)
+# contains the file `roms_grd_liguriansea.nc` (use e.g. `;cd ~/ROMS-implementation-test`)
 
-using ROMS, PyPlot, NCDatasets, GeoDatasets, Statistics
+using ROMS, NCDatasets, GeoDatasets, Statistics
+using PyPlot
 
-ds_grid = NCDataset("LS2v.nc");
+ds_grid = NCDataset("roms_grd_liguriansea.nc");
 lon = ds_grid["lon_rho"][:,:];
 lat = ds_grid["lat_rho"][:,:];
 h = nomissing(ds_grid["h"][:,:],NaN);

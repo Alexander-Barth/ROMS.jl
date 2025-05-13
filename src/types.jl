@@ -192,16 +192,29 @@ end
 
 
 function Grid(his_fname)
-    opt =
-        Dataset(his_fname,"r") do ds
-            (Tcline = ds["Tcline"][:],
-             theta_s = ds["theta_s"][:],
-             theta_b = ds["theta_b"][:],
-             nlevels = Int(ds.dim["s_rho"]),
-             Vtransform  = Int(ds["Vtransform"][:]),
-             Vstretching = Int(ds["Vstretching"][:]),
-             )
-        end
+    ds = NCDataset(his_fname,"r")
+    Tcline = ds["Tcline"][]
+    theta_s = ds["theta_s"][]
+    theta_b = ds["theta_b"][]
+
+    if haskey(ds,"nlevels")
+        nlevels = ds["nlevels"][]
+    else
+        nlevels = Int(ds.dim["s_rho"])
+    end
+
+    Vtransform  = Int(ds["Vtransform"][])
+    Vstretching = Int(ds["Vstretching"][])
+    close(ds)
+
+    opt = (;
+           Tcline,
+           theta_s,
+           theta_b,
+           nlevels,
+           Vtransform,
+           Vstretching,
+           )
 
     grid = ROMS.Grid(his_fname,opt)
     return grid

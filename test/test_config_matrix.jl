@@ -188,7 +188,7 @@ max_tscale = 5e5
 
 nud_name = joinpath(basedir,"roms_nud_$(tscale)_$(Niter).nc")
 tracer_NudgeCoef = ROMS.nudgecoef(domain,nud_name,alpha,Niter,
-                                  halo,tscale; max_tscale = max_tscale)
+                                  halo,tscale; max_tscale = max_tscale);
 
 mkpath(basedir);
 mkpath(modeldir);
@@ -232,15 +232,15 @@ for ogcm in [CMEMS_motu,CMEMS_opendap,HYCOM]
         simulationdir = joinpath(basedir,"Simulation-$(ogcm)-$(agcm)")
 
         intemplate = joinpath(romsdir,"User","External","roms.in")
-        var_name_template = joinpath(romsdir,"ROMS","External","varinfo.dat")
+        var_name_template = joinpath(romsdir,"ROMS","External","varinfo.yaml")
 
         mkpath(simulationdir)
         infile = joinpath(simulationdir,"roms.in")
-        var_name = joinpath(simulationdir,"varinfo.dat")
+        var_name = joinpath(simulationdir,"varinfo.yaml")
 
         cp(var_name_template,var_name; force=true)
 
-        forc_filenames = unique(getindex.(forcing_filenames[agcm],2))
+        frc_name = unique(getindex.(forcing_filenames[agcm],2))
 
         openbc = ROMS.openboundaries(domain.mask)
 
@@ -270,8 +270,8 @@ for ogcm in [CMEMS_motu,CMEMS_opendap,HYCOM]
             "ININAME" => ini_name,
             "BRYNAME" => bry_name,
             "CLMNAME" => clm_name,
-            "NFFILES" => length(forc_filenames),
-            "FRCNAME" => join(forc_filenames,"  \\\n       "),
+            "NFFILES" => length(frc_name),
+            "FRCNAME" => join(frc_name,"  \\\n       "),
             "Vtransform" => opt.Vtransform,
             "Vstretching" => opt.Vstretching,
             "THETA_S" => opt.theta_s,

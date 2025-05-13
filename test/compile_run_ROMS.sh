@@ -16,25 +16,8 @@ git config --global credential.helper '!f() { sleep 1; echo "username=${ROMS_USE
 
 git clone https://github.com/myroms/roms
 cd roms
-git checkout roms-4.0
+git checkout roms-4.1
 
-if [[ $(gcc -dumpversion) -ge 11 ]]; then
-patch Compilers/Linux-gfortran.mk <<EOF
-diff --git a/Compilers/Linux-gfortran.mk b/Compilers/Linux-gfortran.mk
-index a878a381..27ac9004 100644
---- a/Compilers/Linux-gfortran.mk
-+++ b/Compilers/Linux-gfortran.mk
-@@ -30,7 +30,7 @@
- # First the defaults
- #
-                FC := gfortran
--           FFLAGS := -frepack-arrays
-+           FFLAGS := -frepack-arrays -fallow-argument-mismatch
-        FIXEDFLAGS := -ffixed-form
-         FREEFLAGS := -ffree-form -ffree-line-length-none
-               CPP := /usr/bin/cpp
-EOF
-fi
 fi
 
 mkdir -p "$BUILD_DIR"
@@ -45,29 +28,26 @@ wget -O liguriansea.h 'https://dox.ulg.ac.be/index.php/s/9yqxI4tp5hNr2Sg/downloa
 # get compile script
 cp ~/src/roms/ROMS/Bin/build_roms.sh build_roms.sh
 
-patch build_roms.sh <<EOF
+# "EOF" prevent subsituting variables like $HOME
+patch build_roms.sh <<"EOF"
 105c105
 < export   ROMS_APPLICATION=UPWELLING
 ---
 > export   ROMS_APPLICATION=LigurianSea
 110c110
-< export        MY_ROOT_DIR=\${HOME}/ocean/repository
+< export        MY_ROOT_DIR=${HOME}/ocean/repository
 ---
-> export        MY_ROOT_DIR=\${HOME}
-123c123
-<  export       MY_ROMS_SRC=\${MY_ROOT_DIR}/trunk
+> export        MY_ROOT_DIR=${HOME}
+124c124
+<  export       MY_ROMS_SRC=${MY_ROOT_DIR}/svn/trunk
 ---
->  export       MY_ROMS_SRC=\${MY_ROOT_DIR}/src/roms
-171,172c171,172
+>  export       MY_ROMS_SRC=${MY_ROOT_DIR}/src/roms
+173,174c173,174
 <  export              FORT=ifort
 < #export              FORT=gfortran
 ---
 > #export              FORT=ifort
 > export              FORT=gfortran
-177c177
-< #export       USE_NETCDF4=on            # compile with NetCDF-4 library
----
->  export       USE_NETCDF4=on            # compile with NetCDF-4 library
 EOF
 
 if [ -e build_roms.sh.rej ]; then
@@ -76,4 +56,3 @@ fi
 
 # Compile ROMS
 ./build_roms.sh -j 2 -noclean
-

@@ -85,5 +85,6 @@ function generate_grid(grid_fname,bath_name,xr,yr,red,opt,hmin,rmax;
 
     z_r,z_w = ROMS.generate_config(grid_fname,x,y,h,mask,pm,pn,dndx,dmde,opt);
 
-    return nothing
+    domain = ROMS.Grid(grid_fname);
+    return domain
 end

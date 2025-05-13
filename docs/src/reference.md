@@ -28,6 +28,7 @@ ROMS.load
 ROMS.interp_clim
 ROMS.extract_ic
 ROMS.extract_bc
+ROMS.whenopen
 ```
 
 ## Atmospheric forcings
@@ -46,4 +47,10 @@ ROMS.vapor_pressure
 ROMS.vapor_pressure_Buck
 ROMS.relative_humidity
 ROMS.latent_heat_of_vaporization
+```
+
+
+```@docs
+ROMS.build
+ROMS.run_model
 ```

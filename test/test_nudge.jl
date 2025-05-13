@@ -47,7 +47,7 @@ max_tscale = 5e5
 
 nud_name = tempname()
 tracer_NudgeCoef = ROMS.nudgecoef(domain,nud_name,alpha,Niter,
-          halo,tscale; max_tscale = max_tscale)
+          halo,tscale; max_tscale = max_tscale);
 #@show tracer_NudgeCoef[1:5,10,end]
 @test tracer_NudgeCoef[1,10,end] ≈ 1/tscale
 @test isfile(nud_name)

@@ -2,7 +2,7 @@ using ROMS
 using NCDatasets
 using Test
 
-grid_fname = expanduser("~/ROMS-implementation-test/LS2v.nc")
+grid_fname = expanduser("~/ROMS-implementation-test/roms_grd_liguriansea.nc")
 
 opt = (
     Tcline = 50,   # m

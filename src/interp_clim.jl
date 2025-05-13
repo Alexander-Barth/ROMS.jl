@@ -1,7 +1,8 @@
 """
     ROMS.interp_clim(domain,clim_filename,dataset,timerange;
                      padding = 0.5,
-                     missing_value = -9999.)
+                     missing_value = -9999.,
+)
 
 Interpolate `dataset` on the the model grid `domain` and creating the
 climatology file `clim_filename` for all dates between `timerange[1]` and
@@ -9,7 +10,13 @@ climatology file `clim_filename` for all dates between `timerange[1]` and
 """
 function interp_clim(domain,clim_filename,dataset,timerange;
                      padding = 0.5,
-                     missing_value = -9999.)
+                     missing_value = -9999.,
+                     zeta_cf_name = :sea_surface_height_above_geoid,
+                     temp_cf_name = :sea_water_potential_temperature,
+                     salt_cf_name = :sea_water_salinity,
+                     u_cf_name = :eastward_sea_water_velocity,
+                     v_cf_name = :northward_sea_water_velocity,
+                     )
 
     x = domain.lon;
     y = domain.lat;
@@ -30,11 +37,11 @@ function interp_clim(domain,clim_filename,dataset,timerange;
         latitude = wider(y),
     )
 
-    zeta,(zx,zy,zt) = load(dataset[:sea_surface_height_above_geoid]; query...)
-    temp,(tx,ty,tz,tt) = load(dataset[:sea_water_potential_temperature]; query...)
-    salt,(sx,sy,sz,st) = load(dataset[:sea_water_salinity]; query...)
-    u,(ux,uy,uz,ut) = load(dataset[:eastward_sea_water_velocity]; query...)
-    v,(vx,vy,vz,vt) = load(dataset[:northward_sea_water_velocity]; query...)
+    zeta,(zx,zy,zt) = load(dataset[zeta_cf_name]; query...)
+    temp,(tx,ty,tz,tt) = load(dataset[temp_cf_name]; query...)
+    salt,(sx,sy,sz,st) = load(dataset[salt_cf_name]; query...)
+    u,(ux,uy,uz,ut) = load(dataset[u_cf_name]; query...)
+    v,(vx,vy,vz,vt) = load(dataset[v_cf_name]; query...)
 
     angle = repeat(domain.angle,inner = (1, 1, size(z_r,3)))
 

@@ -1,10 +1,8 @@
 This package allows to setup necessary files for the [ROMS ocean model](https://www.myroms.org/).
 
-## Tutorial
-
 This tutorial is for students following the ULiège lecture OCEA0036-1 but might be useful for others as well.
 
-### Using for the first time a Linux (or UNIX-like) environment?
+## Using for the first time a Linux (or UNIX-like) environment?
 
 If you are familiar with Linux and the command line you can skip to section.
 
@@ -45,7 +43,7 @@ cd My\ Directory\ Name
 
 * Check out the [basic shell commands](https://diyhacking.com/linux-commands-for-beginners/) and [this tutorial](https://ryanstutorials.net/linuxtutorial/)
 
-### Registration
+## Registration
 
 Please register at:
 * [CMEMS (Copernicus Marine Environment Monitoring Service)](https://marine.copernicus.eu/services-portfolio/register-now/)
@@ -54,16 +52,17 @@ To generate new forcing fields, register at (optional):
 * [ECMWF (European Centre for Medium-Range Weather Forecasts)](https://apps.ecmwf.int/registration/). To access the operational forecast on the MARS service you will need a special permissions granted by your national weather service (in Europe). The default permission will let you access e.g. ERA5 dataset.
 
 
-### Required software
+## Required software
 
 The tutorial can be run either:
 
 1. on your computer using a preconfigured virtual machine
 2. on the machines of the ULiège computer room
-3. directly on your computer (but all software has to be installed beforehand) if you are using Ubuntu/Debian. Other Linux OS will work too, but the installation instructions must be adapted. Mac OS and Windows (using e.g. Windows Subsystem for Linux) might work too. But if you are not using Linux, it is preferable to the the virtual machine.
+3. directly on your computer (but all software has to be installed beforehand) if you are using Ubuntu/Debian. Other Linux OS will work too, but the installation instructions must be adapted. Mac OS and Windows (using e.g. Windows Subsystem for Linux) might work also; but if you are not using Linux, it is preferable to the the virtual machine.
+4. on the GHER notebook server ([https://notebook-gher.uliege.be/](https://notebook-gher.uliege.be/)) for ULiège students. Download all your data (in particular notebooks) after every session as there is no persistent storage on this machine.
 
 
-#### Preconfigured virtual machine
+## Preconfigured virtual machine
 
 A preconfigured virtual machine is available [here](https://data-assimilation.net/upload/OCEA0036/Ubuntu-24.04-MATE-Julia-ROMS.ova). You also need:
 
@@ -87,21 +86,17 @@ Pkg.update()
 
 Note, it is not necessary for this tutorial to update the whole operating system.
 
-#### Installation on Ubuntu/Linux (or UNIX-like operating systems)
+## Installation on Debian/Ubuntu/Linux (or UNIX-like operating systems)
 
 If you do not use this virtual machine the following software need to be installed:
 
 * [Julia](https://julialang.org/downloads/). Under Linux, you can install Julia with the following shell commands:
 
 ```bash
-cd /opt/
-sudo wget https://julialang-s3.julialang.org/bin/linux/x64/1.10/julia-1.10.3-linux-x86_64.tar.gz
-sudo tar -xvf julia-1.10.3-linux-x86_64.tar.gz
-sudo rm julia-1.10.3-linux-x86_64.tar.gz
-sudo ln -s /opt/julia-1.10.3/bin/julia /usr/local/bin/julia
+curl -fsSL https://install.julialang.org | sh
 ```
 
-where `1.10.3` should be replaced by the version number of the current stable release.
+During installation, you can confirm all default choices.
 More information is available [here](https://julialang.org/downloads/platform/).
 
 Under Linux, you need to install also `python3-matplotlib` for PythonPlot. On Debian/Ubuntu, this packages can be installed by this command:
@@ -119,19 +114,6 @@ Pkg.add("PythonPlot")
 Pkg.add("NCDatasets")
 Pkg.develop(url="https://github.com/Alexander-Barth/ROMS.jl")
 ```
-
-* ROMS source. This example uses the version 4.0 of ROMS. We assume that the ROMS source is copied in `~/src/roms`:
-
-```bash
-mkdir ~/src/
-cd ~/src/
-git clone https://github.com/myroms/roms
-cd roms
-git checkout roms-4.0
-```
-
-The output of the last command will tell you that `You are in 'detached HEAD' state.` (this is not an error).
-
 
 Other required software typically available from a package manager:
 * A Fortran 90 compiler (e.g. gfortran)
@@ -210,13 +192,7 @@ nf-config --all
 
 These commands should return a basic usage info or the version number if they are correctly installed.
 
-
-### Data
-
-* The full [GEBCO bathymetry](https://dox.ulg.ac.be/index.php/s/iEh7ompNdj8AN2p/download) (a subset for the Ligurian Sea is already included in the virtual machine)
-
-
-### Area
+## Choise of area
 
 Choose an area:
 
@@ -232,358 +208,10 @@ Choose an area:
 
 * Choose the domain such to avoid unnecessary open ocean boundary conditions
 
-### Atmospheric forcing fields
 
+## ROMS configuration
 
-* For the Ligurian Sea, necessary parameters have already been prepared and are available in the file [ROMS-implementation.zip](https://dox.ulg.ac.be/index.php/s/nH8u2DrI1m9mMbC). It containts data download the from
-the ECMWF operational archive (`Atmosphere/ecmwf_operational_archive_2018-12-01T00:00:00_2020-01-01T00:00:00.nc`). This NetCDF file needs to be converted by the julia function `ROMS.prepare_ecmwf`.
-
-* The remaining of this section explained how to download data from the ECMWF operational archive (e.g. for a different domain). These instructions are not needed now.
-* Adapt the file name, longitude/latitude and time range (start one day earlier, and finish one day later) in [`forcing_ecmwf.py`](https://github.com/Alexander-Barth/ROMS.jl/blob/master/examples/forcing_ecmwf.py) and execute the script as follows:
-
-```bash
-python3 forcing_ecmwf.py
-```
-
-List of variables (*: quantities accumulated over the integration period ("step"))
-
-| NetCDF Variable name | Description |
-|----------------------|----------|
-| msl | Mean sea level pressure |
-| u10 | 10 metre U wind component |
-| v10 | 10 metre V wind component |
-| t2m | 2 metre temperature |
-| d2m | 2 metre dewpoint temperature |
-| tcc | Total cloud cover* |
-| sshf | Surface sensible heat flux* |
-| strd | Surface thermal radiation downwards* |
-| ssr | Surface net solar radiation* |
-| str | Surface net thermal radiation* |
-| ewss | Eastward turbulent surface stress* |
-| nsss | Northward turbulent surface stress* |
-| e | Evaporation* |
-| ro | Runoff* |
-| tp | Total precipitation* |
-| sst | Sea surface temperature |
-| par | Photosynthetically active radiation at the surface* |
-
-### Generate initial, boundary conditions and forcing files
-
-* Adapt the [`example_config.jl`](https://raw.githubusercontent.com/Alexander-Barth/ROMS.jl/master/test/example_config.jl) file and call it `yourdomain_config.jl` where you replace `yourdomain` by the the name of your domain (lowercase and without space). For the Ligurian Sea, use `liguriansea_config.jl`.
-
-    * Longitude/latitude bounding box
-    * File paths
-    * Time range
-    * ...
-
-* For CMEMS boundary conditions:
-    * You may need to adapt the CMEMS `product_id` and `mapping` (if the model domain is outside of the Mediterranean Sea)
-    * Data will be downloaded and saved in NetCDF by "chunks" of 60 days in the folder `OGCM` under the content of the variable `basedir`
-    * You need to remove the files in this directory if you rerun the script with a different time range.
-
-* Run in Julia
-```julia
-include("yourdomain_config.jl")
-```
-
-* Check the resulting files: bathymetry, initial conditions, boundary conditions, interpolated model (`clim` file) and visualize the these files along some sections.
-
-
-### ROMS compilation
-
-
-* Compile ROMS:
-    * configure ROMS by creating a file `yourdomain.h` (e.g. `liguriansea.h` for the Ligurian Sea) in `ROMS-implementation-test`:
-
-```C
-#define UV_ADV                    /* turn ON advection terms */
-#define UV_COR                    /* turn ON Coriolis term */
-#define DJ_GRADPS                 /* Splines density  Jacobian (Shchepetkin, 2000) */
-#define NONLIN_EOS                /* define if using nonlinear equation of state */
-#define SALINITY                  /* define if using salinity */
-#define SOLVE3D                   /* define if solving 3D primitive equations */
-#define MASKING                   /* define if there is land in the domain */
-#define TS_U3HADVECTION           /* Third-order upstream horizontal advection of tracers */
-#define TS_C4VADVECTION           /* Fourth-order centered vertical advection of tracers */
-#define TS_DIF2                   /* use to turn ON or OFF harmonic horizontal mixing  */
-#define MIX_S_UV                  /* mixing along constant S-surfaces */
-#define UV_VIS2                   /* turn ON Laplacian horizontal mixing */
-#define AVERAGES
-#define UV_QDRAG
-#define MIX_S_TS
-
-#define  MY25_MIXING
-#ifdef MY25_MIXING
-# define N2S2_HORAVG
-# define KANTHA_CLAYSON
-#endif
-
-#define ANA_BSFLUX                /* analytical bottom salinity flux */
-#define ANA_BTFLUX                /* analytical bottom temperature flux */
-#define ANA_SSFLUX
-
-#define BULK_FLUXES               /* turn ON bulk fluxes computation */
-#define CLOUDS
-#define LONGWAVE
-#define SOLAR_SOURCE
-```
-
-* Copy the script `build_roms.sh` to the directory `~/ROMS-implementation-test`
-
-```bash
-cd ~/ROMS-implementation-test
-cp ~/src/roms/ROMS/Bin/build_roms.sh build_roms.sh
-```
-
-* Copy it to this directory and adapt it. Here is a list of changes that I made highlighted with the [diff tool](https://en.wikipedia.org/wiki/Diff_utility#Unified_format).
-The lines in red have been replaced by the lines in green. The plus and minus signes indicates also what has been added or removed and the `@@` indicate line numbers. These markers do not have to be added manually to the file `build_roms.sh`.
-
-```diff
- diff -u /home/abarth/src/roms/ROMS/Bin/build_roms.sh build_roms.sh
---- /home/abarth/src/roms/ROMS/Bin/build_roms.sh	2020-10-11 21:19:08.000000000 +0200
-+++ build_roms.sh	2020-11-06 11:16:15.484841910 +0100
-@@ -102,12 +102,12 @@
- # determine the name of the ".h" header file with the application
- # CPP definitions.
-
--export   ROMS_APPLICATION=UPWELLING
-+export   ROMS_APPLICATION=LigurianSea
-
- # Set a local environmental variable to define the path to the directories
- # where all this project's files are kept.
-
--export        MY_ROOT_DIR=${HOME}/ocean/repository
-+export        MY_ROOT_DIR=${HOME}
- export     MY_PROJECT_DIR=${PWD}
-
- # The path to the user's local current ROMS source code.
-@@ -120,7 +120,7 @@
- # machine. This script is designed to more easily allow for differing paths
- # to the code and inputs on differing machines.
-
-- export       MY_ROMS_SRC=${MY_ROOT_DIR}/trunk
-+ export       MY_ROMS_SRC=${MY_ROOT_DIR}/src/roms
-
- # Set path of the directory containing makefile configuration (*.mk) files.
- # The user has the option to specify a customized version of these files
-@@ -168,13 +168,13 @@
-
- #export        USE_OpenMP=on            # shared-memory parallelism
-
-- export              FORT=ifort
--#export              FORT=gfortran
-+# export              FORT=ifort
-+export              FORT=gfortran
- #export              FORT=pgi
-
- #export         USE_DEBUG=on            # use Fortran debugging flags
-  export         USE_LARGE=on            # activate 64-bit compilation
--#export       USE_NETCDF4=on            # compile with NetCDF-4 library
-+export       USE_NETCDF4=on            # compile with NetCDF-4 library
- #export   USE_PARALLEL_IO=on            # Parallel I/O with NetCDF-4/HDF5
-
-
-```
-
-For ROMS 4.0 and gfortran 11.2, you need to add `-fallow-argument-mismatch` to `FFLAGS` in `Compilers/Linux-gfortran.mk` from the
-ROMS source files. This is expected to be fixed in upcoming version of ROMS.
-
-* Review your changes with:
-
-```bash
-diff -u --color ~/src/roms/ROMS/Bin/build_roms.sh build_roms.sh
-```
-
-*  compile ROMS by running:
-
-```bash
-./build_roms.sh -j 2
-```
-
- * copy `varinfo.dat` from `~/src/roms/ROMS/External/varinfo.dat` in your directory for your simulation (e.g. `ROMS-implementation-test`):
-
-```bash
-cp ~/src/roms/ROMS/External/varinfo.dat .
-```
-
-
-### ROMS model domain configuration
-
- * copy `roms.in` from `~/src/roms/User/External/roms.in` in the directory `~/ROMS-implementation-test`:
-
-```bash
-cp  ~/src/roms/User/External/roms.in .
-```
-
- * check the glossary at the end of this file for the meaning of the keys that we will change
- * when editing this file, do not use "tabs".
-
- * adapt `MyAppCPP` and change it to `LIGURIANSEA`
-
- * adapt file names `VARNAME`, `GRDNAME`, `ININAME`, `BRYNAME`, `CLMNAME`, `FRCNAME` and `NFFILES` (`varinfo.dat`, `LS2v.nc`, `ic2019.nc`, `bc2019.nc`, `clim2019.nc`, `liguriansea2019_*.nc`, `*` means the different variables). `NFFILES` is the number of forcing files.
- * also make sure that these variables are set (number of files with boundary conditions and climatology). If they do not exist, they need to be added (before the line with `BRYNAME`).
-
-```
- NBCFILES == 1
-NCLMFILES == 1
-```
-
- * change `Lm`, `Mm` and `N` based on the dimensions of your grid (make sure to read the glossary for these variable in `roms.in`)
-
- * read the desciption about "lateral boundary conditions" and adapt boundaries `LBC`:
-    * use closed (`Clo`) for boundaries without sea-point
-    * for open boundaries:
-       * free-surface: Chapman implicit (`Cha`)
-       * 2D U/V-momentum: Flather (`Fla`)
-       * 3D U/V-momentum, temperature, salinity: Radiation with nudging (`RadNud`)
-       * mixing TKE: Radiation (`Rad`)
-
- * set the starting time and time reference
-```
-DSTART = ...
-TIME_REF =  18581117
-```
-
-where `DSTART` is here the number of days since 1858-11-17 or November 17, 1858 (see also [modified Julia day](https://en.wikipedia.org/wiki/Julian_day#Variants)) of the start of the model simulation (`t0` in the julia script). For instance the number of days since 2014-01-01 (year-month-day) can be computed by of following commands in Julia:
-
-```julia
-using Dates
-Date(2020,1,1) - Date(1858,11,17)
-```
-
-The inverse operation can be done with:
-
-```julia
-using Dates
-Date(1858,11,17) + Day(58849)
-```
-
-You can use `DateTime` if you want to specify hour, minutes or seconds.
-
-* Adapt the length of a time step `DT` (in seconds) and number of time steps `NTIMES`
-* `DT` can be 300 seconds
-* Initially we choose:
-    * `NTIMES` -> number of time step corresponding to 2 days (e.g. `2*24*60*60/DT` where `DT` is the time steps in seconds)
-    * `NHIS`, `NAVG`-> number of time steps corresponding to 1 hour
-    * `NRST` -> number of time steps correspond to 1 hour
-
-
-### Nudging towards "climatology"
-
-The nudging towards "climatology" is an optional step to avoid issue (like sharp gradients) near the open sea boundaries.
-A flow relexation zone can be implemented in ROMS by using the followings settings:
-
-```
-LtracerCLM == T T  ! enable processing of CLIM data
-LnudgeTCLM == T T  ! nudge to CLIM data
-TNUDG == 2*10.0d0                    ! days
-```
-
-Make nudging on inflow is stronger than on outflow
-
-```
-OBCFAC == 10.0d0                      ! nondimensional
-```
-
-Set also `NUDNAME` to the file name create by the julia script.
-
-
-* Make sure that `THETA_S`, `THETA_B`, `TCLINE`, `Vtransform` and `Vstretching` match the values in your julia script.
-
-* Review your changes with:
-
-```bash
-diff -u --color ~/src/roms/User/External/roms.in roms.in
-```
-
-### Run ROMS
-
-#### Run ROMS without MPI
-
-* To run ROMS without MPI, one need to disable MPI in `build_roms.sh`. The ROMS binary will be called `romsS` and call be called by:
-
-```bash
-./romsS < roms.in | tee roms.out
-```
-
-#### Run ROMS with MPI
-
-* How many CPU cores does your machine have? You can use the command `top` in a shell terminal followed by `1`.
-* In `build_roms.sh` set `USE_MPI=on` (which is actually the default value)
- * Recompile ROMS
- * Change in `roms.in` the parameters `NtileI` and `NtileJ`. The number of CPU cores should be `NtileI` * `NtileJ`.
- * Run ROMS with, e.g.
-
-```bash
-mpirun -np 4 ./romsM  roms.in | tee roms.out
-```
-where 4 is the number of cores to use. To use 4 CPUs, you need to set `NtileI` to 2 and `NtileJ` to 2.
-
-
-With the command `tee` the normal screen output will be place in the file `roms.out` but still be printed on the screen.
-
-* A problem? What does the error message say?
-* Outputs are in `roms_his.nc` and `roms_avg.nc`, plot some variables like sea surface height and sea surface temperature at the beginning and the end of the simulation.
-
-* In Julia, force figure 1 and to 2 to have the same color-bar.
-
-```julia
-figure(); p1 = pcolor(randn(3,3)); colorbar()
-figure(); p2 = pcolor(randn(3,3)); colorbar()
-p2.set_clim(p1.get_clim())
-```
-
-* If everything runs fine,
-    * is the model still stable with a longer time steps (`DT`) ?
-    * increase the number of time steps (`NTIMES`)
-    * possibly adapt the frequency at which you save the model results (`NHIS`, `NAVG`,`NRST`)
-
-### Interpreting ROMS output
-
-* Check minimum and maximum value of the different parameters
-```
- NLM: GET_STATE - Read state initial conditions,             t = 57235 00:00:00
-                   (Grid 02, File: roms_nest_his.nc, Rec=0182, Index=1)
-                - free-surface
-                   (Min = -4.63564634E-01 Max = -3.63838434E-01)
-```
-
-* The barotropic, baroclinic and Coriolis Courant number should be smaller than 1
-
-```
- Minimum barotropic Courant Number =  2.09670689E-02
- Maximum barotropic Courant Number =  5.56799674E-01
- Maximum Coriolis   Courant Number =  1.71574766E-03
-```
-
-* Information
-    * energy (kinetic, potential, total) and volume
-    * maximum Courant number
-
-```
-   STEP   Day HH:MM:SS  KINETIC_ENRG   POTEN_ENRG    TOTAL_ENRG    NET_VOLUME  Grid
-          C => (i,j,k)       Cu            Cv            Cw         Max Speed
-
- 346200 57235 00:00:00  2.691184E-03  1.043099E+04  1.043099E+04  6.221264E+13  01
-          (079,055,30)  9.266512E-02  4.949213E-02  0.000000E+00  1.081862E+00
-```
-
-
-### Validation
-
-Check out satellite data (e.g. sea surface temperature, sea surface height) at:
-* [CMEMS](https://marine.copernicus.eu/)
-* [PODAAC NASA](https://podaac.jpl.nasa.gov/)
-
-Make some comparison with satellite and the downloaded in situ observation
-
-### Hydrodynamic model troubleshooting
-
-[Hydrodynamic model troubleshooting](https://github.com/gher-ulg/Documentation/wiki/Hydrodynamic-model-troubleshooting)
-
-
-### More information
-
-* [ROMS Wiki](https://www.myroms.org/wiki/)
-* [ROMS Wiki Frequently Asked Questions](https://www.myroms.org/wiki/Frequently_Asked_Questions)
-* K. Hedström. 2016. [Technical Manual for a Coupled Sea-Ice/Ocean Circulation Model (Version 4)](https://github.com/kshedstrom/roms_manual/blob/master/roms_manual.pdf). U.S. Dept. of the Interior, Bureau of Ocean Energy Management, Alaska OCS Region. OCS, Study BOEM 2016-037. 176 pp.
+* [01\_build\_roms.ipynb](01_build_roms.ipynb): compilation of the source code
+* [02\_prep\_roms.ipynb](02_prep_roms.ipynb): creating input files
+* [03\_run\_roms.ipynb](03_run_roms.ipynb): running the ROMS model
+* [04\_plots.ipynb](04_plots.ipynb): plotting the results
