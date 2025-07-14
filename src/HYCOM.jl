@@ -5,7 +5,7 @@ function HYCOM(url,cachedir; chunks = 60)
         :sea_surface_height_above_geoid => "surf_el",
     )
 
-    return OPENDAP(
+    return CDMDataset(
         NCDataset,
         DefaultDict{Symbol,String,String}(url),
         cachedir = cachedir,
