@@ -24,7 +24,7 @@ end
 
 using ROMS, NCDatasets, GeoDatasets, Statistics
 using CairoMakie # GeoMakie, GLMakie
-using CairoMakie: Point2f0
+using CairoMakie: Point2f
 
 ds_grid = NCDataset("roms_grd_liguriansea.nc");
 lon = ds_grid["lon_rho"][:,:];
