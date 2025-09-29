@@ -42,7 +42,7 @@ end
 
 cachedir = expanduser("~/tmp/GFS")
 
-# pre-fill cache (becase server unreliable)
+# pre-fill cache (because the server is unreliable)
 # source
 # https://thredds.rda.ucar.edu/thredds/catalog/files/g/ds084.1/2019/20190101/catalog.html
 if !isdir(cachedir)

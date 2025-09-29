@@ -85,25 +85,9 @@ function download_gfs(
         baseurl = baseurl,
     )
 
-    # example
-    # https://thredds.rda.ucar.edu/thredds/dodsC/files/g/ds084.1/2018/20181231/gfs.0p25.2018123118.f003.grib2
-    ds = NCDataset(fname);
-
-    lon = ds["lon"][:]
-    lat = ds["lat"][:]
-
     xr = xr .+ (-padding,padding)
     yr = yr .+ (-padding,padding)
 
-    irange = findall(xr[1] .<= lon .<= xr[end])
-    jrange = findall(yr[1] .<= lat .<= yr[end])
-
-
-    irange = irange[1]:irange[end]
-    jrange = jrange[1]:jrange[end]
-
-    lon = lon[irange]
-    lat = lat[jrange]
 
     mkpath(cachedir)
     filenames = Vector{String}(undef,length(times))
@@ -143,6 +127,21 @@ function download_gfs(
             end
 
             ds = NCDataset(url)
+
+            # example
+            # https://thredds.rda.ucar.edu/thredds/dodsC/files/g/ds084.1/2018/20181231/gfs.0p25.2018123118.f003.grib2
+
+            lon = ds["lon"][:]
+            lat = ds["lat"][:]
+
+            irange = findall(xr[1] .<= lon .<= xr[end])
+            jrange = findall(yr[1] .<= lat .<= yr[end])
+
+            irange = irange[1]:irange[end]
+            jrange = jrange[1]:jrange[end]
+
+            lon = lon[irange]
+            lat = lat[jrange]
 
             write(fname,view(ds,lon = irange,lat = jrange),
                   include = intersect(keys(ds),[
