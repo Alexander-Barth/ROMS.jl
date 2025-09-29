@@ -180,7 +180,7 @@ ax2 = Axis(
     aspect = AxisAspect(1/cosd(mean(lat))),
     backgroundcolor=:white);
 ## inset plot
-poly!(ax2,Point2f0[(lon[1,1], lat[1,1]), (lon[1,1], lat[1,end]), (lon[end,1], lat[1,end]), (lon[end,1], lat[1,1])], color = [:white, :white, :white, :white])
+poly!(ax2,Point2f[(lon[1,1], lat[1,1]), (lon[1,1], lat[1,end]), (lon[end,1], lat[1,end]), (lon[end,1], lat[1,1])], color = [:white, :white, :white, :white])
 surf = surface!(ax2,lon[:,1],lat[1,:],temp[:,:,end], shading = NoShading, interpolate = false);
 #ax2.pcolormesh(lon,lat,temp[:,:,end])
 #ax2.set_aspect(1/cosd(mean(lat)))
@@ -263,7 +263,7 @@ ax2 = Axis(
     valign = 0.18,
     aspect = AxisAspect(1/cosd(mean(lat))),
     backgroundcolor=:white);
-poly!(ax2,Point2f0[(lon[1,1], lat[1,1]), (lon[1,1], lat[1,end]), (lon[end,1], lat[1,end]), (lon[end,1], lat[1,1])], color = [:white, :white, :white, :white])
+poly!(ax2,Point2f[(lon[1,1], lat[1,1]), (lon[1,1], lat[1,end]), (lon[end,1], lat[1,end]), (lon[end,1], lat[1,1])], color = [:white, :white, :white, :white])
 surf = surface!(ax2,lon[:,1],lat[1,:],temp[:,:,end], shading = NoShading, interpolate = false);
 xlims!(ax2,extrema(lon))
 ylims!(ax2,extrema(lat))
