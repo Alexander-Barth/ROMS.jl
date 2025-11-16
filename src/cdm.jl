@@ -72,6 +72,10 @@ function download(dsopendap::CDMDataset{TDS},variablename::Symbol;
         time = time - Dates.Second(dsopendap.time_shift)
     end
 
+    if !(nctime[1] <= time[1] && time[end] <= nctime[end])
+        error("out of date: available time range is $(nctime[1]) - $(nctime[end]). Requested time range is $(time[1]) - $(time[end])")
+    end
+
     indices = (; ((Symbol(name(ncv)), rg(findall(first(b) .<= ncv[:] .<= last(b))) )
                   for (ncv,b) in [ (nclon,longitude),(nclat,latitude),(nctime,time)]) ...)
 
