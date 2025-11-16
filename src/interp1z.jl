@@ -9,13 +9,16 @@ function interp1z(z,v,zi; extrap_surface = false, extrap_bottom = false);
 
     # vertical interpolation
     vii = fill(NaN,size(zi))
-    _tmpzi = zeros(size(zi,3),nthreads())
+    #_tmpzi = zeros(size(zi,3),nthreads())
+    tmpzi = zeros(size(zi,3))
 
     ϵ = 10*eps(Float32)
     @debug "vertical interpolation"
-    Threads.@threads for j=1:size(v,2)
-        tmpzi = @view _tmpzi[:,threadid()]
-
+    # TODO allow for dynamic thread scheduling
+    # https://julialang.org/blog/2023/07/PSA-dont-use-threadid/
+    # Threads.@threads :static for j=1:size(v,2)
+    for j=1:size(v,2)
+        #tmpzi = @view _tmpzi[:,threadid()]
         @inbounds for i=1:size(v,1)
             tmpz = @view z[i,j,:]
 
