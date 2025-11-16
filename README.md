@@ -11,7 +11,8 @@
 
 # Installation
 
-Install ROMS.jl in julia 1.9 or later with the folling command executed in julia:
+ROMS.jl requires julia 1.9 or later.
+Install ROMS.jl with the folling command executed in a julia shell:
 
 ```julia
 using Pkg
