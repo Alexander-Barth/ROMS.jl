@@ -4,7 +4,7 @@ vapor_pressure_Tetens(T) = 6.1078 * exp( 17.27 * T / (T + 237.3))
 """
     e = ROMS.vapor_pressure_Buck(T)
 
-actual vapor pressure in hPa (millibars) from dewpoint temperature `T` in degree Celsius
+Actual vapor pressure in hPa (millibars) from dewpoint temperature `T` in degree Celsius
 using using [Buck (1996)](https://en.wikipedia.org/w/index.php?title=Arden_Buck_equation&oldid=946509994). If `T` is the air temperature, then  `e` is the saturated vapor
 pressure over liquid water is given by:
 
@@ -18,7 +18,7 @@ vapor_pressure_Buck(T) = 6.1121 * exp( (18.678 - T/234.5) * T / (257.14 + T))
 """
     e = ROMS.vapor_pressure(T)
 
-actual vapor pressure in hPa (millibars) from dewpoint temperature `T` in degree Celsius
+Actual vapor pressure in hPa (millibars) from dewpoint temperature `T` in degree Celsius
 using using [1]. If `T` is the air temperature, then  `e` is the saturated vapor
 pressure over liquid water is given by:
 
