@@ -12,6 +12,9 @@ function copernicus_marine_resolve(
     cat = STAC.Catalog(catalog_url);
     list_item = collect(keys(cat[product_id].items))
     item_canditates = sort(filter(startswith(dataset_id),list_item))
+    if length(item_canditates) == 0
+        error("no item found product_id=$product_id  dataset_id=$dataset_id asset_name=$asset_name at $catalog_url")
+    end
     # use last version per default
     dataset_version_id = item_canditates[end]
     item = cat[product_id].items[dataset_version_id]
