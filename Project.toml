@@ -29,6 +29,7 @@ Interpolations = "0.12, 0.13, 0.14, 0.15, 0.16"
 NCDatasets = "0.14"
 Statistics = "1"
 STAC = "0.1.2"
+ZarrDatasets = "0.1.9"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
