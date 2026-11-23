@@ -25,19 +25,6 @@ if haskey(ENV,"CMEMS_USERNAME")
     cmems_username = ENV["CMEMS_USERNAME"]
     cmems_password = ENV["CMEMS_PASSWORD"]
 
-    mapping = Dict(
-        # var  dataset_id
-        :sea_surface_height_above_geoid => ("zos","med-cmcc-ssh-rean-d"),
-        :sea_water_potential_temperature => ("thetao", "med-cmcc-tem-rean-d"),
-        :sea_water_salinity => ("so","med-cmcc-sal-rean-d"),
-        :eastward_sea_water_velocity => ("uo", "med-cmcc-cur-rean-d"),
-        :northward_sea_water_velocity => ("vo", "med-cmcc-cur-rean-d"),
-    )
-
-
-    # CMEMS opendap is retired
-    #dataset_cmems_opendap = ROMS.CMEMS_opendap(cmems_username,cmems_password,mapping,outdir)
-    #push!(datasets,dataset_cmems_opendap)
 end
 
 # CMEMS Zarr ARCO
@@ -46,11 +33,11 @@ product_id = "MEDSEA_MULTIYEAR_PHY_006_004"
 
 mapping = Dict(
     # var  dataset_id
-    :sea_surface_height_above_geoid => ("zos","med-cmcc-ssh-rean-d"),
-    :sea_water_potential_temperature => ("thetao", "med-cmcc-tem-rean-d"),
-    :sea_water_salinity => ("so","med-cmcc-sal-rean-d"),
-    :eastward_sea_water_velocity => ("uo", "med-cmcc-cur-rean-d"),
-    :northward_sea_water_velocity => ("vo", "med-cmcc-cur-rean-d"),
+    :sea_surface_height_above_geoid => ("zos","cmems_mod_med_phy-ssh_my_4.2km_P1D-m"),
+    :sea_water_potential_temperature => ("thetao", "cmems_mod_med_phy-temp_my_4.2km_P1D-m"),
+    :sea_water_salinity => ("so","cmems_mod_med_phy-sal_my_4.2km_P1D-m"),
+    :eastward_sea_water_velocity => ("uo", "cmems_mod_med_phy-cur_my_4.2km_P1D-m"),
+    :northward_sea_water_velocity => ("vo", "cmems_mod_med_phy-cur_my_4.2km_P1D-m"),
 )
 
 dataset_cmems_zarr = CMEMS_zarr(product_id,mapping,outdir,
@@ -62,6 +49,7 @@ push!(datasets,dataset_cmems_zarr)
 #push!(datasets,dataset_hycom)
 
 for dataset in datasets
+    local v, x, y, z, t
     v,(x,y,z,t) = ROMS.load(dataset,:sea_water_potential_temperature,
                         longitude = xr, latitude = yr, time = tr);
 
@@ -70,10 +58,6 @@ for dataset in datasets
     @test all(z .<= 0)
     @test all(tr[1] .<= t .<= tr[end])
 end
-
-
-#vo,(xo,yo,zo,to) = ROMS.load(dataset_cmems_opendap,:sea_water_potential_temperature,
-#                             longitude = xr, latitude = yr, time = tr);
 
 vz,(xz,yz,zz,tz) = ROMS.load(dataset_cmems_zarr,:sea_water_potential_temperature,
                              longitude = xr, latitude = yr, time = tr);

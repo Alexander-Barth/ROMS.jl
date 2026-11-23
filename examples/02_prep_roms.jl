@@ -112,12 +112,14 @@ product_id = "MEDSEA_MULTIYEAR_PHY_006_004"
 
 # mapping the variable (CF names) with the CMEMS `dataset_id`
 
+
 mapping = Dict(
-    :sea_surface_height_above_geoid => "med-cmcc-ssh-rean-d",
-    :sea_water_potential_temperature => "med-cmcc-tem-rean-d",
-    :sea_water_salinity => "med-cmcc-sal-rean-d",
-    :eastward_sea_water_velocity => "med-cmcc-cur-rean-d",
-    :northward_sea_water_velocity => "med-cmcc-cur-rean-d",
+    # var  dataset_id
+    :sea_surface_height_above_geoid => ("zos","cmems_mod_med_phy-ssh_my_4.2km_P1D-m"),
+    :sea_water_potential_temperature => ("thetao", "cmems_mod_med_phy-temp_my_4.2km_P1D-m"),
+    :sea_water_salinity => ("so","cmems_mod_med_phy-sal_my_4.2km_P1D-m"),
+    :eastward_sea_water_velocity => ("uo", "cmems_mod_med_phy-cur_my_4.2km_P1D-m"),
+    :northward_sea_water_velocity => ("vo", "cmems_mod_med_phy-cur_my_4.2km_P1D-m"),
 )
 
 dataset = ROMS.CMEMS_zarr(product_id,mapping,outdir, time_shift = 12*60*60)

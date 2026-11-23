@@ -61,7 +61,9 @@ function download(dsopendap::CDMDataset{TDS},variablename::Symbol;
 
     mkpath(dsopendap.cachedir)
     uri = URI(dsopendap.url[variablename])
+
     _ds = TDS(dsopendap.url[variablename]; dsopendap.options...)
+
     ncvar = getvar(dsopendap,_ds,variablename)
 
     nclon = coord(ncvar,"longitude")

@@ -90,9 +90,15 @@ function CMEMS_zarr(product_id,mapping,cachedir;
         ZarrDataset,
         urls,
         cachedir = cachedir,
-        options = Dict(:_omitcode => [404,403]),
+        options = Dict(:_omitcode => [404,403],:consolidated => true),
         time_shift = time_shift,
         chunks = chunks)
 
     return dataset
 end
+
+
+# consider in future to use copernicusmarine
+# curl -LsSf https://astral.sh/uv/install.sh | sh
+# uv tool install copernicusmarine
+# uv tool run copernicusmarine subset --dataset-id cmems_obs-sl_eur_phy-ssh_my_allsat-l4-duacs-0.0625deg_P1D  --minimum-longitude  -7  --maximum-longitude 0 --minimum-latitude 43 --maximum-latitude 49  --start-datetime 1900-01-01T00:00:00 --end-datetime 2026-01-03T23:59:59
