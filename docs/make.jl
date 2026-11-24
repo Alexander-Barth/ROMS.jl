@@ -70,7 +70,4 @@ makedocs(
 )
 
 deploydocs(repo = "github.com/Alexander-Barth/ROMS.jl.git",
-           target = "build",
-           devbranch = "roms-4.1",
-           devurl = "JuliaEO25",
-           )
+           target = "build")
