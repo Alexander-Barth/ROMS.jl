@@ -112,9 +112,7 @@ product_id = "MEDSEA_MULTIYEAR_PHY_006_004"
 
 # mapping the variable (CF names) with the CMEMS `dataset_id`
 
-
 mapping = Dict(
-    # var  dataset_id
     :sea_surface_height_above_geoid => ("zos","cmems_mod_med_phy-ssh_my_4.2km_P1D-m"),
     :sea_water_potential_temperature => ("thetao", "cmems_mod_med_phy-temp_my_4.2km_P1D-m"),
     :sea_water_salinity => ("so","cmems_mod_med_phy-sal_my_4.2km_P1D-m"),
